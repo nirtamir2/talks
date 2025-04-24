@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <style>
+    <![CDATA[
+    #drawing-path {
+        fill: none;
+        stroke: #5edcb9;
+        stroke-width: 2;
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        animation: draw 3s linear forwards;
+    }
+
+    @keyframes draw {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    .rect-animate {
+        opacity: 0;
+        animation: fade-in 0.5s ease forwards;
+    }
+
+    @keyframes fade-in {
+        to {
+            opacity: 1;
+        }
+    }
+
+    #rect1 { animation-delay: 0.5s; }
+    #rect2 { animation-delay: 0.7s; }
+    #rect3 { animation-delay: 0.9s; }
+    #rect4 { animation-delay: 1.1s; }
+    #rect5 { animation-delay: 1.3s; }
+    #rect6 { animation-delay: 1.5s; }
+    ]]>
+  </style>
+  <defs>
+    <clipPath id="b">
+      <rect width="400" height="400" />
+    </clipPath>
+  </defs>
+  <g id="a" clip-path="url(#b)">
+    <!-- <rect width="400" height="400" fill="#0d0922" /> -->
+    <path
+      id="drawing-path"
+      d="M131,158 L159,158 L159,187 L131,187 Z
+                                    M187,241 L214,241 L214,270 L187,270 Z
+                                    M241,158 L270,158 L270,187 L241,187 Z
+                                    M131,214 L159,214 L159,270 L131,270 Z
+                                    M241,214 L270,214 L270,270 L241,270 Z
+                                    M187,131 L214,131 L214,214 L187,214 Z"
+      stroke="#5edcb9"
+      fill="#5edcb9"
+    />
+
+    <rect
+      id="rect1"
+      class="rect-animate"
+      width="28"
+      height="29"
+      x="131"
+      y="158"
+      fill="#5edcb9"
+    />
+    <rect
+      id="rect2"
+      class="rect-animate"
+      width="27"
+      height="29"
+      x="187"
+      y="241"
+      fill="#5edcb9"
+    />
+    <rect
+      id="rect3"
+      class="rect-animate"
+      width="29"
+      height="29"
+      x="241"
+      y="158"
+      fill="#5edcb9"
+    />
+    <rect
+      id="rect4"
+      class="rect-animate"
+      width="28"
+      height="56"
+      x="131"
+      y="214"
+      fill="#5edcb9"
+    />
+    <rect
+      id="rect5"
+      class="rect-animate"
+      width="29"
+      height="56"
+      x="241"
+      y="214"
+      fill="#5edcb9"
+    />
+    <rect
+      id="rect6"
+      class="rect-animate"
+      width="27"
+      height="83"
+      x="187"
+      y="131"
+      fill="#5edcb9"
+    />
+  </g>
+</svg>
