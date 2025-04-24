@@ -1,0 +1,8 @@
+[submodule "2023-08-20/src/shadcn-meetup-demo"]
+	path = 2023-08-20/src/shadcn-meetup-demo
+	url = https://github.com/nirtamir2/shadcn-meetup-demo
+
+[submodule "2024-06-27/src"]
+	path = 2024-06-27/src
+	url = https://github.com/nirtamir2/ai-sdk-slides
+	
