@@ -13,4 +13,5 @@ Learn more about Slidev at the [documentation](https://sli.dev/).
 
 ---
 
-Slides inspired by https://github.com/antfu/talks
+- Slides inspired by https://github.com/antfu/talks
+- Also https://github.com/toddeTV/talk_2024-11-12_NuxtNation-conference/ for rendering 3D in browser window component in slidev
