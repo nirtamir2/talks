@@ -286,6 +286,27 @@ importers:
         specifier: ^1.0.5
         version: 1.0.5(prettier@3.5.1)
 
+  2025-06-25/src:
+    dependencies:
+      '@iconify-json/mdi':
+        specifier: ^1.2.3
+        version: 1.2.3
+      '@slidev/cli':
+        specifier: ^51.4.0
+        version: 51.6.0(@babel/parser@7.27.0)(@nuxt/kit@3.14.1592(rollup@4.40.0))(@types/markdown-it@14.1.2)(@types/node@22.13.4)(@vue/compiler-sfc@3.5.13)(markdown-it-async@2.0.0)(playwright-chromium@1.50.1)(postcss@8.5.3)(react@18.3.1)(rollup@4.40.0)(svelte@5.28.2)(tsx@4.19.2)(vue-template-compiler@2.7.16)
+      '@slidev/theme-default':
+        specifier: latest
+        version: 0.25.0
+      '@slidev/theme-seriph':
+        specifier: latest
+        version: 0.25.0
+      seedrandom:
+        specifier: ^3.0.5
+        version: 3.0.5
+      vue:
+        specifier: ^3.5.13
+        version: 3.5.13(typescript@5.8.3)
+
   2025-06-26/src:
     dependencies:
       '@iconify-json/mdi':
@@ -8632,9 +8653,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@sveltejs/acorn-typescript@1.0.5(acorn@8.14.0)':
+  '@sveltejs/acorn-typescript@1.0.5(acorn@8.14.1)':
     dependencies:
-      acorn: 8.14.0
+      acorn: 8.14.1
 
   '@szmarczak/http-timer@5.0.1':
     dependencies:
@@ -11517,7 +11538,7 @@ snapshots:
 
   is-reference@3.0.3:
     dependencies:
-      '@types/estree': 1.0.6
+      '@types/estree': 1.0.7
 
   is-regexp@3.1.0: {}
 
@@ -13017,9 +13038,9 @@ snapshots:
     dependencies:
       '@ampproject/remapping': 2.3.0
       '@jridgewell/sourcemap-codec': 1.5.0
-      '@sveltejs/acorn-typescript': 1.0.5(acorn@8.14.0)
-      '@types/estree': 1.0.6
-      acorn: 8.14.0
+      '@sveltejs/acorn-typescript': 1.0.5(acorn@8.14.1)
+      '@types/estree': 1.0.7
+      acorn: 8.14.1
       aria-query: 5.3.2
       axobject-query: 4.1.0
       clsx: 2.1.1
