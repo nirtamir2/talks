@@ -31,6 +31,7 @@ Before we dive in, let me introduce myself. I'm Nir Tamir, a senior frontend dev
 ---
 layout: section
 ---
+
 # Why 3D?
 
 <div v-click class="text-2xl">Because it makes people go “whoa.”</div>
@@ -68,14 +69,14 @@ But not always.
 
 ```tsx
 export default function App() {
-  return (
-    <Canvas>
-      <mesh>
-        <boxGeometry />
-        <meshStandardMaterial />
-      </mesh>
-    </Canvas>
-  )
+    return (
+        <Canvas>
+            <mesh>
+                <boxGeometry/>
+                <meshStandardMaterial/>
+            </mesh>
+        </Canvas>
+    )
 }
 ```
 
@@ -104,3 +105,19 @@ function animate() {
 
 animate()
 ```
+
+---
+
+# Home
+
+<BrowserWrapper>
+  <DemoIframe url="/" />
+</BrowserWrapper>
+
+---
+
+# Posts
+
+<BrowserWrapper>
+  <DemoIframe url="/posts"></DemoIframe>
+</BrowserWrapper>
