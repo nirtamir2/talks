@@ -9,12 +9,16 @@
     "start": "vinxi start"
   },
   "dependencies": {
+    "@react-three/drei": "^10.0.7",
+    "@react-three/fiber": "^9.1.2",
     "@tanstack/react-router": "^1.117.1",
     "@tanstack/react-router-devtools": "^1.117.1",
     "@tanstack/react-start": "^1.118.0",
+    "@types/three": "^0.176.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "tailwind-merge": "^2.6.0",
+    "three": "^0.176.0",
     "vinxi": "0.5.3"
   },
   "devDependencies": {
