@@ -1,13 +1,14 @@
 import { Canvas } from '@react-three/fiber'
 import { createFileRoute } from '@tanstack/react-router'
 
-export const Route = createFileRoute('/')({
-  component: Home,
+export const Route = createFileRoute('/demo/basic')({
+  component: RouteComponent,
 })
 
-function Home() {
+function RouteComponent() {
   return (
     <Canvas>
+      <ambientLight />
       <mesh>
         <boxGeometry />
         <meshStandardMaterial />

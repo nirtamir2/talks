@@ -38,5 +38,6 @@
     "json",
     "jsonc",
     "yaml"
-  ]
+  ],
+  "slidev.port": 3030
 }
