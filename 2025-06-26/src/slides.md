@@ -40,4 +40,19 @@ Before we dive in, let me introduce myself. I'm Nir Tamir, a senior frontend dev
 
 ---
 
-# 
+# Links
+
+- [Effect: Beginners Complete Getting Started](https://www.typeonce.dev/course/effect-beginners-complete-getting-started)
+
+
+# The tweet about types
+https://x.com/dillon_mulroy/status/1898590282020450681
+
+> typescript/javascript happy path blindness is real.
+>
+> go through a critical code path in your application and note every single place an error can be thrown. are you handling each appropriately?
+>
+> we did this with part of our domain renewal flow.
+>
+> from 3 errors to 17
+

@@ -13,6 +13,11 @@ title: "Effortless 3D with react-three-fiber"
 ![](./nirtamir-animate.svg){.w-30.mt--10.mb-5}
 
 ---
+layout: center
+---
+# Effortless 3D with react-three-fiber
+
+---
 title: About me
 layout: image-right
 image: ./nirtamir.png
@@ -116,6 +121,56 @@ class: p-10
 ---
 
 ---
+title: Three.js Meshe
+layout: image
+image: ./public/three.js mesh.png
+backgroundSize: contain
+class: mix-blend-screen hue-rotate-180 contrast-180
+---
+
+---
+title: Three.js Geometries
+layout: image
+image: ./public/three.js geometries.png
+backgroundSize: contain
+class: mix-blend-screen hue-rotate-180 contrast-180
+---
+
+---
+title: Three.js Materials
+layout: image
+image: ./public/three.js materials.png
+backgroundSize: contain
+# class: mix-blend-screen hue-rotate-180 contrast-180
+---
+
+---
+
+# Three.js code
+
+```tsx
+const renderer = new THREE.WebGLRenderer()
+renderer.setSize(width, height)
+// document.querySelector("#canvas-container").appendChild(renderer.domElement);
+
+const scene = new THREE.Scene()
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
+
+const mesh = new THREE.Mesh()
+mesh.geometry = new THREE.BoxGeometry()
+mesh.material = new THREE.MeshStandardMaterial()
+
+scene.add(mesh)
+
+function animate() {
+  requestAnimationFrame(animate)
+  renderer.render(scene, camera)
+}
+
+animate()
+```
+
+---
 title: React-three-fiber
 layout: section
 ---
@@ -160,32 +215,6 @@ export default function App() {
     </Canvas>
   )
 }
-```
-
----
-
-# Under the hood
-
-```tsx
-const scene = new THREE.Scene()
-const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000)
-
-const renderer = new THREE.WebGLRenderer()
-renderer.setSize(width, height)
-// document.querySelector("#canvas-container").appendChild(renderer.domElement);
-
-const mesh = new THREE.Mesh()
-mesh.geometry = new THREE.BoxGeometry()
-mesh.material = new THREE.MeshStandardMaterial()
-
-scene.add(mesh)
-
-function animate() {
-  requestAnimationFrame(animate)
-  renderer.render(scene, camera)
-}
-
-animate()
 ```
 
 ---
