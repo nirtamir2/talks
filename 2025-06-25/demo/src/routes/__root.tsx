@@ -1,7 +1,6 @@
 import {
   createRootRoute,
   HeadContent,
-  Link,
   Outlet,
   Scripts,
 } from '@tanstack/react-router'

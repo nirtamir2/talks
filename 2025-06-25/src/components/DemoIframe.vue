@@ -16,10 +16,9 @@ const demoBaseUrl = computed<string | undefined>(() => {
 
 <template>
   <iframe
-      v-if="demoBaseUrl"
-      height="100%"
-      :src="`${demoBaseUrl}${props.url}`"
-      width="100%"
+    v-if="demoBaseUrl"
+    class="size-full"
+    :src="`${demoBaseUrl}${props.url}`"
   />
   <div v-else>
     demo base url is not set. Please set it in .env file.

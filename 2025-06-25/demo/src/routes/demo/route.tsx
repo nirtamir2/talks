@@ -5,5 +5,5 @@ export const Route = createFileRoute('/demo')({
 })
 
 function RouteComponent() {
-  return <div className="size-full"><Outlet /></div>
+  return <div className="size-full min-h-screen h-screen"><Outlet /></div>
 }
