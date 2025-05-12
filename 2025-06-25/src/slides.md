@@ -83,13 +83,13 @@ layout: section
 
 # Three.js
 
-![Three.js logo](./public/three.js%20logo.svg){.w-30.absolute}
+![Three.js logo](/three.js%20logo.svg){.w-30.absolute}
 
 A JavaScript library for creating 3D graphics in the browser.
 
 ---
 layout: image
-image: ./public/three-js-main.png
+image: /three-js-main.png
 backgroundSize: contain
 title: Three.js structure original
 hide: true
@@ -97,7 +97,7 @@ hide: true
 
 ---
 layout: image
-image: ./public/three-js-main-figma.svg
+image: /three-js-main-figma.svg
 backgroundSize: calc(100%-5rem) calc(100%-5rem)
 title: Three.js structure
 ---
@@ -106,16 +106,16 @@ title: Three.js structure
 title: Three.js structure animate from docs
 ---
 <v-switch>
-  <template #1> <img src="./public/structure/1.svg"/> </template>
-  <template #2> <img src="./public/structure/2.svg"/> </template>
-  <template #3> <img src="./public/structure/3.svg"/> </template>
-  <template #4> <img src="./public/structure/4.svg"/> </template>
+  <template #0> <img src="/structure/1.svg"/> </template>
+  <template #1> <img src="/structure/2.svg"/> </template>
+  <template #2> <img src="/structure/3.svg"/> </template>
+  <template #3> <img src="/structure/4.svg"/> </template>
 </v-switch>
 
 ---
 title: Three.js structure
 layout: image
-image: ./public/threejs-structure.svg
+image: /threejs-structure.svg
 backgroundSize: contain
 class: p-10
 ---
@@ -123,7 +123,7 @@ class: p-10
 ---
 title: Three.js Meshe
 layout: image
-image: ./public/three.js mesh.png
+image: /three.js mesh.png
 backgroundSize: contain
 class: mix-blend-screen hue-rotate-180 contrast-180
 ---
@@ -131,7 +131,7 @@ class: mix-blend-screen hue-rotate-180 contrast-180
 ---
 title: Three.js Geometries
 layout: image
-image: ./public/three.js geometries.png
+image: /three.js geometries.png
 backgroundSize: contain
 class: mix-blend-screen hue-rotate-180 contrast-180
 ---
@@ -139,7 +139,7 @@ class: mix-blend-screen hue-rotate-180 contrast-180
 ---
 title: Three.js Materials
 layout: image
-image: ./public/three.js materials.png
+image: /three.js materials.png
 backgroundSize: contain
 # class: mix-blend-screen hue-rotate-180 contrast-180
 ---
@@ -177,14 +177,14 @@ layout: section
 
 # React-three-fiber (r3f)
 
-![Three.js logo](./public/three.js%20logo.svg){.w-30.absolute}
+![Three.js logo](/three.js%20logo.svg){.w-30.absolute}
 
 React-three-fiber is a React renderer for three.js.
 
 ---
 title: React Reconciler & Renderer
 layout: image
-image: ./public/reconciler-renderer.png
+image: /reconciler-renderer.png
 backgroundSize: contain
 class: mix-blend-screen invert hue-rotate-180 contrast-150
 ---
@@ -193,7 +193,7 @@ class: mix-blend-screen invert hue-rotate-180 contrast-150
 ---
 title: React
 layout: image
-image: ./public/fiber-in-react.png
+image: /fiber-in-react.png
 backgroundSize: contain
 class: mix-blend-screen invert hue-rotate-180 contrast-150
 # hide: true
@@ -201,13 +201,18 @@ class: mix-blend-screen invert hue-rotate-180 contrast-150
 <!--  https://www.youtube.com/watch?v=ZCuYPiUIONs -->
 
 ---
+layout: two-cols-header-gap
+---
 
-# Hello World
+# Basic example
+
+::left::
 
 ```tsx
 export default function App() {
   return (
     <Canvas>
+      <ambientLight />
       <mesh>
         <boxGeometry />
         <meshStandardMaterial />
@@ -217,9 +222,7 @@ export default function App() {
 }
 ```
 
----
-
-# Home
+::right::
 
 <BrowserWrapper>
   <DemoIframe url="/demo/basic" />
@@ -267,7 +270,7 @@ useGLTF.preload('/suzanne.gltf')
 ---
 title: Suzanne
 layout: image
-image: ./public/suzanne.png
+image: /suzanne.png
 backgroundSize: contain
 class: p-10 mix-blend-screen invert
 ---
