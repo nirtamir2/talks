@@ -229,6 +229,32 @@ export default function App() {
 </BrowserWrapper>
 
 ---
+
+```jsx {monaco-run}
+function A(){
+ return <h1>Hi</h1>
+}
+
+// import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+// import { Canvas } from '@react-three/fiber'
+
+// function RouteComponent() {
+//   return (
+//     <Canvas>
+//       <PerspectiveCamera/>
+//       <OrbitControls/>
+//       <ambientLight />
+//       <mesh position={[0,1,0]} scale={[2,2,2]} rotation={[Math.PI / 2, 0, 0]}>
+//         <boxGeometry args={[2, 1, 0.5]}  />
+//         <meshStandardMaterial color="#0c8cbf" />
+//       </mesh>
+//     </Canvas>
+//   )
+// }
+
+```
+
+---
 title: "Demo wow"
 ---
 
