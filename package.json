@@ -47,5 +47,8 @@
     "vis-network": "catalog:",
     "vue-router": "catalog:",
     "vue-tsc": "catalog:"
+  },
+  "dependencies": {
+    "sandpack-vue3": "^3.1.12"
   }
 }
