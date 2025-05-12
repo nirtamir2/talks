@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {   SandpackProvider,
+import {   SandpackProvider,Sandpack,
   SandpackLayout,
   SandpackCodeEditor,
   SandpackPreview,  } from 'sandpack-vue3';
@@ -41,11 +41,21 @@ const files = ref({
 
 <template>
     <div @keydown.stop @keyup.stop class="">
-    <SandpackProvider theme="dark" template="react-ts" :files="files" >
-        <SandpackLayout :height="1500" >
+        <Sandpack :showOpenInCodeSandbox="false" theme="dark" template="react-ts" :files="files" :options="{
+          editorHeight: 500, // default - 300
+          editorWidthPercentage: 70, // default - 50
+    }"  />
+    <!-- <SandpackProvider  >
+        <SandpackLayout >
           <SandpackCodeEditor />
           <SandpackPreview :showOpenInCodeSandbox="false" />
     </SandpackLayout>
-  </SandpackProvider>
+  </SandpackProvider> -->
     </div>
 </template>
+
+<style>
+.dark {
+    /* --sp-layout-height: 500px; */
+}
+</style>   
