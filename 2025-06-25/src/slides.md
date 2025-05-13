@@ -8,6 +8,8 @@ layout: center
 glowSeed: 4
 lang: en-US
 title: "Effortless 3D with react-three-fiber"
+addons:
+  - slidev-component-zoom
 ---
 
 ![](./nirtamir-animate.svg){.w-30.mt--10.mb-5}
@@ -103,6 +105,7 @@ title: Three.js structure
 ---
 
 ---
+hide: true
 title: Three.js structure animate from docs
 ---
 <v-switch>
@@ -113,6 +116,7 @@ title: Three.js structure animate from docs
 </v-switch>
 
 ---
+hide: true
 title: Three.js structure
 layout: image
 image: /threejs-structure.svg
@@ -121,12 +125,108 @@ class: p-10
 ---
 
 ---
+hide: true
 title: Three.js Meshe
 layout: image
 image: /three.js mesh.png
 backgroundSize: contain
 class: mix-blend-screen hue-rotate-180 contrast-180
 ---
+
+---
+title: Three.js Meshe
+dragPos:
+  foo: 459,48,83,44
+---
+
+<!-- <img src="/geometry-normal-material.png"/>  -->
+
+ <!-- <img src="/geometry-wireframe.png"/>  -->
+
+<Transform v-drag="[469,239,349,326]" pos="" >
+ <img src="/material-normal.png" /> 
+</Transform>
+
+<Transform v-drag="[247,239,292,317]" pos="" >
+ <img src="/material-normal-wireframe.png"/> 
+</Transform>
+
+<v-drag text-6xl pos="444,19,83,44">
+Mesh
+</v-drag>
+
+<v-drag text-2xl pos="329,248,118,40">
+Geometry
+</v-drag>
+
+<v-drag text-2xl pos="589,251,97,40">
+Material
+</v-drag>
+
+<v-drag-arrow pos="470,100,-80,120"/>
+
+<v-drag-arrow pos="550,100,70,120"/>
+
+---
+title: Three.js Geometries
+---
+# Geometries
+
+<div class="flex justify-center">
+<img src="/geometries-demo.png" class="h-120"/>
+</div> 
+
+---
+hide: true
+title: Three.js Geometries
+---
+
+<!-- <img src="/geometry-normal-material.png"/>  -->
+
+ <!-- <img src="/geometry-wireframe.png"/>  -->
+
+<Transform v-drag pos="" >
+ <img src="/geometries-normal.png" /> 
+</Transform>
+
+<v-drag text-6xl pos="444,19,83,44">
+Mesh
+</v-drag>
+
+<v-drag text-xl pos="329,248,118,40">
+Geometry
+</v-drag>
+
+<v-drag text-xl pos="589,251,97,40">
+Material
+</v-drag>
+
+<v-drag text-xl pos="589,251,97,40">
+Sphere 
+</v-drag>
+
+
+
+---
+hidd: true
+title: Three.js Geometries vs Material
+layout: image
+image: /material-geometry.png
+backgroundSize: contain
+---
+<v-drag text-6xl pos="444,200,150,250">
+Geometry
+</v-drag>
+
+---
+title: UV Map
+layout: image
+image: /uv-map.png
+backgroundSize: contain
+---
+<v-drag text-6xl pos="444,200,150,250">
+UV Map
+</v-drag>
 
 ---
 title: Three.js Geometries

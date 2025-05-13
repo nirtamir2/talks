@@ -13,6 +13,8 @@
 import { Route as rootRoute } from './routes/__root'
 import { Route as DemoRouteImport } from './routes/demo/route'
 import { Route as DemoWowImport } from './routes/demo/wow'
+import { Route as DemoMaterialImport } from './routes/demo/material'
+import { Route as DemoGeometryImport } from './routes/demo/geometry'
 import { Route as DemoEmptyImport } from './routes/demo/empty'
 import { Route as DemoBasicImport } from './routes/demo/basic'
 
@@ -27,6 +29,18 @@ const DemoRouteRoute = DemoRouteImport.update({
 const DemoWowRoute = DemoWowImport.update({
   id: '/wow',
   path: '/wow',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+
+const DemoMaterialRoute = DemoMaterialImport.update({
+  id: '/material',
+  path: '/material',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+
+const DemoGeometryRoute = DemoGeometryImport.update({
+  id: '/geometry',
+  path: '/geometry',
   getParentRoute: () => DemoRouteRoute,
 } as any)
 
@@ -67,6 +81,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoEmptyImport
       parentRoute: typeof DemoRouteImport
     }
+    '/demo/geometry': {
+      id: '/demo/geometry'
+      path: '/geometry'
+      fullPath: '/demo/geometry'
+      preLoaderRoute: typeof DemoGeometryImport
+      parentRoute: typeof DemoRouteImport
+    }
+    '/demo/material': {
+      id: '/demo/material'
+      path: '/material'
+      fullPath: '/demo/material'
+      preLoaderRoute: typeof DemoMaterialImport
+      parentRoute: typeof DemoRouteImport
+    }
     '/demo/wow': {
       id: '/demo/wow'
       path: '/wow'
@@ -82,12 +110,16 @@ declare module '@tanstack/react-router' {
 interface DemoRouteRouteChildren {
   DemoBasicRoute: typeof DemoBasicRoute
   DemoEmptyRoute: typeof DemoEmptyRoute
+  DemoGeometryRoute: typeof DemoGeometryRoute
+  DemoMaterialRoute: typeof DemoMaterialRoute
   DemoWowRoute: typeof DemoWowRoute
 }
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoBasicRoute: DemoBasicRoute,
   DemoEmptyRoute: DemoEmptyRoute,
+  DemoGeometryRoute: DemoGeometryRoute,
+  DemoMaterialRoute: DemoMaterialRoute,
   DemoWowRoute: DemoWowRoute,
 }
 
@@ -99,6 +131,8 @@ export interface FileRoutesByFullPath {
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/basic': typeof DemoBasicRoute
   '/demo/empty': typeof DemoEmptyRoute
+  '/demo/geometry': typeof DemoGeometryRoute
+  '/demo/material': typeof DemoMaterialRoute
   '/demo/wow': typeof DemoWowRoute
 }
 
@@ -106,6 +140,8 @@ export interface FileRoutesByTo {
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/basic': typeof DemoBasicRoute
   '/demo/empty': typeof DemoEmptyRoute
+  '/demo/geometry': typeof DemoGeometryRoute
+  '/demo/material': typeof DemoMaterialRoute
   '/demo/wow': typeof DemoWowRoute
 }
 
@@ -114,15 +150,36 @@ export interface FileRoutesById {
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/basic': typeof DemoBasicRoute
   '/demo/empty': typeof DemoEmptyRoute
+  '/demo/geometry': typeof DemoGeometryRoute
+  '/demo/material': typeof DemoMaterialRoute
   '/demo/wow': typeof DemoWowRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/demo' | '/demo/basic' | '/demo/empty' | '/demo/wow'
+  fullPaths:
+    | '/demo'
+    | '/demo/basic'
+    | '/demo/empty'
+    | '/demo/geometry'
+    | '/demo/material'
+    | '/demo/wow'
   fileRoutesByTo: FileRoutesByTo
-  to: '/demo' | '/demo/basic' | '/demo/empty' | '/demo/wow'
-  id: '__root__' | '/demo' | '/demo/basic' | '/demo/empty' | '/demo/wow'
+  to:
+    | '/demo'
+    | '/demo/basic'
+    | '/demo/empty'
+    | '/demo/geometry'
+    | '/demo/material'
+    | '/demo/wow'
+  id:
+    | '__root__'
+    | '/demo'
+    | '/demo/basic'
+    | '/demo/empty'
+    | '/demo/geometry'
+    | '/demo/material'
+    | '/demo/wow'
   fileRoutesById: FileRoutesById
 }
 
@@ -152,6 +209,8 @@ export const routeTree = rootRoute
       "children": [
         "/demo/basic",
         "/demo/empty",
+        "/demo/geometry",
+        "/demo/material",
         "/demo/wow"
       ]
     },
@@ -161,6 +220,14 @@ export const routeTree = rootRoute
     },
     "/demo/empty": {
       "filePath": "demo/empty.tsx",
+      "parent": "/demo"
+    },
+    "/demo/geometry": {
+      "filePath": "demo/geometry.tsx",
+      "parent": "/demo"
+    },
+    "/demo/material": {
+      "filePath": "demo/material.tsx",
       "parent": "/demo"
     },
     "/demo/wow": {

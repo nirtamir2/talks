@@ -49,6 +49,7 @@
     "vue-tsc": "catalog:"
   },
   "dependencies": {
-    "sandpack-vue3": "^3.1.12"
+    "sandpack-vue3": "^3.1.12",
+    "slidev-component-zoom": "^1.1.0"
   }
 }
