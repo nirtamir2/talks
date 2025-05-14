@@ -169,12 +169,11 @@ Material
 
 ---
 title: Three.js Geometries
+layout: image
+image: /geometries-demo.png
+backgroundSize: contain
 ---
 # Geometries
-
-<div class="flex justify-center">
-<img src="/geometries-demo.png" class="h-120"/>
-</div> 
 
 ---
 hide: true
@@ -208,7 +207,7 @@ Sphere
 
 
 ---
-hidd: true
+hide: true
 title: Three.js Geometries vs Material
 layout: image
 image: /material-geometry.png
@@ -217,6 +216,14 @@ backgroundSize: contain
 <v-drag text-6xl pos="444,200,150,250">
 Geometry
 </v-drag>
+
+---
+title: Three.js Materials
+layout: image
+image: /materials-demo.png
+backgroundSize: contain
+---
+# Materials
 
 ---
 title: UV Map
@@ -229,6 +236,7 @@ UV Map
 </v-drag>
 
 ---
+hide: true
 title: Three.js Geometries
 layout: image
 image: /three.js geometries.png
@@ -237,6 +245,7 @@ class: mix-blend-screen hue-rotate-180 contrast-180
 ---
 
 ---
+hide: true
 title: Three.js Materials
 layout: image
 image: /three.js materials.png
