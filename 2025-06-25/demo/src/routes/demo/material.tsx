@@ -19,7 +19,7 @@ function RouteComponent() {
 
         <mesh>
          <torusKnotGeometry />
-      {/*<meshNormalMaterial />*/}
+     1    {/*<meshNormalMaterial />*/}
           {/*<meshBasicMaterial color="#5DDCB9" />*/}
           {/*<meshMatcapMaterial color="#5DDCB9" />*/}
          {/*<meshLambertMaterial color="#5DDCB9" />*/}

@@ -144,11 +144,11 @@ dragPos:
  <!-- <img src="/geometry-wireframe.png"/>  -->
 
 <Transform v-drag="[469,239,349,326]" pos="" >
- <img src="/material-normal.png" /> 
+ <img src="/material-normal.png" />
 </Transform>
 
 <Transform v-drag="[247,239,292,317]" pos="" >
- <img src="/material-normal-wireframe.png"/> 
+ <img src="/material-normal-wireframe.png"/>
 </Transform>
 
 <v-drag text-6xl pos="444,19,83,44">
@@ -185,7 +185,7 @@ title: Three.js Geometries
  <!-- <img src="/geometry-wireframe.png"/>  -->
 
 <Transform v-drag pos="" >
- <img src="/geometries-normal.png" /> 
+ <img src="/geometries-normal.png" />
 </Transform>
 
 <v-drag text-6xl pos="444,19,83,44">
@@ -201,10 +201,8 @@ Material
 </v-drag>
 
 <v-drag text-xl pos="589,251,97,40">
-Sphere 
+Sphere
 </v-drag>
-
-
 
 ---
 hide: true
@@ -231,7 +229,8 @@ layout: image
 image: /uv-map.png
 backgroundSize: contain
 ---
-<v-drag text-6xl pos="444,200,150,250">
+
+<v-drag text-6xl pos="336,163,368,250">
 UV Map
 </v-drag>
 
@@ -340,10 +339,9 @@ export default function App() {
 ---
 
 ```jsx {monaco-run}
-function A(){
- return <h1>Hi</h1>
+function A() {
+  return <h1>Hi</h1>
 }
-
 ```
 
 ---
@@ -363,6 +361,42 @@ export default function App() {
   )
 }
 "/>
+
+---
+title: "Shit"
+mdc: true
+code: "import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+  import { Canvas } from '@react-three/fiber'
+  export default function App() {
+    return (
+      <Canvas>
+        <ambientLight />
+        <mesh>
+          <boxGeometry />
+          <meshStandardMaterial />
+        </mesh>
+      </Canvas>
+    )
+  }"
+---
+
+<!-- ::playgrounds{:code='["const a = 1", "const b = 2", "const c = a + b"]'}
+:: -->
+
+<!-- ::playgrounds{:code=`["const a = 1", "const b = 2", "const c = a + b"]`}
+:: -->
+
+::playgrounds{:code=`["export default function A(){ \n return <h1>hi</h1> }", "const b = 2", "const c = a + b"]`}
+::
+
+::playgrounds
+---
+code:
+  - IconNuxt
+  - description: Harness the full power of Nuxt and the Nuxt ecosystem.
+  - title: Nuxt Architecture.
+---
+::
 
 ---
 title: "Demo wow"
