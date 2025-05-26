@@ -1,13 +1,16 @@
 import { definePreparserSetup } from "@slidev/types";
 
-type FileObject = {index: number, data: Record<
-  string,
-  {
-    code: string;
-    hidden: boolean;
-    active: boolean;
-  }
->};
+type FileObject = {
+  index: number;
+  data: Record<
+    string,
+    {
+      code: string;
+      hidden: boolean;
+      active: boolean;
+    }
+  >;
+};
 
 interface ParsedAttributes {
   file?: string;
@@ -48,12 +51,13 @@ function createFileObject(attributes: string, code: string): FileObject {
 
   return {
     index,
-    data:{
-    [filename]: {
-      code: code.trim(),
-      hidden,
-      active
-    }}
+    data: {
+      [filename]: {
+        code: code.trim(),
+        hidden,
+        active,
+      },
+    },
   };
 }
 
@@ -99,17 +103,20 @@ function isQuoted(value: string): boolean {
   );
 }
 
-interface Item<T>{
+interface Item<T> {
   index: number;
   data: T;
-};
+}
 
-function mergeByIndex<T extends Record<string, unknown>>(items: Array<Item<T>>): Array<T | undefined> {
+function mergeByIndex<T extends Record<string, unknown>>(
+  items: Array<Item<T>>,
+): Array<T | undefined> {
   const result: Array<T | undefined> = [];
 
   for (const item of items) {
     const { index, data } = item;
-    result[index] = result[index] == null ? { ...data } : { ...result[index], ...data };
+    result[index] =
+      result[index] == null ? { ...data } : { ...result[index], ...data };
   }
 
   return result;

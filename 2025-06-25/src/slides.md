@@ -496,7 +496,7 @@ export default function App() {
 
 ```tsx sandpack index=2 file="App.tsx"
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import {Box} from "./Box";
+import { Box } from "./Box";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
   return (
@@ -534,7 +534,7 @@ export function Box(props: ThreeElements["mesh"]) {
 
 ```tsx sandpack index=3 file="App.tsx"
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
-import {Box} from "./Box";
+import { Box } from "./Box";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
   return (
@@ -560,10 +560,7 @@ export function Box(props: ThreeElements["mesh"]) {
   });
 
   return (
-    <mesh
-      {...props}
-      ref={meshRef}
-    >
+    <mesh {...props} ref={meshRef}>
       <boxGeometry args={[1, 1, 1]} />
       <meshMatcapMaterial color={"orange"} />
     </mesh>
