@@ -1,17 +1,19 @@
 import { definePreparserSetup } from "@slidev/types";
 
-type FileObject = Record<
+type FileObject = {index: number, data: Record<
   string,
   {
     code: string;
     hidden: boolean;
+    active: boolean;
   }
->;
+>};
 
 interface ParsedAttributes {
-  [key: string]: string | boolean | undefined;
   file?: string;
+  index?: number;
   hidden?: boolean;
+  active?: boolean;
 }
 
 const SANDPACK_BLOCK_REGEX =
@@ -30,8 +32,9 @@ export default definePreparserSetup(() => {
 });
 
 function transformSandpackBlock(_match: string, blocksContent: string): string {
-  const files = extractFilesFromBlocks(blocksContent);
+  const files = mergeByIndex(extractFilesFromBlocks(blocksContent));
   const filesJson = JSON.stringify(files).replaceAll('"', "&quot;");
+  // return `<Debug :data="${filesJson}"/>`;
   // eslint-disable-next-line github/unescaped-html-literal
   return `<FilesPlayground :files="${filesJson}"/>`;
 }
@@ -40,12 +43,17 @@ function createFileObject(attributes: string, code: string): FileObject {
   const attrs = parseAttributes(attributes);
   const filename = attrs.file || "App.tsx";
   const hidden = attrs.hidden !== undefined;
+  const active = attrs.active !== undefined;
+  const index = attrs.index ?? 0;
 
   return {
+    index,
+    data:{
     [filename]: {
       code: code.trim(),
       hidden,
-    },
+      active
+    }}
   };
 }
 
@@ -89,4 +97,20 @@ function isQuoted(value: string): boolean {
     (value.startsWith('"') && value.endsWith('"')) ||
     (value.startsWith("'") && value.endsWith("'"))
   );
+}
+
+interface Item<T>{
+  index: number;
+  data: T;
+};
+
+function mergeByIndex<T extends Record<string, unknown>>(items: Array<Item<T>>): Array<T | undefined> {
+  const result: Array<T | undefined> = [];
+
+  for (const item of items) {
+    const { index, data } = item;
+    result[index] = result[index] == null ? { ...data } : { ...result[index], ...data };
+  }
+
+  return result;
 }

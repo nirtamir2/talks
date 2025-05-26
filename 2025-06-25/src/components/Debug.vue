@@ -5,5 +5,5 @@ const props = defineProps<{
 </script>
 
 <template>
-  <pre>{{ JSON.stringify(props.data, null, 2) }}</pre>
+  <pre class="overflow-auto max-h-full">{{ JSON.stringify(props.data, null, 2) }}</pre>
 </template>

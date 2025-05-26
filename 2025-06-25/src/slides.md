@@ -435,7 +435,7 @@ export default function App() {
       <axesHelper/>
       <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
         <boxGeometry />
-        <meshBasicMaterial />
+        <meshMatcapMaterial />
       </mesh>
     </Canvas>
   )
@@ -449,7 +449,7 @@ export default function App() {
       <axesHelper/>
       <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
         <boxGeometry />
-        <meshBasicMaterial color={"0066CC"} />
+        <meshMatcapMaterial color={"#0066CC"} />
       </mesh>
     </Canvas>
   )
@@ -468,23 +468,107 @@ export default function App() {
   return (
     <Canvas>
       <OrbitControls />
-      <ambientLight />
-      <axesHelper />
-      <mesh position={[0, 0, 0]} scale={[1, 1, 1]} rotation={[0, 0, 0]}>
-        <boxGeometry />
-        <meshBasicMaterial />
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshMatcapMaterial color={"#0066CC"} />
       </mesh>
     </Canvas>
   );
 }
 ```
 
-```tsx sandpack index=1 hidden
-bbb;
+```tsx sandpack index=1
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls />
+      <axesHelper />
+      <mesh position={[0, 0, 0]} scale={[1, 1, 1]} rotation={[0, 0, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshMatcapMaterial color={"#0066CC"} />
+      </mesh>
+    </Canvas>
+  );
+}
 ```
 
-```tsx sandpack index=1 file="Box.tsx"
-ccc;
+```tsx sandpack index=2 file="App.tsx"
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import {Box} from "./Box";
+import { Canvas } from "@react-three/fiber";
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls />
+      <Box position={[-1.2, 0, 0]} />
+      <Box position={[1.2, 0, 0]} />
+    </Canvas>
+  );
+}
+```
+
+```tsx sandpack index=2 file="Box.tsx"
+import type { ThreeElements } from "@react-three/fiber";
+import { useState } from "react";
+
+export function Box(props: ThreeElements["mesh"]) {
+  const [hovered, setHover] = useState(false);
+  const [active, setActive] = useState(false);
+
+  return (
+    <mesh
+      {...props}
+      scale={active ? 1.5 : 1}
+      onClick={() => setActive(!active)}
+      onPointerOver={() => setHover(true)}
+      onPointerOut={() => setHover(false)}
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshMatcapMaterial color={hovered ? "hotpink" : "orange"} />
+    </mesh>
+  );
+}
+```
+
+```tsx sandpack index=3 file="App.tsx"
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import {Box} from "./Box";
+import { Canvas } from "@react-three/fiber";
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls />
+      <Box position={[-1.2, 0, 0]} />
+      <Box position={[1.2, 0, 0]} />
+    </Canvas>
+  );
+}
+```
+
+```tsx sandpack index=3 active file="Box.tsx"
+import type { ThreeElements } from "@react-three/fiber";
+import { useFrame } from "@react-three/fiber";
+import { useRef, useState } from "react";
+
+export function Box(props: ThreeElements["mesh"]) {
+  const meshRef = useRef<ThreeElements["mesh"]>(null!);
+
+  useFrame((state, delta) => {
+    meshRef.current.rotation.x += delta;
+  });
+
+  return (
+    <mesh
+      {...props}
+      ref={meshRef}
+    >
+      <boxGeometry args={[1, 1, 1]} />
+      <meshMatcapMaterial color={"orange"} />
+    </mesh>
+  );
+}
 ```
 
 @@@
