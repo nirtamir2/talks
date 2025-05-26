@@ -618,7 +618,7 @@ export default function App() {
 title: "Demo wow"
 ---
 
-# Posts
+# Demo
 
 <BrowserWrapper>
   <DemoIframe url="/demo/wow"></DemoIframe>
@@ -634,7 +634,7 @@ layout: fact
 layout: center
 ---
 
-# nirtamir.com
+# [nirtamir.com](https://www.nirtamir.com)
 
 ---
 layout: end
