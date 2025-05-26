@@ -1,7 +1,11 @@
 <script setup lang="ts">
-import { SandpackCodeEditor, SandpackPreview, SandpackProvider } from "sandpack-vue3";
-import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
+import {
+  SandpackCodeEditor,
+  SandpackPreview,
+  SandpackProvider,
+} from "sandpack-vue3";
 import { computed, ref } from "vue";
+import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 
 const props = defineProps<{
   code: string | Array<string>;
@@ -95,16 +99,16 @@ function handleGoBack() {
     </button>
   </div>
   <div class="" @keydown.stop @keyup.stop>
-  <SandpackProvider template="react-ts" :files="files">
- <PanelGroup direction="horizontal">
-      <Panel :default-size="20">
-        <SandpackCodeEditor/>
-      </Panel>
-      <PanelResizeHandle />
-      <Panel :default-size="20">
-        <SandpackPreview :show-open-in-code-sandbox="false"/>
-      </Panel>
-    </PanelGroup>
+    <SandpackProvider template="react-ts" :files="files">
+      <PanelGroup direction="horizontal">
+        <Panel :default-size="20">
+          <SandpackCodeEditor />
+        </Panel>
+        <PanelResizeHandle />
+        <Panel :default-size="20">
+          <SandpackPreview :show-open-in-code-sandbox="false" />
+        </Panel>
+      </PanelGroup>
     </SandpackProvider>
     <!--    <SandpackProvider :files="files" theme="dark" template="react-ts" :options="{}"> -->
     <!--      <SandpackLayout style="height: 500px" > -->
