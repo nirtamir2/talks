@@ -5,10 +5,15 @@
   "scripts": {
     "build": "rimraf dist && pnpm -r run build",
     "dev": "esno scripts/picker.ts dev --open",
+    "format": "prettier --write . --ignore-unknown",
     "typecheck": "vue-tsc --noEmit",
-    "lint": "eslint .",
+    "lint": "eslint . --fix",
     "update": "esno scripts/redirects.ts",
     "prepare": "git submodule update --init --recursive"
+  },
+  "dependencies": {
+    "sandpack-vue3": "^3.1.12",
+    "slidev-component-zoom": "^1.1.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "catalog:",
@@ -16,9 +21,11 @@
     "@eslint/config-inspector": "catalog:",
     "@iconify/collections": "catalog:",
     "@iconify/json": "catalog:",
+    "@nirtamir2/eslint-config": "^0.1.13",
     "@slidev/cli": "catalog:",
     "@slidev/client": "catalog:",
     "@slidev/theme-default": "catalog:",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
     "@types/node": "catalog:",
     "@types/prompts": "catalog:",
     "@types/seedrandom": "catalog:",
@@ -34,7 +41,10 @@
     "markdown-it-magic-link": "catalog:",
     "playwright-chromium": "catalog:",
     "pnpm": "catalog:",
+    "prettier": "^3.3.2",
+    "prettier-plugin-packagejson": "^2.5.14",
     "prettier-plugin-slidev": "catalog:",
+    "prettier-plugin-tailwindcss": "^0.6.11",
     "prompts": "catalog:",
     "rimraf": "catalog:",
     "seedrandom": "catalog:",
@@ -47,9 +57,5 @@
     "vis-network": "catalog:",
     "vue-router": "catalog:",
     "vue-tsc": "catalog:"
-  },
-  "dependencies": {
-    "sandpack-vue3": "^3.1.12",
-    "slidev-component-zoom": "^1.1.0"
   }
 }
