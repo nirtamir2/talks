@@ -1,24 +1,24 @@
 import fg from "fast-glob";
 import fs from "node:fs/promises";
 import path from "node:path";
+
 const packageFiles = (
   await fg("*/src/package.json", {
     onlyFiles: true,
   })
-// eslint-disable-next-line unicorn/no-await-expression-member
-).sort();
+)
+  // eslint-disable-next-line unicorn/no-await-expression-member
+  .sort();
 
 const bases = (
   await Promise.all(
     packageFiles.map(async (file) => {
       const talkRoot = path.dirname(path.dirname(file));
       const json = JSON.parse(await fs.readFile(file, "utf8"));
-      const [pdfFile] = 
-        await fg("*.pdf", {
-          cwd: path.resolve(process.cwd(), talkRoot),
-          onlyFiles: true,
-        })
-      ;
+      const [pdfFile] = await fg("*.pdf", {
+        cwd: path.resolve(process.cwd(), talkRoot),
+        onlyFiles: true,
+      });
       const command = json.scripts?.build;
       if (!command) return;
       const base = command.match(/ --base (.*?)\s/)?.[1];
@@ -30,8 +30,9 @@ const bases = (
       };
     }),
   )
-// eslint-disable-next-line unicorn/no-await-expression-member
-).filter(Boolean);
+)
+  // eslint-disable-next-line unicorn/no-await-expression-member
+  .filter(Boolean);
 
 const redirects = bases
   .flatMap(({ base, pdfFile, dir }) => {
@@ -50,11 +51,13 @@ to = "https://github.com/antfu/talks/blob/main/${dir}/${pdfFile}?raw=true"
 status = 302`);
     }
 
-    parts.push(`
+    parts.push(
+      `
 [[redirects]]
 from = "${base}src"
 to = "https://github.com/antfu/talks/tree/main/${dir}"
-status = 302`, `
+status = 302`,
+      `
 [[redirects]]
 from = "${dir}"
 to = "https://talks.antfu.me${base}"
@@ -63,7 +66,8 @@ status = 301
 [[redirects]]
 from = "${base}*"
 to = "${base}index.html"
-status = 200`);
+status = 200`,
+    );
 
     return parts;
   })

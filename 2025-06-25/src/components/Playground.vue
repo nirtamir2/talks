@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { Sandpack } from "sandpack-vue3";
-import { ref, computed } from "vue";
+import { computed, ref } from "vue";
 
 const props = defineProps<{
   code: string | Array<string>;
 }>();
 
 const index = ref(0);
-const currentCode = computed(() => Array.isArray(props.code) ? props.code[index.value] : props.code);
+const currentCode = computed(() =>
+  Array.isArray(props.code) ? props.code[index.value] : props.code,
+);
 const files = ref({
   "/App.tsx": currentCode,
 
-  '/index.tsx': {
+  "/index.tsx": {
     code: `import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
@@ -70,11 +72,13 @@ function handleGoNext() {
 function handleGoBack() {
   index.value = Math.max((index.value - 1) % props.code.length, 0);
 }
-
 </script>
 
 <template>
-  <div class="mb-4 flex items-center justify-center gap-2" v-if="Array.isArray(props.code) && props.code.length > 1">
+  <div
+    v-if="Array.isArray(props.code) && props.code.length > 1"
+    class="mb-4 flex items-center justify-center gap-2"
+  >
     <button
       class="flex size-5 items-center justify-center rounded-full border"
       @click="handleGoBack"
@@ -90,6 +94,8 @@ function handleGoBack() {
     </button>
   </div>
   <div class="" @keydown.stop @keyup.stop>
+    <pre>{{ JSON.stringify(files, null, 2) }}</pre>
+
     <Sandpack
       :show-open-in-code-sandbox="false"
       theme="dark"

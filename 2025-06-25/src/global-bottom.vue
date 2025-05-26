@@ -38,7 +38,9 @@ const formatter = computed(
 const distribution = computed(
   () => (formatter.value.glow || "full") as Distribution,
 );
-const opacity = computed<number>(() => Number(formatter.value.glowOpacity ?? 0.4));
+const opacity = computed<number>(() =>
+  Number(formatter.value.glowOpacity ?? 0.4),
+);
 const hue = computed<number>(() => Number(formatter.value.glowHue || 0));
 const seed = computed<string>(() =>
   formatter.value.glowSeed === "false" || formatter.value.glowSeed === false

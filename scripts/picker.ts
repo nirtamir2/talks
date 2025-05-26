@@ -28,8 +28,8 @@ async function startPicker(args: Array<string>) {
   if (result.folder) {
     /* eslint-disable sonarjs/no-commented-code */
     // if (args[0] === 'dev') {
-      //   execa('code', [fileURLToPath(new URL(`../${result.folder}/src/slides.md`, import.meta.url))])
-      // }
+    //   execa('code', [fileURLToPath(new URL(`../${result.folder}/src/slides.md`, import.meta.url))])
+    // }
     /* eslint-enable sonarjs/no-commented-code */
     await execa("pnpm", ["run", ...args], {
       cwd: new URL(`../${result.folder}/src`, import.meta.url),

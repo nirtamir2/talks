@@ -30,10 +30,7 @@ const props = defineProps({
 </script>
 
 <template>
-  <div
-    class="slidev-layout two-cols-header-gap size-full"
-    :class="layoutClass"
-  >
+  <div class="slidev-layout two-cols-header-gap size-full" :class="layoutClass">
     <div class="col-header">
       <slot />
     </div>

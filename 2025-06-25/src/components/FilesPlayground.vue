@@ -12,7 +12,7 @@ const currentFiles = computed(() => props.files[index.value]);
 
 const files = computed(() => ({
   ...currentFiles.value,
-  '/index.tsx': {
+  "/index.tsx": {
     code: `import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
@@ -71,25 +71,38 @@ function handleGoNext() {
 function handleGoBack() {
   index.value = Math.max((index.value - 1) % props.files.length, 0);
 }
-
 </script>
 
 <template>
-  <div v-if="props.files.length > 1" class="mb-4 flex items-center justify-center gap-2">
-    <button class="flex size-5 items-center justify-center rounded-full border" @click="handleGoBack">
+  <div
+    v-if="props.files.length > 1"
+    class="mb-4 flex items-center justify-center gap-2"
+  >
+    <button
+      class="flex size-5 items-center justify-center rounded-full border"
+      @click="handleGoBack"
+    >
       -
     </button>
     {{ index + 1 }} / {{ props.files.length }}
-    <button class="flex size-5 items-center justify-center rounded-full border" @click="handleGoNext">
+    <button
+      class="flex size-5 items-center justify-center rounded-full border"
+      @click="handleGoNext"
+    >
       +
     </button>
   </div>
   <div class="" @keydown.stop @keyup.stop>
     <Sandpack
-:show-open-in-code-sandbox="false" theme="dark" template="react-ts" :files="files" :options="{
-      editorHeight: 500, // default - 300
-      editorWidthPercentage: 70, // default - 50
-    }" />
+      :show-open-in-code-sandbox="false"
+      theme="dark"
+      template="react-ts"
+      :files="files"
+      :options="{
+        editorHeight: 500, // default - 300
+        editorWidthPercentage: 70, // default - 50
+      }"
+    />
     <!--    <SandpackProvider :files="files" theme="dark" template="react-ts" :options="{}"> -->
     <!--      <SandpackLayout style="height: 500px" > -->
     <!--        <SandpackCodeEditor  /> -->

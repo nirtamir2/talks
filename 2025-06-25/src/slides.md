@@ -408,9 +408,11 @@ files:
        </Canvas>
      )
     }
+
 ---
 
-<!-- <Playground :code="[String.raw`
+<!--
+<Playground :code="[String.raw`
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 export default function App() {
@@ -452,41 +454,44 @@ export default function App() {
     </Canvas>
   )
 }`]"
-"/> -->
+"/>
+-->
+
 ---
 
 @@@
-```tsx sandpack index=0
 
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
+```tsx sandpack index=0
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
 export default function App() {
   return (
     <Canvas>
-      <OrbitControls/>
+      <OrbitControls />
       <ambientLight />
-      <axesHelper/>
-      <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
+      <axesHelper />
+      <mesh position={[0, 0, 0]} scale={[1, 1, 1]} rotation={[0, 0, 0]}>
         <boxGeometry />
         <meshBasicMaterial />
       </mesh>
     </Canvas>
-  )
+  );
 }
-
 ```
 
 ```tsx sandpack index=1 hidden
-bbb
+bbb;
 ```
 
 ```tsx sandpack index=1 file="Box.tsx"
-ccc
+ccc;
 ```
 
 @@@
 
-<!-- <Debug :files="[{'App.tsx': {code: 'aaaa\nbbbb'}}, {'App.tsx': {code: 'cccc\ndddd', hidden: true}, 'Box.tsx': {code: 'eeee\nffff'}}]"/> -->
+<!--
+<Debug :files="[{'App.tsx': {code: 'aaaa\nbbbb'}}, {'App.tsx': {code: 'cccc\ndddd', hidden: true}, 'Box.tsx': {code: 'eeee\nffff'}}]"/>
+-->
 
 ---
 title: "Shit"

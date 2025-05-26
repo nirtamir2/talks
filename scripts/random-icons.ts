@@ -19,8 +19,9 @@ const icons = (
       return list.slice(0, 100);
     }),
   )
-// eslint-disable-next-line unicorn/no-await-expression-member
-).flat();
+)
+  // eslint-disable-next-line unicorn/no-await-expression-member
+  .flat();
 
 function shuffle(array: Array<unknown>) {
   for (let i = array.length - 1; i > 0; i--) {
@@ -33,5 +34,4 @@ function shuffle(array: Array<unknown>) {
 shuffle(icons);
 
 console.log(icons.slice(0, 100));
-export { };
-
+export {};

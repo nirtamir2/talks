@@ -54,7 +54,9 @@ export default defineCodeRunnersSetup(() => {
       });
 
       // eslint-disable-next-line sonarjs/code-eval, no-new-func
-      const Component = new Function(`return (React) => ${result.code}`)()(React);
+      const Component = new Function(`return (React) => ${result.code}`)()(
+        React,
+      );
       const app = React.createElement(Component);
       const el = document.createElement("div");
       el.className = "jsx-runner";
