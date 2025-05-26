@@ -579,7 +579,7 @@ import { RigidBodyProps } from "@react-three/rapier";
 
 export function MyThorus(props: RigidBodyProps) {
   return (
-    <RigidBody {...props} colliders="hull">
+    <RigidBody {...props} colliders="trimesh">
       <mesh>
         <torusGeometry />
         <meshMatcapMaterial color={"#50C878"} />
@@ -602,7 +602,7 @@ export default function App() {
     <Canvas>
       <OrbitControls />
       <Physics debug>
-        <MyBox rotation={Math.PI/4, Math.PI/4, 0]} />
+        <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />
         <MySphere position={[0, 10, 0]} />
         <MyThorus position={[2, 0, 0]} />
         <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />
