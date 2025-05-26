@@ -1,13 +1,46 @@
 <script setup lang="ts">
 import { Sandpack } from "sandpack-vue3";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps<{
-  code: string;
+  code: string | Array<string>;
 }>();
 
+const index = ref(0);
+const currentCode = computed(() => Array.isArray(props.code) ? props.code[index.value] : props.code);
 const files = ref({
-  "/App.tsx": props.code,
+  "/App.tsx": currentCode,
+
+  '/index.tsx': {
+    code: `import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./styles.css";
+
+import App from "./App";
+import React from "react";
+
+const root = createRoot(document.getElementById("root") as HTMLElement);
+root.render(
+  <StrictMode>
+    <App />
+  </StrictMode>
+);`,
+    hidden: true,
+  },
+  "/styles.css": {
+    code: `body {
+  margin: 0;
+  padding: 0;
+  }
+
+  #root {
+    width: 100vw;
+    height: 100vh;
+  }
+  
+  `,
+    hidden: true,
+  },
   "/package.json": {
     hidden: true,
     code: JSON.stringify({
@@ -29,9 +62,33 @@ const files = ref({
     }),
   },
 });
+
+function handleGoNext() {
+  index.value = (index.value + 1) % props.code.length;
+}
+
+function handleGoBack() {
+  index.value = Math.max((index.value - 1) % props.code.length, 0);
+}
+
 </script>
 
 <template>
+  <div class="mb-4 flex items-center justify-center gap-2" v-if="Array.isArray(props.code) && props.code.length > 1">
+    <button
+      class="flex size-5 items-center justify-center rounded-full border"
+      @click="handleGoBack"
+    >
+      -
+    </button>
+    {{ index + 1 }} / {{ props.code.length }}
+    <button
+      class="flex size-5 items-center justify-center rounded-full border"
+      @click="handleGoNext"
+    >
+      +
+    </button>
+  </div>
   <div class="" @keydown.stop @keyup.stop>
     <Sandpack
       :show-open-in-code-sandbox="false"

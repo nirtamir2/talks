@@ -360,7 +360,7 @@ function A() {
 
 ---
 
-<Playground code="
+<Playground :code="[String.raw`
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 export default function App() {
@@ -373,7 +373,21 @@ export default function App() {
       </mesh>
     </Canvas>
   )
-}
+}`,String.raw`import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls/>
+      <ambientLight />
+      <axesHelper/>
+      <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
+        <boxGeometry />
+        <meshBasicMaterial />
+      </mesh>
+    </Canvas>
+  )
+}`]"
 "/>
 
 ---
@@ -394,16 +408,16 @@ code: "import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
   }"
 ---
 
-<!-- ::playgrounds{:code='["const a = 1", "const b = 2", "const c = a + b"]'}
+<!-- ::playground{:code='["const a = 1", "const b = 2", "const c = a + b"]'}
 :: -->
 
-<!-- ::playgrounds{:code=`["const a = 1", "const b = 2", "const c = a + b"]`}
+<!-- ::playground{:code=`["const a = 1", "const b = 2", "const c = a + b"]`}
 :: -->
 
-::playgrounds{:code=`["export default function A(){ \n return <h1>hi</h1> }", "const b = 2", "const c = a + b"]`}
+::playground{:code=`["export default function A(){ \n return <h1>hi</h1> }", "const b = 2", "const c = a + b"]`}
 ::
 
-::playgrounds
+::playground
 
 ---
 code:
