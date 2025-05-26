@@ -359,8 +359,60 @@ function A() {
 ```
 
 ---
+layout: code-playground
+code:
 
-<Playground :code="[String.raw`
+- |+
+ import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+ import { Canvas } from '@react-three/fiber'
+ export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls/>
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshMatcapMaterial color={"#0066CC"} />
+      </mesh>
+    </Canvas>
+  )
+ }
+
+- |+
+ import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+ import { Canvas } from '@react-three/fiber'
+ export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls/>
+      <axesHelper/>
+      <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshMatcapMaterial color={"#0066CC"} />
+      </mesh>
+    </Canvas>
+  )
+ }
+- |+
+ import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+ import { useState } from 'react'
+ import { Canvas } from '@react-three/fiber'
+ export default function App() {
+ const [isActive, setIsActive] = useState(false);
+  return (
+    <Canvas>
+      <OrbitControls/>
+      <axesHelper/>
+      <mesh onClick={() => setIsActive(isActive => !isActive)}>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshMatcapMaterial color={isActive ? "red" : "blue"} />
+      </mesh>
+    </Canvas>
+  )
+ }
+
+---
+
+<!-- <Playground :code="[String.raw`
 import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 export default function App() {
@@ -387,8 +439,22 @@ export default function App() {
       </mesh>
     </Canvas>
   )
+}`,String.raw`import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls/>
+      <ambientLight />
+      <axesHelper/>
+      <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
+        <boxGeometry />
+        <meshBasicMaterial color={"0066CC"} />
+      </mesh>
+    </Canvas>
+  )
 }`]"
-"/>
+"/> -->
 
 ---
 title: "Shit"
