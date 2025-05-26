@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "code-tag": "^1.2.0",
+    "mdast-util-from-markdown": "^2.0.2",
     "sandpack-vue3": "^3.1.12",
     "slidev-component-zoom": "^1.1.0"
   },
@@ -27,6 +28,7 @@
     "@slidev/client": "catalog:",
     "@slidev/theme-default": "catalog:",
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@types/mdast": "^4.0.4",
     "@types/node": "catalog:",
     "@types/prompts": "catalog:",
     "@types/seedrandom": "catalog:",

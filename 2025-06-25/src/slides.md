@@ -360,7 +360,7 @@ function A() {
 
 ---
 layout: code-playground
-code:
+files:
   - |+
     import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
     import { Canvas } from '@react-three/fiber'
@@ -453,6 +453,40 @@ export default function App() {
   )
 }`]"
 "/> -->
+---
+
+@@@
+```tsx sandpack index=0
+
+import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
+import { Canvas } from '@react-three/fiber'
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls/>
+      <ambientLight />
+      <axesHelper/>
+      <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
+        <boxGeometry />
+        <meshBasicMaterial />
+      </mesh>
+    </Canvas>
+  )
+}
+
+```
+
+```tsx sandpack index=1 hidden
+bbb
+```
+
+```tsx sandpack index=1 file="Box.tsx"
+ccc
+```
+
+@@@
+
+<!-- <Debug :files="[{'App.tsx': {code: 'aaaa\nbbbb'}}, {'App.tsx': {code: 'cccc\ndddd', hidden: true}, 'Box.tsx': {code: 'eeee\nffff'}}]"/> -->
 
 ---
 title: "Shit"
