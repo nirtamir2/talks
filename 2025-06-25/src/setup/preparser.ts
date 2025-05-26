@@ -1,75 +1,85 @@
 import { definePreparserSetup } from '@slidev/types'
 
+type FileObject = Record<string, {
+    code: string
+    hidden: boolean
+  }>;
+
+interface ParsedAttributes {
+  [key: string]: string | boolean | undefined
+  file?: string
+  hidden?: boolean
+}
+
+const SANDPACK_BLOCK_REGEX = /@@@\s*\n((?:```tsx sandpack[^\n]*\n[\s\S]*?\n```\s*)+)@@@/g
+// eslint-disable-next-line sonarjs/slow-regex, regexp/no-super-linear-backtracking
+const CODE_BLOCK_REGEX = /```tsx sandpack(?:\s+([^\n]*))?\n([\s\S]*?)```/g
+
 export default definePreparserSetup(() => {
   return [
     {
-      transformSlide(content, frontmatter) {
-        // Find all sandpack blocks wrapped in @@@
-        const sandpackRegex = /@@@\s*\n((?:```tsx sandpack[^\n]*\n[\s\S]*?\n```\s*)+)@@@/g;
-        
-        return content.replaceAll(sandpackRegex, (match, blocksContent) => {
-          // Parse individual code blocks within the sandpack group
-          const blockRegex = /```tsx sandpack(?:\s+([^\n]*))?\n([\s\S]*?)```/g;
-          const files = [];
-          let blockMatch;
-          
-          while ((blockMatch = blockRegex.exec(blocksContent)) !== null) {
-            const [, attributes = '', code] = blockMatch;
-            
-            // Parse attributes
-            const attrs = parseAttributes(attributes);
-            const filename = attrs.file || 'App.tsx';
-            const hidden = attrs.hidden !== undefined;
-            
-            // Create file object
-            const fileObj = {
-              [String(filename)]: {
-                code: code.trim(),
-                hidden
-              }
-            };
-          
-            
-            files.push(fileObj);
-          }
-          
-          // Generate the Playground component
-          const filesJson = String.raw`${JSON.stringify(files)}`.replaceAll('"', '&quot;');
-          return `<FilesPlayground :files="${filesJson}"/>`;
-        });
+      async transformSlide(content) {
+        return content.replaceAll(SANDPACK_BLOCK_REGEX, transformSandpackBlock)
       }
     }
-  ];
-});
+  ]
+})
 
-function parseAttributes(attributeString: string): Record<string, string | boolean> {
-  const attrs: Record<string, string | boolean> = {};
+function transformSandpackBlock(_match: string, blocksContent: string): string {
+  const files = extractFilesFromBlocks(blocksContent)
+  const filesJson = JSON.stringify(files).replaceAll('"', '&quot;')
+  // eslint-disable-next-line github/unescaped-html-literal
+  return `<FilesPlayground :files="${filesJson}"/>`
+}
+
+function createFileObject(attributes: string, code: string): FileObject {
+  const attrs = parseAttributes(attributes)
+  const filename = attrs.file || 'App.tsx'
+  const hidden = attrs.hidden !== undefined
+  
+  return {
+    [filename]: {
+      code: code.trim(),
+      hidden
+    }
+  }
+}
+
+function extractFilesFromBlocks(blocksContent: string): Array<FileObject> {
+  return [...blocksContent.matchAll(CODE_BLOCK_REGEX)]
+    .map(([, attributes = '', code]) => createFileObject(attributes, code))
+}
+
+function parseAttributes(attributeString: string): ParsedAttributes {
+  const attrs: ParsedAttributes = {}
   
   if (!attributeString.trim()) {
-    return attrs;
+    return attrs
   }
   
-  // Parse key=value pairs and standalone flags
-  const parts = attributeString.trim().split(/\s+/);
+  const parts = attributeString.trim().split(/\s+/)
   
   for (const part of parts) {
     if (part.includes('=')) {
-      const [key, ...valueParts] = part.split('=');
-      let value = valueParts.join('=');
+      const [key, ...valueParts] = part.split('=')
+      let value = valueParts.join('=')
       
-      // Remove quotes if present
-      if ((value.startsWith('"') && value.endsWith('"')) || 
-          (value.startsWith("'") && value.endsWith("'"))) {
-        value = value.slice(1, -1);
+      // Remove surrounding quotes
+      if (isQuoted(value)) {
+        value = value.slice(1, -1)
       }
       
-      // Convert numeric strings to numbers for index
-      attrs[key] = key === 'index' && /^\d+$/.test(value) ? value : value;
+      attrs[key] = value
     } else {
-      // Standalone attribute (like 'hidden')
-      attrs[part] = true;
+      // Standalone flag attribute
+      attrs[part] = true
     }
   }
   
-  return attrs;
+  return attrs
+}
+
+function isQuoted(value: string): boolean {
+  return (value.startsWith('"') && value.endsWith('"')) || 
+         (value.startsWith("'") && value.endsWith("'"))
 }
