@@ -1,58 +1,68 @@
 <script setup lang="ts">
-import { Sandpack } from 'sandpack-vue3'
-import { computed, ref } from 'vue'
+import { Sandpack } from "sandpack-vue3";
+import { computed, ref } from "vue";
 
 const props = defineProps<{
-  code: Array<string>
-}>()
+  code: Array<string>;
+}>();
 
-const index = ref(0)
+const index = ref(0);
 
 const files = computed(() => ({
-  '/App.tsx': props.code[index.value],
-  '/package.json': {
+  "/App.tsx": props.code[index.value],
+  "/package.json": {
     hidden: true,
     code: JSON.stringify({
       dependencies: {
-        'react-dom': '^19.0.0',
-        'react-scripts': '^4.0.0',
-        'react': '^19.0.0',
-        '@react-three/drei': '^10.0.7',
-        '@react-three/fiber': '^9.1.2',
-        'three': '^0.176.0',
+        "react-dom": "^19.0.0",
+        "react-scripts": "^4.0.0",
+        react: "^19.0.0",
+        "@react-three/drei": "^10.0.7",
+        "@react-three/fiber": "^9.1.2",
+        three: "^0.176.0",
       },
       devDependencies: {
-        '@types/react': '^19.0.0',
-        '@types/react-dom': '^19.0.0',
-        '@types/three': '^0.176.0',
-        'typescript': '^4.0.0',
+        "@types/react": "^19.0.0",
+        "@types/react-dom": "^19.0.0",
+        "@types/three": "^0.176.0",
+        typescript: "^4.0.0",
       },
-      main: '/index.tsx',
+      main: "/index.tsx",
     }),
   },
-}))
+}));
 
 function handleGoNext() {
-  index.value = (index.value + 1) % props.code.length
+  index.value = (index.value + 1) % props.code.length;
 }
 function handleGoBack() {
-  index.value = Math.max((index.value - 1) % props.code.length, 0)
+  index.value = Math.max((index.value - 1) % props.code.length, 0);
 }
 </script>
 
 <template>
-  <div class="flex justify-center items-center mb-4 gap-2">
-    <button class="rounded-full size-5 border flex items-center justify-center" @click="handleGoBack">
+  <div class="mb-4 flex items-center justify-center gap-2">
+    <button
+      class="flex size-5 items-center justify-center rounded-full border"
+      @click="handleGoBack"
+    >
       -
     </button>
     {{ index + 1 }} / {{ props.code.length }}
-    <button class="rounded-full size-5 border flex items-center justify-center" @click="handleGoNext">
+    <button
+      class="flex size-5 items-center justify-center rounded-full border"
+      @click="handleGoNext"
+    >
       +
     </button>
   </div>
   <div class="" @keydown.stop @keyup.stop>
     <Sandpack
-      :show-open-in-code-sandbox="false" theme="dark" template="react-ts" :files="files" :options="{
+      :show-open-in-code-sandbox="false"
+      theme="dark"
+      template="react-ts"
+      :files="files"
+      :options="{
         editorHeight: 500, // default - 300
         editorWidthPercentage: 70, // default - 50
       }"

@@ -1,5 +1,5 @@
 <template>
-  <footer class="absolute text-xs top-0 right-0 p-2">
+  <footer class="absolute right-0 top-0 p-2 text-xs">
     <a href="https://nirtamir.com">nirtamir.com</a>
   </footer>
 </template>

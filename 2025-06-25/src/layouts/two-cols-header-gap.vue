@@ -25,11 +25,14 @@ const props = defineProps({
   layoutClass: {
     type: String,
   },
-})
+});
 </script>
 
 <template>
-  <div class="slidev-layout two-cols-header-gap w-full h-full" :class="layoutClass">
+  <div
+    class="slidev-layout two-cols-header-gap h-full w-full"
+    :class="layoutClass"
+  >
     <div class="col-header">
       <slot />
     </div>

@@ -10,7 +10,6 @@ lang: en-US
 title: "TypeScript Without Surprises: Smarter Error Handling with Effect-TS"
 ---
 
-
 ![](./nirtamir-animate.svg){.w-30.mt--10.mb-5}
 
 <!--
@@ -25,7 +24,7 @@ layout: image-right
 image: ./nirtamir.png
 ---
 
-# Nir Tamir 
+# Nir Tamir
 
 - Senior Frontend developer
 - Loves open source and tooling
@@ -34,7 +33,7 @@ image: ./nirtamir.png
 - <mdi-twitter /> [@NirTamir](https://twitter.com/NirTamir)
 - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2)
 
-<!-- 
+<!--
 Before we dive in, let me introduce myself. I'm Nir Tamir, a senior frontend developer passionate about open source and tooling. I work with early-stage startups, helping them leverage cutting-edge technologies like AI.
 -->
 
@@ -44,8 +43,8 @@ Before we dive in, let me introduce myself. I'm Nir Tamir, a senior frontend dev
 
 - [Effect: Beginners Complete Getting Started](https://www.typeonce.dev/course/effect-beginners-complete-getting-started)
 
-
 # The tweet about types
+
 https://x.com/dillon_mulroy/status/1898590282020450681
 
 > typescript/javascript happy path blindness is real.
@@ -55,4 +54,3 @@ https://x.com/dillon_mulroy/status/1898590282020450681
 > we did this with part of our domain renewal flow.
 >
 > from 3 errors to 17
-

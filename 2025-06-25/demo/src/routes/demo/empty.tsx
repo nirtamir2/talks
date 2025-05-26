@@ -1,10 +1,10 @@
-import { Canvas } from '@react-three/fiber'
-import { createFileRoute } from '@tanstack/react-router'
+import { Canvas } from "@react-three/fiber";
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/demo/empty')({
+export const Route = createFileRoute("/demo/empty")({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return <Canvas />
+  return <Canvas />;
 }

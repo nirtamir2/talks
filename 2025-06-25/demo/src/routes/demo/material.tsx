@@ -8,26 +8,22 @@ export const Route = createFileRoute("/demo/material")({
 
 function RouteComponent() {
   return (
-    <div className="bg-black size-screen h-screen">
+    <div className="size-screen h-screen bg-black">
       <Canvas>
         <PerspectiveCamera />
         <OrbitControls />
 
         <directionalLight />
-{/*<ambientLight />*/}
-
+        {/*<ambientLight />*/}
 
         <mesh>
-         <torusKnotGeometry />
-     1    {/*<meshNormalMaterial />*/}
+          <torusKnotGeometry />1 {/*<meshNormalMaterial />*/}
           {/*<meshBasicMaterial color="#5DDCB9" />*/}
           {/*<meshMatcapMaterial color="#5DDCB9" />*/}
-         {/*<meshLambertMaterial color="#5DDCB9" />*/}
-         {/* <meshToonMaterial color="#5DDCB9" />*/}
+          {/*<meshLambertMaterial color="#5DDCB9" />*/}
+          {/* <meshToonMaterial color="#5DDCB9" />*/}
           <meshStandardMaterial color="#5DDCB9" />
         </mesh>
-
-
       </Canvas>
     </div>
   );

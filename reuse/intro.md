@@ -1,5 +1,5 @@
 ---
-layout: 'intro'
+layout: "intro"
 ---
 
 # Nir Tamir

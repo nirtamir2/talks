@@ -1,18 +1,18 @@
 <script setup lang="ts">
-const props = withDefaults(defineProps<{
-  background?: string
-  maxHeight?: boolean
-}>(), {
-  background: '#ffffff',
-  maxHeight: false,
-})
+const props = withDefaults(
+  defineProps<{
+    background?: string;
+    maxHeight?: boolean;
+  }>(),
+  {
+    background: "#ffffff",
+    maxHeight: false,
+  },
+);
 </script>
 
 <template>
-  <div
-    class="browser-window"
-    :class="{ '!h-120': props.maxHeight }"
-  >
+  <div class="browser-window" :class="{ '!h-120': props.maxHeight }">
     <div class="browser-header">
       <div class="browser-buttons">
         <div class="minimize-btn" />
@@ -32,12 +32,12 @@ const props = withDefaults(defineProps<{
 <style scoped>
 /* Browser window */
 .browser-window {
-  @apply w-full rounded-md border border-gray-300 shadow-md overflow-hidden max-h-120 h-full;
+  @apply max-h-120 h-full w-full overflow-hidden rounded-md border border-gray-300 shadow-md;
 }
 
 /* Browser header */
 .browser-header {
-  @apply flex items-center justify-end bg-gray-800 text-white p-2;
+  @apply flex items-center justify-end bg-gray-800 p-2 text-white;
 }
 
 /* Browser control buttons (right aligned) */
@@ -46,19 +46,19 @@ const props = withDefaults(defineProps<{
 }
 
 .close-btn {
-  @apply w-3 h-3 rounded-full bg-red-500;
+  @apply h-3 w-3 rounded-full bg-red-500;
 }
 
 .minimize-btn {
-  @apply w-3 h-3 rounded-full bg-yellow-500;
+  @apply h-3 w-3 rounded-full bg-yellow-500;
 }
 
 .maximize-btn {
-  @apply w-3 h-3 rounded-full bg-green-500;
+  @apply h-3 w-3 rounded-full bg-green-500;
 }
 
 /* Browser content with scrollable area */
 .browser-content {
-  @apply text-gray-700 overflow-x-hidden overflow-y-auto h-full min-h-24 max-h-full;
+  @apply h-full max-h-full min-h-24 overflow-y-auto overflow-x-hidden text-gray-700;
 }
 </style>
