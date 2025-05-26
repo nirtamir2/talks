@@ -31,6 +31,7 @@ export const logMiddleware = createMiddleware()
     const res = await ctx.next();
 
     const now = new Date();
+    // eslint-disable-next-line no-console
     console.log("Client Req/Res:", {
       duration: res.context.clientTime.getTime() - now.getTime(),
       durationToServer: res.context.durationToServer,

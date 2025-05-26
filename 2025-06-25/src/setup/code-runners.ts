@@ -1,4 +1,3 @@
-/* eslint-disable no-new-func */
 import { defineCodeRunnersSetup } from "@slidev/types";
 
 export default defineCodeRunnersSetup(() => {
@@ -21,9 +20,9 @@ export default defineCodeRunnersSetup(() => {
 
       // Replace Vue imports to object destructuring
       // Only for simple demo, it doesn't work with imports from other packages
-      scripts = scripts.replace(
-        /import (\{[^}]+\}) from ['"]vue['"]/g,
-        (_, imports) => `const ${imports.replace(/\sas\s/g, ":")} = Vue`,
+      scripts = scripts.replaceAll(
+        /import ({[^}]+}) from ['"]vue['"]/g,
+        (_, imports) => `const ${imports.replaceAll(/\sas\s/g, ":")} = Vue`,
       );
       scripts += "\nreturn __Component";
 
@@ -31,6 +30,7 @@ export default defineCodeRunnersSetup(() => {
 
       // Create function to evaluate the script and get the component
       // Note this is not sandboxed, it's NOT secure.
+      // eslint-disable-next-line no-new-func, sonarjs/code-eval
       const component = new Function(`return (Vue) => {${scripts}}`)()(Vue);
 
       // console.log(component)
@@ -48,22 +48,16 @@ export default defineCodeRunnersSetup(() => {
       const React = await import("react");
       const ReactDOM = await import("react-dom/client");
       const Babel = await import("@babel/standalone");
-      console.log(React);
 
       const result = Babel.transform(code, {
         presets: ["react"],
       });
 
-      let Component = new Function(`return (React) => ${result.code}`)()(React);
-      let app = React.createElement(Component);
+      // eslint-disable-next-line sonarjs/code-eval, no-new-func
+      const Component = new Function(`return (React) => ${result.code}`)()(React);
+      const app = React.createElement(Component);
       const el = document.createElement("div");
       el.className = "jsx-runner";
-
-      //   // style
-      //   el.style.width = '100%'
-      //   el.style.height = '50vh'
-      //   // el.style.minHeight = '400px';
-      //   el.style.overflow = 'auto'
 
       ReactDOM.createRoot(el).render(app);
 

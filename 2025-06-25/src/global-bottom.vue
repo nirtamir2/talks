@@ -32,13 +32,14 @@ export type Distribution =
   | "topmost";
 
 const formatter = computed(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   () => (currentSlideRoute.value.meta?.slide as any)?.frontmatter || {},
 );
 const distribution = computed(
   () => (formatter.value.glow || "full") as Distribution,
 );
-const opacity = computed<number>(() => +(formatter.value.glowOpacity ?? 0.4));
-const hue = computed<number>(() => +(formatter.value.glowHue || 0));
+const opacity = computed<number>(() => Number(formatter.value.glowOpacity ?? 0.4));
+const hue = computed<number>(() => Number(formatter.value.glowHue || 0));
 const seed = computed<string>(() =>
   formatter.value.glowSeed === "false" || formatter.value.glowSeed === false
     ? Date.now().toString()
@@ -62,37 +63,47 @@ function distributionToLimits(distribution: Distribution) {
 
   for (const limit of limits) {
     switch (limit) {
-      case "topmost":
+      case "topmost": {
         y = intersection(y, [-0.5, 0]);
         break;
-      case "top":
+      }
+      case "top": {
         y = intersection(y, [min, 0.6]);
         break;
-      case "bottom":
+      }
+      case "bottom": {
         y = intersection(y, [0.4, max]);
         break;
-      case "left":
+      }
+      case "left": {
         x = intersection(x, [min, 0.6]);
         break;
-      case "right":
+      }
+      case "right": {
         x = intersection(x, [0.4, max]);
         break;
-      case "xcenter":
+      }
+      case "xcenter": {
         x = intersection(x, [0.25, 0.75]);
         break;
-      case "ycenter":
+      }
+      case "ycenter": {
         y = intersection(y, [0.25, 0.75]);
         break;
-      case "center":
+      }
+      case "center": {
         x = intersection(x, [0.25, 0.75]);
         y = intersection(y, [0.25, 0.75]);
         break;
-      case "full":
+      }
+      case "full": {
         x = intersection(x, [0, 1]);
         y = intersection(y, [0, 1]);
         break;
-      default:
+      }
+      default: {
         break;
+      }
     }
   }
 
@@ -104,7 +115,7 @@ function distance2([x1, y1]: Range, [x2, y2]: Range) {
 }
 
 function usePloy(number = 16) {
-  function getPoints(): Range[] {
+  function getPoints(): Array<Range> {
     const limits = distributionToLimits(distribution.value);
     const rng = seedrandom(`${seed.value}-${currentSlideRoute.value.no}`);
     function randomBetween([a, b]: Range) {
@@ -131,7 +142,7 @@ function usePloy(number = 16) {
     const newPoints = new Set(getPoints());
     points.value = points.value.map((o) => {
       let minDistance = Number.POSITIVE_INFINITY;
-      let closest: Range | undefined;
+      let closest: Range | null = null;
       for (const n of newPoints) {
         const d = distance2(o, n);
         if (d < minDistance) {
@@ -164,11 +175,11 @@ const poly3 = usePloy(3);
   >
     <div
       class="clip bg-gradient-to-r from-[#00DC82] to-white/10"
-      :style="{ 'clip-path': `polygon(${poly1})`, opacity: opacity }"
+      :style="{ 'clip-path': `polygon(${poly1})`, opacity }"
     />
     <div
       class="clip bg-gradient-to-l from-[#2f96ad] to-white/10"
-      :style="{ 'clip-path': `polygon(${poly2})`, opacity: opacity }"
+      :style="{ 'clip-path': `polygon(${poly2})`, opacity }"
     />
     <div
       class="clip from-lime bg-gradient-to-t to-white/10"

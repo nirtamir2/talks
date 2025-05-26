@@ -1,25 +1,24 @@
 import fg from "fast-glob";
 import fs from "node:fs/promises";
-import { dirname, resolve } from "node:path";
-import process from "node:process";
-
+import path from "node:path";
 const packageFiles = (
   await fg("*/src/package.json", {
     onlyFiles: true,
   })
+// eslint-disable-next-line unicorn/no-await-expression-member
 ).sort();
 
 const bases = (
   await Promise.all(
     packageFiles.map(async (file) => {
-      const talkRoot = dirname(dirname(file));
-      const json = JSON.parse(await fs.readFile(file, "utf-8"));
-      const pdfFile = (
+      const talkRoot = path.dirname(path.dirname(file));
+      const json = JSON.parse(await fs.readFile(file, "utf8"));
+      const [pdfFile] = 
         await fg("*.pdf", {
-          cwd: resolve(process.cwd(), talkRoot),
+          cwd: path.resolve(process.cwd(), talkRoot),
           onlyFiles: true,
         })
-      )[0];
+      ;
       const command = json.scripts?.build;
       if (!command) return;
       const base = command.match(/ --base (.*?)\s/)?.[1];
@@ -31,11 +30,12 @@ const bases = (
       };
     }),
   )
+// eslint-disable-next-line unicorn/no-await-expression-member
 ).filter(Boolean);
 
 const redirects = bases
   .flatMap(({ base, pdfFile, dir }) => {
-    const parts: string[] = [];
+    const parts: Array<string> = [];
 
     if (pdfFile) {
       parts.push(`
@@ -54,9 +54,7 @@ status = 302`);
 [[redirects]]
 from = "${base}src"
 to = "https://github.com/antfu/talks/tree/main/${dir}"
-status = 302`);
-
-    parts.push(`
+status = 302`, `
 [[redirects]]
 from = "${dir}"
 to = "https://talks.antfu.me${base}"
@@ -88,4 +86,4 @@ to = "https://antfu.me/talks"
 status = 302
 `;
 
-await fs.writeFile("netlify.toml", content, "utf-8");
+await fs.writeFile("netlify.toml", content, "utf8");

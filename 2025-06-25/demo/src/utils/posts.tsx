@@ -10,6 +10,7 @@ export type PostType = {
 export const fetchPost = createServerFn({ method: "GET" })
   .validator((d: string) => d)
   .handler(async ({ data }) => {
+    // eslint-disable-next-line no-console
     console.info(`Fetching post with id ${data}...`);
     const res = await fetch(
       `https://jsonplaceholder.typicode.com/posts/${data}`,
@@ -29,6 +30,7 @@ export const fetchPost = createServerFn({ method: "GET" })
 
 export const fetchPosts = createServerFn({ method: "GET" }).handler(
   async () => {
+    // eslint-disable-next-line no-console
     console.info("Fetching posts...");
     const res = await fetch("https://jsonplaceholder.typicode.com/posts");
     if (!res.ok) {

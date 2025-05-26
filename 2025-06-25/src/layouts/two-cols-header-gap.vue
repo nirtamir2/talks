@@ -14,7 +14,8 @@ This shows on the right
 ::bottom::
 This shows at the bottom, aligned to the end (bottom) of the grid
 ```
-<!-- https://github.com/slidevjs/slidev/blob/main/packages/client/layouts/two-cols-header.vue -->
+
+Taken from https://github.com/slidevjs/slidev/blob/main/packages/client/layouts/two-cols-header.vue
 -->
 
 <script setup lang="ts">
@@ -30,7 +31,7 @@ const props = defineProps({
 
 <template>
   <div
-    class="slidev-layout two-cols-header-gap h-full w-full"
+    class="slidev-layout two-cols-header-gap size-full"
     :class="layoutClass"
   >
     <div class="col-header">

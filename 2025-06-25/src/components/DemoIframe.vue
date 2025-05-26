@@ -8,7 +8,7 @@ const props = defineProps<{
 const demoBaseUrl = computed<string | undefined>(() => {
   const demoBaseUrl = import.meta.env.VITE_DEMO_BASE_URL;
   if (!demoBaseUrl) {
-    return undefined;
+    return;
   }
   return demoBaseUrl;
 });

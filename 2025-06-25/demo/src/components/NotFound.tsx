@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
+import type { ReactNode } from "react";
 
-export function NotFound({ children }: { children?: any }) {
+export function NotFound({ children }: { children: ReactNode }) {
   return (
     <div className="space-y-2 p-2">
       <div className="text-gray-600 dark:text-gray-400">
@@ -8,7 +9,7 @@ export function NotFound({ children }: { children?: any }) {
       </div>
       <p className="flex flex-wrap items-center gap-2">
         <button
-          onClick={() => window.history.back()}
+          onClick={() => globalThis.history.back()}
           className="rounded bg-emerald-500 px-2 py-1 text-sm font-black uppercase text-white"
         >
           Go back

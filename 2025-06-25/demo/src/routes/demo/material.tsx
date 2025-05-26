@@ -1,4 +1,4 @@
-import { OrbitControls, PerspectiveCamera, SpotLight } from "@react-three/drei";
+import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { createFileRoute } from "@tanstack/react-router";
 
