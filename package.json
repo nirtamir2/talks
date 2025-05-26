@@ -12,6 +12,8 @@
     "prepare": "git submodule update --init --recursive"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.1.2",
+    "@react-three/rapier": "^2.1.0",
     "code-tag": "^1.2.0",
     "mdast-util-from-markdown": "^2.0.2",
     "sandpack-vue3": "^3.1.12",

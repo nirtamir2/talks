@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import type { SandpackProps } from "sandpack-vue3";
-import { SandpackCodeEditor, SandpackPreview, SandpackProvider, defaultDark } from "sandpack-vue3";
+import {
+  SandpackCodeEditor,
+  SandpackPreview,
+  SandpackProvider,
+  defaultDark,
+} from "sandpack-vue3";
 import { computed, ref } from "vue";
 import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 
@@ -52,6 +57,7 @@ root.render(
         react: "^19.0.0",
         "@react-three/drei": "^10.0.7",
         "@react-three/fiber": "^9.1.2",
+        "@react-three/rapier": "^2.1.0",
         three: "^0.176.0",
       },
       devDependencies: {
@@ -75,13 +81,24 @@ function handleGoBack() {
 </script>
 
 <template>
-  <div v-if="props.files.length > 1" class="absolute left-0 top-0 z-10 flex w-full items-center justify-center">
-    <div class="rounded-t-2 flex items-center justify-center gap-2 px-2 py-1 text-xs">
-      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleGoBack">
+  <div
+    v-if="props.files.length > 1"
+    class="absolute left-0 top-0 z-10 flex w-full items-center justify-center"
+  >
+    <div
+      class="rounded-t-2 flex items-center justify-center gap-2 px-2 py-1 text-xs"
+    >
+      <button
+        class="flex size-4 items-center justify-center rounded-full border"
+        @click="handleGoBack"
+      >
         -
       </button>
       {{ index + 1 }} / {{ props.files.length }}
-      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleGoNext">
+      <button
+        class="flex size-4 items-center justify-center rounded-full border"
+        @click="handleGoNext"
+      >
         +
       </button>
     </div>

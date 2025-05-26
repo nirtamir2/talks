@@ -352,113 +352,6 @@ export default function App() {
 
 ---
 
-```jsx {monaco-run}
-function A() {
-  return <h1>Hi</h1>;
-}
-```
-
----
-layout: code-playground
-files:
-  - |+
-    import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-    import { Canvas } from '@react-three/fiber'
-    export default function App() {
-     return (
-       <Canvas>
-         <OrbitControls/>
-         <mesh>
-           <boxGeometry args={[1, 1, 1]} />
-           <meshMatcapMaterial color={"#0066CC"} />
-         </mesh>
-       </Canvas>
-     )
-    }
-
-  - |+
-    import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-    import { Canvas } from '@react-three/fiber'
-    export default function App() {
-     return (
-       <Canvas>
-         <OrbitControls/>
-         <axesHelper/>
-         <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
-           <boxGeometry args={[1, 1, 1]} />
-           <meshMatcapMaterial color={"#0066CC"} />
-         </mesh>
-       </Canvas>
-     )
-    }
-  - |+
-    import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-    import { useState } from 'react'
-    import { Canvas } from '@react-three/fiber'
-    export default function App() {
-    const [isActive, setIsActive] = useState(false);
-     return (
-       <Canvas>
-         <OrbitControls/>
-         <axesHelper/>
-         <mesh onClick={() => setIsActive(isActive => !isActive)}>
-           <boxGeometry args={[1, 1, 1]} />
-           <meshMatcapMaterial color={isActive ? "red" : "blue"} />
-         </mesh>
-       </Canvas>
-     )
-    }
-
----
-
-<!--
-<Playground :code="[String.raw`
-import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
-export default function App() {
-  return (
-    <Canvas>
-      <ambientLight />
-      <mesh>
-        <boxGeometry />
-        <meshStandardMaterial />
-      </mesh>
-    </Canvas>
-  )
-}`,String.raw`import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
-export default function App() {
-  return (
-    <Canvas>
-      <OrbitControls/>
-      <ambientLight />
-      <axesHelper/>
-      <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
-        <boxGeometry />
-        <meshMatcapMaterial />
-      </mesh>
-    </Canvas>
-  )
-}`,String.raw`import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-import { Canvas } from '@react-three/fiber'
-export default function App() {
-  return (
-    <Canvas>
-      <OrbitControls/>
-      <ambientLight />
-      <axesHelper/>
-      <mesh position={[0,0,0]} scale={[1,1,1]} rotation={[0, 0, 0]}>
-        <boxGeometry />
-        <meshMatcapMaterial color={"#0066CC"} />
-      </mesh>
-    </Canvas>
-  )
-}`]"
-"/>
--->
-
----
-
 @@@
 
 ```tsx sandpack index=0
@@ -526,7 +419,7 @@ export function Box(props: ThreeElements["mesh"]) {
       onPointerOut={() => setHover(false)}
     >
       <boxGeometry args={[1, 1, 1]} />
-      <meshMatcapMaterial color={hovered ? "hotpink" : "orange"} />
+      <meshMatcapMaterial color={hovered ? "#0066CC" : "#FF5733"} />
     </mesh>
   );
 }
@@ -562,7 +455,7 @@ export function Box(props: ThreeElements["mesh"]) {
   return (
     <mesh {...props} ref={meshRef}>
       <boxGeometry args={[1, 1, 1]} />
-      <meshMatcapMaterial color={"orange"} />
+      <meshMatcapMaterial color={"#FF5733"} />
     </mesh>
   );
 }
@@ -570,61 +463,11 @@ export function Box(props: ThreeElements["mesh"]) {
 
 @@@
 
-<!--
-<Debug :files="[{'App.tsx': {code: 'aaaa\nbbbb'}}, {'App.tsx': {code: 'cccc\ndddd', hidden: true}, 'Box.tsx': {code: 'eeee\nffff'}}]"/>
--->
-
----
-title: "Shit"
-mdc: true
-code: "import { OrbitControls, PerspectiveCamera } from '@react-three/drei'
-  import { Canvas } from '@react-three/fiber'
-  export default function App() {
-  return (
-  <Canvas>
-  <ambientLight />
-  <mesh>
-  <boxGeometry />
-  <meshStandardMaterial />
-  </mesh>
-  </Canvas>
-  )
-  }"
----
-
-<!-- ::playground{:code='["const a = 1", "const b = 2", "const c = a + b"]'}
-:: -->
-
-<!-- ::playground{:code=`["const a = 1", "const b = 2", "const c = a + b"]`}
-:: -->
-
-::playground{:code=`["export default function A(){ \n return <h1>hi</h1> }", "const b = 2", "const c = a + b"]`}
-::
-
-::playground
-
----
-code:
-  - IconNuxt
-  - description: Harness the full power of Nuxt and the Nuxt ecosystem.
-  - title: Nuxt Architecture.
----
-
-::
-
----
-title: "Demo wow"
----
-
-# Posts
-
-<BrowserWrapper>
-  <DemoIframe url="/demo/wow"></DemoIframe>
-</BrowserWrapper>
-
 ---
 title: "Import models"
 ---
+
+# Import models
 
 ```tsx
 /*
@@ -665,4 +508,134 @@ title: Suzanne Iframe
 layout: iframe
 url: https://gltf.pmnd.rs/
 class: mix-blend-screen invert
+---
+
+---
+title: "Physics"
+---
+
+# Physics
+
+@@@
+
+```tsx sandpack index=0
+import { Sphere, Torus, OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Physics, RigidBody, CuboidCollider } from "@react-three/rapier";
+
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls />
+      <Physics debug>
+        <RigidBody colliders="cuboid" rotation={[Math.PI / 4, Math.PI / 4, 0]}>
+          <mesh>
+            <boxGeometry args={[1, 1, 1]} />
+            <meshMatcapMaterial color={"#0066CC"} />
+          </mesh>
+        </RigidBody>
+        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />
+      </Physics>
+    </Canvas>
+  );
+}
+```
+
+```tsx sandpack index=1 file="MyBox.tsx"
+import { RigidBody } from "@react-three/rapier";
+import { RigidBodyProps } from "@react-three/rapier";
+
+export function MyBox(props: RigidBodyProps) {
+  return (
+    <RigidBody {...props} colliders="cuboid">
+      <mesh>
+        <boxGeometry args={[1, 1, 1]} />
+        <meshMatcapMaterial color={"#0066CC"} />
+      </mesh>
+    </RigidBody>
+  );
+}
+```
+
+```tsx sandpack index=1 file="MySphere.tsx"
+import { RigidBody } from "@react-three/rapier";
+import { RigidBodyProps } from "@react-three/rapier";
+
+export function MySphere(props: RigidBodyProps) {
+  return (
+    <RigidBody {...props} colliders="ball">
+      <mesh>
+        <sphereGeometry />
+        <meshMatcapMaterial color={"#FF5733"} />
+      </mesh>
+    </RigidBody>
+  );
+}
+```
+
+```tsx sandpack index=1 file="MyThorus.tsx"
+import { RigidBody } from "@react-three/rapier";
+import { RigidBodyProps } from "@react-three/rapier";
+
+export function MyThorus(props: RigidBodyProps) {
+  return (
+    <RigidBody {...props} colliders="hull">
+      <mesh>
+        <torusGeometry />
+        <meshMatcapMaterial color={"#50C878"} />
+      </mesh>
+    </RigidBody>
+  );
+}
+```
+
+```tsx sandpack index=1 file="App.tsx"
+import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+import { Physics, CuboidCollider } from "@react-three/rapier";
+import { MyBox } from "./MyBox";
+import { MySphere } from "./MySphere";
+import { MyThorus } from "./MyThorus";
+
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls />
+      <Physics debug>
+        <MyBox rotation={Math.PI/4, Math.PI/4, 0]} />
+        <MySphere position={[0, 10, 0]} />
+        <MyThorus position={[2, 0, 0]} />
+        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />
+      </Physics>
+    </Canvas>
+  );
+}
+```
+
+@@@
+
+---
+title: "Demo wow"
+---
+
+# Posts
+
+<BrowserWrapper>
+  <DemoIframe url="/demo/wow"></DemoIframe>
+</BrowserWrapper>
+
+---
+layout: fact
+---
+
+# Go build stuff
+
+---
+layout: center
+---
+
+# nirtamir.com
+
+---
+layout: end
 ---
