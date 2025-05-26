@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { Sandpack } from "sandpack-vue3";
+import { SandpackCodeEditor, SandpackPreview, SandpackProvider } from "sandpack-vue3";
+import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 import { computed, ref } from "vue";
 
 const props = defineProps<{
@@ -94,18 +95,17 @@ function handleGoBack() {
     </button>
   </div>
   <div class="" @keydown.stop @keyup.stop>
-    <pre>{{ JSON.stringify(files, null, 2) }}</pre>
-
-    <Sandpack
-      :show-open-in-code-sandbox="false"
-      theme="dark"
-      template="react-ts"
-      :files="files"
-      :options="{
-        editorHeight: 500, // default - 300
-        editorWidthPercentage: 70, // default - 50
-      }"
-    />
+  <SandpackProvider template="react-ts" :files="files">
+ <PanelGroup direction="horizontal">
+      <Panel :default-size="20">
+        <SandpackCodeEditor/>
+      </Panel>
+      <PanelResizeHandle />
+      <Panel :default-size="20">
+        <SandpackPreview :show-open-in-code-sandbox="false"/>
+      </Panel>
+    </PanelGroup>
+    </SandpackProvider>
     <!--    <SandpackProvider :files="files" theme="dark" template="react-ts" :options="{}"> -->
     <!--      <SandpackLayout style="height: 500px" > -->
     <!--        <SandpackCodeEditor  /> -->

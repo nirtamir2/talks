@@ -131,6 +131,9 @@ importers:
       slidev-component-zoom:
         specifier: ^1.1.0
         version: 1.1.0(@slidev/client@51.1.2(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.40.0))(@vue/compiler-sfc@3.5.13)(magicast@0.3.5)(markdown-it-async@2.0.0)(postcss@8.5.3)(react@19.1.0)(rollup@4.40.0)(solid-js@1.9.5)(svelte@5.28.2)(vite@6.1.0(@types/node@22.13.4)(jiti@2.4.2)(terser@5.39.0)(tsx@4.19.2)(yaml@2.7.0))(vue-template-compiler@2.7.16))(vue@3.5.13(typescript@5.7.3))
+      vue-resizable-panels:
+        specifier: ^0.0.1
+        version: 0.0.1
     devDependencies:
       '@antfu/eslint-config':
         specifier: 'catalog:'
@@ -10157,6 +10160,9 @@ packages:
     resolution: {integrity: sha512-JdgRRUVrN0Y2GosA0M68DEbKlXMqJ7FQgsK8CjQD2vxvNSqAU6PZEpi4cfcTVtfM2GVOMjHo7GKKLbXxOBqDqA==}
     peerDependencies:
       vue: ^3.4.37
+
+  vue-resizable-panels@0.0.1:
+    resolution: {integrity: sha512-8al3kvbhZWnE6bS14lrKkJ6tc55N/wFeVIo+A/Ip8ZPBc5BIJYOdQU3pexhp+hj6pfxhV9UNynwJYZzAtvkCSg==}
 
   vue-resize@2.0.0-alpha.1:
     resolution: {integrity: sha512-7+iqOueLU7uc9NrMfrzbG8hwMqchfVfSzpVlCMeJQe4pyibqyoifDNbKTZvwxZKDvGkB+PdFeKvnGZMoEb8esg==}
@@ -22769,6 +22775,8 @@ snapshots:
   vue-flow-layout@0.1.1(vue@3.5.13(typescript@5.8.3)):
     dependencies:
       vue: 3.5.13(typescript@5.7.3)
+
+  vue-resizable-panels@0.0.1: {}
 
   vue-resize@2.0.0-alpha.1(vue@3.5.13(typescript@5.8.3)):
     dependencies:

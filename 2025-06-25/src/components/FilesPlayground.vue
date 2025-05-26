@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { Sandpack } from "sandpack-vue3";
 import type { SandpackProps } from "sandpack-vue3";
+import { SandpackCodeEditor, SandpackPreview, SandpackProvider, defaultDark } from "sandpack-vue3";
 import { computed, ref } from "vue";
+import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 
 const props = defineProps<{
   files: Array<SandpackProps["files"]>;
@@ -74,35 +75,30 @@ function handleGoBack() {
 </script>
 
 <template>
-  <div
-    v-if="props.files.length > 1"
-    class="mb-4 flex items-center justify-center gap-2"
-  >
-    <button
-      class="flex size-5 items-center justify-center rounded-full border"
-      @click="handleGoBack"
-    >
-      -
-    </button>
-    {{ index + 1 }} / {{ props.files.length }}
-    <button
-      class="flex size-5 items-center justify-center rounded-full border"
-      @click="handleGoNext"
-    >
-      +
-    </button>
+  <div v-if="props.files.length > 1" class="absolute left-0 top-0 z-10 flex w-full items-center justify-center">
+    <div class="rounded-t-2 flex items-center justify-center gap-2 px-2 py-1 text-xs">
+      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleGoBack">
+        -
+      </button>
+      {{ index + 1 }} / {{ props.files.length }}
+      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleGoNext">
+        +
+      </button>
+    </div>
   </div>
-  <div class="" @keydown.stop @keyup.stop>
-    <Sandpack
-      :show-open-in-code-sandbox="false"
-      theme="dark"
-      template="react-ts"
-      :files="files"
-      :options="{
-        editorHeight: 500, // default - 300
-        editorWidthPercentage: 70, // default - 50
-      }"
-    />
+  <div class="flex size-full" @keydown.stop @keyup.stop>
+    <SandpackProvider :theme="defaultDark" template="react-ts" :files="files">
+      <PanelGroup direction="horizontal" class="flex size-full">
+        <Panel :default-size="70" class="h-full">
+          <SandpackCodeEditor class="h-full" />
+        </Panel>
+        <PanelResizeHandle class="w-1" />
+        <Panel :default-size="30" class="h-full">
+          <SandpackPreview :show-open-in-code-sandbox="false" class="h-full">
+          </SandpackPreview>
+        </Panel>
+      </PanelGroup>
+    </SandpackProvider>
     <!--    <SandpackProvider :files="files" theme="dark" template="react-ts" :options="{}"> -->
     <!--      <SandpackLayout style="height: 500px" > -->
     <!--        <SandpackCodeEditor  /> -->
@@ -111,3 +107,9 @@ function handleGoBack() {
     <!--    </SandpackProvider> -->
   </div>
 </template>
+
+<style global>
+.sp-wrapper {
+  width: 100%;
+}
+</style>
