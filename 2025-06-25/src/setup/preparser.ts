@@ -37,9 +37,28 @@ export default definePreparserSetup(() => {
 function transformSandpackBlock(_match: string, blocksContent: string): string {
   const files = mergeByIndex(extractFilesFromBlocks(blocksContent));
   const filesJson = JSON.stringify(files).replaceAll('"', "&quot;");
+  const templates = files
+    .flatMap((file, index) => {
+      return Object.entries(file).map(([filename, data]) => {
+        return `
+<template v-slot:index_${index}_filename_${filename.replaceAll(".", "_")}>
+\`\`\`tsx 
+${data.code}
+\`\`\`
+</template>
+`;
+      });
+    })
+    .join("\n");
   // return `<Debug :data="${filesJson}"/>`;
   // eslint-disable-next-line github/unescaped-html-literal
-  return `<FilesPlayground :files="${filesJson}"/>`;
+
+  return `<FilesPlayground :files="${filesJson}">
+${templates}
+</FilesPlayground>
+  `;
+
+  return `<Debug :data="${templates}"/>`;
 }
 
 function createFileObject(attributes: string, code: string): FileObject {

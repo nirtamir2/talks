@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { useSandpack } from "sandpack-vue3";
+import { computed } from "vue";
 
 const { sandpack } = useSandpack();
+const props = defineProps<{
+  index: number;
+}>();
+
+const slotName = computed(() => {
+  return `index_${props.index}_filename_${sandpack.activeFile.replaceAll(".", "_").replace("/", "")}`;
+});
 </script>
 <template>
   <div class="flex w-full appearance-none flex-wrap gap-2 pb-4">
@@ -16,12 +24,14 @@ const { sandpack } = useSandpack();
         ]"
         @click="sandpack.setActiveFile(visibleFile)"
       >
-        {{ visibleFile }}
+        {{ visibleFile.replace("/", "") }}
       </button>
     </template>
   </div>
-  <pre
+  <slot :name="slotName" />
+
+  <!-- <pre
     class="shiki shiki-themes vitesse-dark vitesse-light slidev-code h-full overflow-auto"
   ><code>{{
-        sandpack.files[sandpack.activeFile].code }}</code></pre>
+        sandpack.files[sandpack.activeFile].code }}</code></pre> -->
 </template>

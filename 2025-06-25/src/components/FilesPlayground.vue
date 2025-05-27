@@ -6,14 +6,18 @@ import {
   SandpackProvider,
   defaultDark,
 } from "sandpack-vue3";
-import { computed, ref } from "vue";
+import { computed, ref, useSlots } from "vue";
 import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
+import ActiveSandpackFile from "./ActiveSandpackFile.vue";
 
 const props = defineProps<{
   files: Array<SandpackProps["files"]>;
 }>();
 
 const index = ref(0);
+
+const isEditMode = ref(true);
+
 const currentFiles = computed(() => props.files[index.value]);
 
 const files = computed(() => ({
@@ -78,28 +82,24 @@ function handleGoNext() {
 function handleGoBack() {
   index.value = Math.max((index.value - 1) % props.files.length, 0);
 }
+
+function handleToggleEditMode() {
+  isEditMode.value = !isEditMode.value;
+}
 </script>
 
 <template>
-  <div
-    v-if="props.files.length > 1"
-    class="absolute left-0 top-0 z-10 flex w-full items-center justify-center"
-  >
-    <div
-      class="rounded-t-2 flex items-center justify-center gap-2 px-2 py-1 text-xs"
-    >
-      <button
-        class="flex size-4 items-center justify-center rounded-full border"
-        @click="handleGoBack"
-      >
+  <div v-if="props.files.length > 1" class="absolute left-0 top-0 z-10 flex w-full items-center justify-center">
+    <div class="rounded-t-2 flex items-center justify-center gap-2 px-2 py-1 text-xs">
+      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleGoBack">
         -
       </button>
       {{ index + 1 }} / {{ props.files.length }}
-      <button
-        class="flex size-4 items-center justify-center rounded-full border"
-        @click="handleGoNext"
-      >
+      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleGoNext">
         +
+      </button>
+      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleToggleEditMode">
+        {{ isEditMode ? "V" : "E" }}
       </button>
     </div>
   </div>
@@ -107,7 +107,12 @@ function handleGoBack() {
     <SandpackProvider :theme="defaultDark" template="react-ts" :files="files">
       <PanelGroup direction="horizontal" class="flex size-full">
         <Panel :default-size="70" class="h-full">
-          <SandpackCodeEditor class="h-full" />
+          <SandpackCodeEditor v-if="isEditMode" class="h-full" />
+          <ActiveSandpackFile :index="index" v-else class="h-full">
+            <template v-for="(_, name) in $slots" :key="name" v-slot:[name]>
+              <slot :name="name" />
+            </template>
+          </ActiveSandpackFile>
         </Panel>
         <PanelResizeHandle class="w-1" />
         <Panel :default-size="30" class="h-full">
