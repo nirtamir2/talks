@@ -7,8 +7,12 @@ const props = defineProps<{
   index: number;
 }>();
 
+// Same like in setup preparser.ts
 const slotName = computed(() => {
-  return `index_${props.index}_filename_${sandpack.activeFile.replaceAll(".", "_").replace("/", "")}`;
+  const activeFileName = sandpack.activeFile
+    .replaceAll(".", "_")
+    .replace("/", "");
+  return `index_${props.index}_filename_${activeFileName}`;
 });
 </script>
 <template>
@@ -28,6 +32,7 @@ const slotName = computed(() => {
       </button>
     </template>
   </div>
+
   <slot :name="slotName" />
 
   <!-- <pre

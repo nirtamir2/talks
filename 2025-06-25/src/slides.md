@@ -354,7 +354,7 @@ export default function App() {
 
 @@@
 
-```tsx sandpack index=0
+```tsx sandpack index=0 {1}
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 export default function App() {

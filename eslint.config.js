@@ -30,6 +30,9 @@ export default nirtamir2(
         "sonarjs/unused-import": "off",
         "sonarjs/no-unused-vars": "off",
         "sonarjs/no-dead-store": "off",
+        "antfu/no-top-level-await": "off",
+        // For Effect code
+        "unicorn/throw-new-error": "off",
       },
     },
   ],

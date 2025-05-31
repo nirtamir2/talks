@@ -8,6 +8,8 @@ type FileObject = {
       code: string;
       hidden: boolean;
       active: boolean;
+      attrs: Record<string, unknown>;
+      blocksContent: string;
     }
   >;
 };
@@ -17,6 +19,7 @@ interface ParsedAttributes {
   index?: number;
   hidden?: boolean;
   active?: boolean;
+  [key: string]: unknown; // Allow any other attributes
 }
 
 const SANDPACK_BLOCK_REGEX =
@@ -34,22 +37,27 @@ export default definePreparserSetup(() => {
   ];
 });
 
-function transformSandpackBlock(_match: string, blocksContent: string): string {
+function transformSandpackBlock(match: string, blocksContent: string): string {
   const files = mergeByIndex(extractFilesFromBlocks(blocksContent));
   const filesJson = JSON.stringify(files).replaceAll('"', "&quot;");
   const templates = files
     .flatMap((file, index) => {
       return Object.entries(file).map(([filename, data]) => {
+        console.log(data.blocksContent);
         return `
 <template v-slot:index_${index}_filename_${filename.replaceAll(".", "_")}>
 \`\`\`tsx 
 ${data.code}
 \`\`\`
+
+
+
 </template>
 `;
       });
     })
     .join("\n");
+
   // return `<Debug :data="${filesJson}"/>`;
   // eslint-disable-next-line github/unescaped-html-literal
 
@@ -61,7 +69,11 @@ ${templates}
   return `<Debug :data="${templates}"/>`;
 }
 
-function createFileObject(attributes: string, code: string): FileObject {
+function createFileObject(
+  attributes: string,
+  code: string,
+  blocksContent: string,
+): FileObject {
   const attrs = parseAttributes(attributes);
   const filename = attrs.file || "App.tsx";
   const hidden = attrs.hidden !== undefined;
@@ -75,6 +87,8 @@ function createFileObject(attributes: string, code: string): FileObject {
         code: code.trim(),
         hidden,
         active,
+        attrs,
+        blocksContent,
       },
     },
   };
@@ -82,7 +96,8 @@ function createFileObject(attributes: string, code: string): FileObject {
 
 function extractFilesFromBlocks(blocksContent: string): Array<FileObject> {
   return [...blocksContent.matchAll(CODE_BLOCK_REGEX)].map(
-    ([, attributes = "", code]) => createFileObject(attributes, code),
+    ([, attributes = "", code]) =>
+      createFileObject(attributes, code, blocksContent),
   );
 }
 

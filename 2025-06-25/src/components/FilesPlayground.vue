@@ -89,16 +89,30 @@ function handleToggleEditMode() {
 </script>
 
 <template>
-  <div v-if="props.files.length > 1" class="absolute left-0 top-0 z-10 flex w-full items-center justify-center">
-    <div class="rounded-t-2 flex items-center justify-center gap-2 px-2 py-1 text-xs">
-      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleGoBack">
+  <div
+    v-if="props.files.length > 1"
+    class="absolute left-0 top-0 z-10 flex w-full items-center justify-center"
+  >
+    <div
+      class="rounded-t-2 flex items-center justify-center gap-2 px-2 py-1 text-xs"
+    >
+      <button
+        class="flex size-4 items-center justify-center rounded-full border"
+        @click="handleGoBack"
+      >
         -
       </button>
       {{ index + 1 }} / {{ props.files.length }}
-      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleGoNext">
+      <button
+        class="flex size-4 items-center justify-center rounded-full border"
+        @click="handleGoNext"
+      >
         +
       </button>
-      <button class="flex size-4 items-center justify-center rounded-full border" @click="handleToggleEditMode">
+      <button
+        class="flex size-4 items-center justify-center rounded-full border"
+        @click="handleToggleEditMode"
+      >
         {{ isEditMode ? "V" : "E" }}
       </button>
     </div>
