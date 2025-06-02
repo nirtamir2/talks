@@ -298,6 +298,7 @@ layout: section
 React-three-fiber is a React renderer for three.js.
 
 ---
+hide: true
 title: React Reconciler & Renderer
 layout: image
 image: /reconciler-renderer.png
@@ -310,6 +311,7 @@ https://www.youtube.com/watch?v=ZCuYPiUIONs
 -->
 
 ---
+hide: true
 title: React
 layout: image
 image: /fiber-in-react.png
