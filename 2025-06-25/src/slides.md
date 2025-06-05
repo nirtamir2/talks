@@ -43,7 +43,6 @@ layout: section
 # The WOW effect
 
 <!--
-Let’s talk about something small—but powerful.
 The wow effect.
 
 It’s that moment when someone sees your product and goes, ‘Whoa, that’s cool.’
@@ -80,7 +79,9 @@ layout: section
 <div v-click class="text-2xl">Yes, even you — let’s make something that wows.</div>
 
 <!--
-3D isn’t just for experts — it’s a creative tool anyone can use. In this talk, I’ll convince you that building immersive web experiences is within your reach.
+There is myth that you need to be a special 3D low-level shaders master or 3D model editor in order to create 3D on the web. 
+
+But 3D isn’t just for experts — it’s a creative tool anyone can use. In this talk, I’ll convince you that building immersive web experiences is within your reach.
 -->
 
 ---
@@ -92,6 +93,10 @@ layout: section
 ![Three.js logo](/three.js%20logo.svg){.w-30.absolute}
 
 A JavaScript library for creating 3D graphics in the browser.
+
+<!--
+We are going to use Three.js - which is a JavaScript library for creating 3D graphics in the browser. It's not a low-level WebGL or WebGPU
+-->
 
 ---
 layout: image
@@ -107,6 +112,20 @@ image: /three-js-main-figma.svg
 backgroundSize: calc(100%-5rem) calc(100%-5rem)
 title: Three.js structure
 ---
+
+<!--
+Most Three.js apps have the same core elements.
+
+First we need have a Renderer that handles rendering your 3D scene in the browser using WebGL (a low-level graphics API built into browsers). (or WebGPU).
+
+Then inside the render we have a **Scene** - which is like the stage to play -  it’s the space where all your 3D objects, lights, and cameras live.
+
+The **Camera** is like the eyes of the viewer — it defines what part of the 3D scene is visible and how it’s projected onto the 2D screen.
+
+Then we can have **Light** - so we won't have everything dark
+
+and we have **Meshes** - which are the 3D object you actually see
+-->
 
 ---
 hide: true
@@ -144,9 +163,26 @@ dragPos:
   foo: 459,48,83,44
 ---
 
-<!-- <img src="/geometry-normal-material.png"/>  -->
+<!--
+Mesh is made of:
 
- <!-- <img src="/geometry-wireframe.png"/>  -->
+➕ Geometry (the shape) -
+It defines the vertices (points in space), faces (triangles built from those points) and the overal shape (cube, sphere, model...)
+
+
+🎨 Material (the look)
+
+This is the “skin” that wraps the geometry.
+
+It controls:
+	•	Color
+	•	Shininess
+	•	Transparency
+	•	Texture maps
+	•	How it reacts to light
+
+
+  -->
 
 <Transform v-drag="[469,239,349,326]" pos="" >
  <img src="/material-normal.png" />
@@ -180,6 +216,13 @@ backgroundSize: contain
 ---
 
 # Geometries
+
+<!-- TODO: wireframe true -->
+
+<!--
+Here are sone geometries with the same normal material. 
+Cube Sphere Cyliner Torus Plane - Notice that they all ends with Geometry
+-->
 
 ---
 hide: true
@@ -231,6 +274,21 @@ backgroundSize: contain
 
 # Materials
 
+<!--
+🎨 Material (the look)
+
+This is the “skin” that wraps the geometry.
+
+It controls:
+	•	Color
+	•	Shininess
+	•	Transparency
+	•	Texture maps
+	•	How it reacts to light
+
+  Here on the left we have some materials that does not react to light and on the right it do affected by light. I colored the materials in green color.
+-->
+
 ---
 title: UV Map
 layout: image
@@ -241,6 +299,16 @@ backgroundSize: contain
 <v-drag text-6xl pos="336,163,368,250">
 UV Map
 </v-drag>
+
+<div class="text-black text-[8px] absolute bottom-10 right-10">
+"UV Mapping Example" by Tschmits, licensed under CC BY-SA 3.0 / GFDL.
+</div>
+
+<!--
+For materials we can have the concept of UV Map sometimes.
+A UV map is how a 2D image (like a texture) gets wrapped onto a 3D model — it’s like saying:
+🧊 “Which part of the image should go on which part of the 3D object?”
+-->
 
 ---
 hide: true
@@ -261,30 +329,49 @@ backgroundSize: contain
 ---
 
 ---
+monacoRunAdditionalDeps:
+  - three
+---
 
 # Three.js code
 
-```tsx
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(width, height);
-document.querySelector("#canvas-container").append(renderer.domElement);
+```ts {monaco-run}
+import * as THREE from "three";
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
 
-const mesh = new THREE.Mesh();
-mesh.geometry = new THREE.BoxGeometry();
-mesh.material = new THREE.MeshStandardMaterial();
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000,
+);
 
-scene.add(mesh);
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
 
-function animate() {
-  requestAnimationFrame(animate);
+document.body.appendChild(renderer.domElement);
+
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: "#433F81" });
+const cube = new THREE.Mesh(geometry, material);
+
+scene.add(cube);
+
+const render = function () {
+  requestAnimationFrame(render);
+  cube.rotation.y += 0.01;
   renderer.render(scene, camera);
-}
+};
 
-animate();
+render();
 ```
+
+<!--
+So let's see how Three.js code looks like.
+We create a WebGLRenderer, which set a canvas and we append it to the dom.
+Then we create a scene with a camera and then we create a mesh with Box geometry and normal material
+-->
 
 ---
 title: React-three-fiber
@@ -326,6 +413,7 @@ https://www.youtube.com/watch?v=ZCuYPiUIONs
 
 ---
 layout: two-cols-header-gap
+hide: true
 ---
 
 # Basic example
@@ -467,6 +555,7 @@ export function Box(props: ThreeElements["mesh"]) {
 
 ---
 title: "Import models"
+hide: true
 ---
 
 # Import models
@@ -498,6 +587,7 @@ useGLTF.preload("/suzanne.gltf");
 ```
 
 ---
+hide: true
 title: Suzanne
 layout: image
 image: /suzanne.png
@@ -509,8 +599,20 @@ class: p-10 mix-blend-screen invert
 title: Suzanne Iframe
 layout: iframe
 url: https://gltf.pmnd.rs/
-class: mix-blend-screen invert
+hide: true
 ---
+
+---
+title: Suzanne Iframe
+layout: full
+url: https://gltf.pmnd.rs/
+---
+
+# Import models
+
+<BrowserWrapper title="gltf.pmnd.rs">
+  <DemoIframe url="https://gltf.pmnd.rs/"></DemoIframe>
+</BrowserWrapper>
 
 ---
 title: "Physics"
@@ -521,9 +623,9 @@ title: "Physics"
 @@@
 
 ```tsx sandpack index=0
-import { Sphere, Torus, OrbitControls } from "@react-three/drei";
+import { OrbitControls, Sphere, Torus } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Physics, RigidBody, CuboidCollider } from "@react-three/rapier";
+import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier";
 
 export default function App() {
   return (
@@ -544,8 +646,7 @@ export default function App() {
 ```
 
 ```tsx sandpack index=1 file="MyBox.tsx"
-import { RigidBody } from "@react-three/rapier";
-import { RigidBodyProps } from "@react-three/rapier";
+import { RigidBody, RigidBodyProps } from "@react-three/rapier";
 
 export function MyBox(props: RigidBodyProps) {
   return (
@@ -560,8 +661,7 @@ export function MyBox(props: RigidBodyProps) {
 ```
 
 ```tsx sandpack index=1 file="MySphere.tsx"
-import { RigidBody } from "@react-three/rapier";
-import { RigidBodyProps } from "@react-three/rapier";
+import { RigidBody, RigidBodyProps } from "@react-three/rapier";
 
 export function MySphere(props: RigidBodyProps) {
   return (
@@ -576,8 +676,7 @@ export function MySphere(props: RigidBodyProps) {
 ```
 
 ```tsx sandpack index=1 file="MyThorus.tsx"
-import { RigidBody } from "@react-three/rapier";
-import { RigidBodyProps } from "@react-three/rapier";
+import { RigidBody, RigidBodyProps } from "@react-three/rapier";
 
 export function MyThorus(props: RigidBodyProps) {
   return (
@@ -594,7 +693,7 @@ export function MyThorus(props: RigidBodyProps) {
 ```tsx sandpack index=1 file="App.tsx"
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { Physics, CuboidCollider } from "@react-three/rapier";
+import { CuboidCollider, Physics } from "@react-three/rapier";
 import { MyBox } from "./MyBox";
 import { MySphere } from "./MySphere";
 import { MyThorus } from "./MyThorus";

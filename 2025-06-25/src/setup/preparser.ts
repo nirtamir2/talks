@@ -43,7 +43,7 @@ function transformSandpackBlock(match: string, blocksContent: string): string {
   const templates = files
     .flatMap((file, index) => {
       return Object.entries(file).map(([filename, data]) => {
-        console.log(data.blocksContent);
+        // console.log(data.blocksContent);
         return `
 <template v-slot:index_${index}_filename_${filename.replaceAll(".", "_")}>
 \`\`\`tsx 
@@ -59,7 +59,6 @@ ${data.code}
     .join("\n");
 
   // return `<Debug :data="${filesJson}"/>`;
-  // eslint-disable-next-line github/unescaped-html-literal
 
   return `<FilesPlayground :files="${filesJson}">
 ${templates}

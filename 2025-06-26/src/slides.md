@@ -13,9 +13,7 @@ title: "TypeScript Without Surprises: Smarter Error Handling with Effect-TS"
 ![](./nirtamir-animate.svg){.w-30.mt--10.mb-5}
 
 <!--
-Hello everyone, thanks a lot for having me and I hope you are enjoying the conference so far.
-
-It's my first time speaking in a conference. But I hope my topic today would be interesting to you
+TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 -->
 
 ---
@@ -34,7 +32,8 @@ image: ./nirtamir.png
 - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
 
 <!--
-Before we dive in, let me introduce myself. I'm Nir Tamir, a senior frontend developer passionate about open source and tooling. I work with early-stage startups, helping them leverage cutting-edge technologies like AI.
+My name is Nir Tamir and I'm a frontend developer more than a decade.
+You find me at nirtamir.com
 -->
 
 ---
@@ -46,19 +45,23 @@ function divide(a: number, b: number) {
   return a / b;
 }
 
-const result = divide(4, 2);
+const result = divide(10, 2); // 5
 
 divide("hi", 2);
 ```
 
 <!--
 TypeScript is great. It helps us prevent erros. If a function accept a value and we try to call it with a different type value - we get
-a compile time error. This is great and it helps prevent errors. Also it infers the return type so if we create transformations TypeScript is aware of that. Here for example we can define a function that accept two integers and divide the first in the second
+a compile time error.
+
+> hover on result 
+
+TypeScript infers the response type automatically and this makes composition easier
 -->
 
 ---
 
-# But we need to catch some edge cases
+# Edge cases
 
 ```ts twoslash
 function divide(a: number, b: number) {
@@ -69,17 +72,47 @@ const result = divide(4, 0); // Infinity
 ```
 
 <!--
-numerator/denomerator 
-But sometimes we need to take care of edge cases like when the denomerator is 0, because we don't want to handle Infinity
+> <numerator/denomerator>
+
+But in real-world apps we need to take care of edge cases.
+If we call the `divide` function with 0 as the denomerator - we will get Infinity value.
+It's a valid number - but not expected.
 -->
 
 ---
 
-# The TypeScript type system doesn't care about those
+# Errors in TypeScript are unknown
+
+```ts twoslash
+function divide(a: number, b: number) {
+  if (b === 0) {
+    throw new Error("Cannot divide by 0");
+  }
+  return a / b;
+}
+
+try {
+  const result = divide(4, 0); // throws new Error("Cannot divide by 0")
+} catch (error) {
+  // `error` is unknown
+}
+```
+
+<!--
+So we can throw an error and wrap the code with try-catch block.
+
+> hover over error
+
+But error has an unknown type
+-->
+
+---
+
+# We need to check the error types ourself
 
 ```ts twoslash
 class DivededByZeroError extends Error {
-  _name = "Cannot divide by zero";
+  _tag = "DivededByZeroError";
 }
 
 function divide(a: number, b: number) {
@@ -100,21 +133,27 @@ try {
 ```
 
 <!--
-So we can throw a custom error to handle it. But we lost the type safety by doing it
+So we can throw a custom error to handle it.
+
+> hover on `error`
+
+ Error in catch is still unknown but we can check if it looks like our Error type and handle it.
 -->
 
 ---
 
-# We can return different type for it like in Go
+# Wrap the results instead of throwing
 
 ```ts twoslash
 class DivededByZeroError extends Error {
-  _name = "Cannot divide by zero";
+  _tag = "DivededByZeroError";
 }
 
-type Result = { data: number, error?: never } | { data?: never, error: DivededByZeroError };
+type Result<Data, Error> =
+  | { data: Data; error?: never }
+  | { data?: never; error: Error };
 
-function divide(a: number, b: number ): Result {
+function divide(a: number, b: number): Result<number, DivededByZeroError> {
   if (b === 0) {
     return { error: new DivededByZeroError() };
   }
@@ -123,62 +162,107 @@ function divide(a: number, b: number ): Result {
 
 const result = divide(4, 0);
 
-if (result.data == null) {
-  console.error(result.error);
-} else {
+if (result.error == null) {
   console.log(result.data);
+} else {
+  console.error(result.error);
 }
 ```
 
 <!--
 In language like Go we usually don't have the concept of throwing errors so we can have a return value and propegate it.
-But its not convenient that much. Also - errors are part of the language and some functions throw errors. We can also have async code example
+TypeScript is very good in infering the result type - so we can use it too.
+We can define a type that returns either the result or an error but not both. We can also use discriminator.
+The way we know which errors do the function throw and we can sure we handle them even without looking into the implementation - from the type system.
+But its not convenient that much - it's a lot more code. And when we composite it with other functions and don't want to ignore the error and don't want to immediately handle it - we need to wrap the data and the errors for all the functions.
 -->
 
 ---
 
 # Async TypeScript is a litte bit harder
 
-```ts twoslash
+````md magic-move
+```ts
 const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
 const data = await response.json();
 ```
 
-<!--
-Take this code for example - we can have a lot of options to fail in this simple API request.
-But when we have async stuff things can go
--->
-
----
-
-```ts twoslash
+```ts
 const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
 // TODO: Network errors, CORS, Server internal errors, Auth failed errros
-if(response.ok){
-    // Parsing to JSON can go wrong
-   const data = await response.json();
-   // What about the result - validation with a schema
+if (response.ok) {
+  // Parsing to JSON can go wrong
+  const data = await response.json();
+  // What about the result - validation with a schema
 }
 ```
 
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
+  try {
+    const data = await response.json();
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+````
+
+<!--
+TypeError: Failed to fetch
+Non-OK responses (like 404, 500) response.ok
+SyntaxError: Unexpected token ... in JSON at position ...
+
+ -->
+
+<!--
+Here is another real-world example.
+This code can fail for so many reasons. Network error, Server internal error, JSON parse error, Authentication error...
+Once we have to call async function that and "await" for its result - we need to "color" this function with async and we get many async functions in the codebase.
+And in async javascript code we don't want to have floating promises - so we need to handle every "await" statement function with try-catch blocks so we won't miss the error handling.
+-->
+
+---
+layout: section
 ---
 
-# When you start using async - you mark your functions with async
-and you need to take care about floating promises
+# TypeScript is great
+
+<div v-click class="text-2xl">
+For the happy path
+</div>
 
 ---
-
-# I wish we could hanlde type-safety for errors
-
+layout: section
 ---
 
----
-
-# [Effect](https://effect.website/docs/getting-started/introduction/) is a powerful TypeScript library designed to help developers easily create complex, synchronous, and asynchronous programs.
-
+# No **type-safety** for **errors**
 
 ---
+layout: section
+---
 
+# [Effect](https://effect.website/docs/getting-started/introduction/)
+
+<div v-click class="text-2xl">
+is a powerful TypeScript library designed to help developers easily create complex, synchronous, and asynchronous programs.
+</div>
+
+---
+hide: true
+---
 
 # I had such use case
 
@@ -193,20 +277,76 @@ import { $ } from "execa";
 try {
   const { message: currentBranch } = await $`git branch --show-current`;
 } catch (error) {
-    //  a lot of things can go wrong here
+  //  a lot of things can go wrong here
 }
 ```
 ````
 
 ---
 
+```ts
+              ┌─── Represents the success type
+              │        ┌─── Represents the error type
+              │        │      ┌─── Represents required dependencies
+              ▼        ▼      ▼
+type Effect<Success, Error, Requirements> = (
+  context: Context<Requirements>
+) => Error | Success
+```
+
+<!--
+The Effect type is an immutable description of a workflow or operation that is lazily executed. This means that when you create an Effect, it doesn’t run immediately, but instead defines a program that can succeed, fail, or require some additional context to complete.
+-->
+
+---
+
 ```ts twoslash
-import {Effect} from "effect";
-//       ┌─── Produces a value of type number
-//       │       ┌─── Fails with an Error
-//       │       │      ┌─── Requires no dependencies
-//       ▼       ▼      ▼
-type MyEffect = Effect<number, Error, never>
+import { Effect, Context } from "effect";
+
+class SomeContext extends Context.Tag("SomeContext")<SomeContext, {}>() {}
+
+// Assume we have an effect that succeeds with a number,
+// fails with an Error, and requires SomeContext
+declare const program: Effect.Effect<number, Error, SomeContext>;
+
+// Extract the success type, which is number
+type A = Effect.Effect.Success<typeof program>;
+
+// Extract the error type, which is Error
+type E = Effect.Effect.Error<typeof program>;
+
+// Extract the context type, which is SomeContext
+type R = Effect.Effect.Context<typeof program>;
+```
+
+---
+
+```ts twoslash
+import { Effect } from "effect";
+
+//      ┌─── Effect<never, Error, never>
+//      ▼
+const failure = Effect.fail(new Error("Operation failed due to network error"));
+
+//      ┌─── Effect<number, never, never>
+//      ▼
+const success = Effect.succeed(42);
+```
+
+---
+
+```twoslash ts
+import { Effect } from "effect"
+
+function divide(a: number, b: number): Effect.Effect<number, Error> {
+
+  if(b === 0)
+    {
+      return Effect.fail(new Error("Cannot divide by zero"))
+    }
+   return Effect.succeed(a / b)
+}
+
 ```
 
 ---
@@ -215,17 +355,12 @@ type MyEffect = Effect<number, Error, never>
 
 ---
 
-```ts twoslash
-import {Effect} from "effect"
-Effect.success("good")
-Effect.fail("bad")
-```
-
 ---
 
 # Main
 
 ```ts
+
 ```
 
 ---
@@ -483,6 +618,66 @@ pre.twoslash {
 # The tweet about types
 
 https://x.com/dillon_mulroy/status/1898590282020450681
+
+And the part of this slide
+https://www.youtube.com/watch?v=VcOIz7tOBoM&list=PL4mWVugy3a2il28mbeNmyjJDoHOvw4JTK&index=13
+
+# TypeScript happy path
+
+https://x.com/dillon_mulroy/status/1803430049254633492
+
+Also -
+https://x.com/dillon_mulroy/status/1799811526020538555
+
+https://www.youtube.com/watch?v=VcOIz7tOBoM&list=PL4mWVugy3a2il28mbeNmyjJDoHOvw4JTK&index=13
+
+> Happy path blindness
+
+What happens if Auth.check throws? Does
+it throw? Can it throw more than one kind of
+error?
+What about Db.queryDomain?
+→ Can we retry on any errors?
+→ If so, do we need to consider a backoff
+interval for retrying?
+How should we communicate errors to
+callers? Should we pass through errors? All of
+them? Should we wrap them with custom
+errors?
+
+The benefits
+→ Crystal clear guarantees of how our code will
+run at a glance. If the computation succeeds we'll
+end up with the Ok type, if it fails we'll end up with
+Err type
+→ No hidden control flow (e.g. try/catch).
+→ The result type is composable. We can chain
+computations together that may fail, with static
+guarantees that we'll gracefully handle the
+unhappy path.
+→ Typed error tracking via unions on the Err type.
+
+Treating errors as values with the Result type-whether
+with an implementation like neverthrow or a simple
+discriminated union-will make your code safer, more
+resilient, and predictable.
+
+Defects
+There are two kinds of errors-those
+that we can expect, program
+defensively against, and analyze
+statically-and those that are truly
+exceptional and outside of our contro l.
+
+Errors are typed as unknown
+
+```ts
+try
+}
+catch
+(error: unknown) {
+}
+```
 
 > typescript/javascript happy path blindness is real.
 >

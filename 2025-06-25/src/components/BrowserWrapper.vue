@@ -3,10 +3,12 @@ const props = withDefaults(
   defineProps<{
     background?: string;
     maxHeight?: boolean;
+    title?: string;
   }>(),
   {
     background: "#ffffff",
     maxHeight: false,
+    title: null,
   },
 );
 </script>
@@ -15,10 +17,11 @@ const props = withDefaults(
   <div class="browser-window" :class="{ '!h-120': props.maxHeight }">
     <div class="browser-header">
       <div class="browser-buttons">
+        <div class="close-btn" />
         <div class="minimize-btn" />
         <div class="maximize-btn" />
-        <div class="close-btn" />
       </div>
+      <div class="text-sm" v-if="props.title">{{ props.title }}</div>
     </div>
     <div
       class="browser-content"
@@ -32,12 +35,12 @@ const props = withDefaults(
 <style scoped>
 /* Browser window */
 .browser-window {
-  @apply max-h-120 h-full w-full overflow-hidden rounded-md border border-gray-300 shadow-md;
+  @apply max-h-120 flex h-full w-full flex-col overflow-hidden rounded-md border border-gray-300 shadow-md;
 }
 
 /* Browser header */
 .browser-header {
-  @apply flex items-center justify-end bg-gray-800 p-2 text-white;
+  @apply flex items-center gap-4 bg-gray-800 p-2 text-white;
 }
 
 /* Browser control buttons (right aligned) */

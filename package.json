@@ -19,6 +19,7 @@
     "mdast-util-from-markdown": "^2.0.2",
     "sandpack-vue3": "^3.1.12",
     "slidev-component-zoom": "^1.1.0",
+    "three": "^0.176.0",
     "vue-resizable-panels": "^0.0.1"
   },
   "devDependencies": {
