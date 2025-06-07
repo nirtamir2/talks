@@ -284,20 +284,40 @@ try {
 
 ---
 
-```ts
-              ┌─── Represents the success type
-              │        ┌─── Represents the error type
-              │        │      ┌─── Represents required dependencies
-              ▼        ▼      ▼
-type Effect<Success, Error, Requirements> = (
-  context: Context<Requirements>
-) => Error | Success
+# The Effect type
+
+```ts twoslash
+type Success = number;
+type Requirements = never;
+// ---cut-before---
+import type { Effect } from "effect";
+//                                 ┌─── Represents the success type
+//                                 │        ┌─── Represents the error type
+//                                 │        │      ┌─── Represents required dependencies
+//                                 ▼        ▼      ▼
+type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
 ```
 
 <!--
-The Effect type is an immutable description of a workflow or operation that is lazily executed. This means that when you create an Effect, it doesn’t run immediately, but instead defines a program that can succeed, fail, or require some additional context to complete.
+Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
 -->
 
+---
+
+# The effect type conceptually
+
+```ts
+type Effect<Success, Error, Requirements> = (
+  context: Context<Requirements>,
+) => Error | Success;
+```
+
+<!--
+Conceptually - we can thing about Effect type like this one
+-->
+
+---
+hide: true
 ---
 
 ```ts twoslash
@@ -321,47 +341,258 @@ type R = Effect.Effect.Context<typeof program>;
 
 ---
 
+# Effect values
+
 ```ts twoslash
 import { Effect } from "effect";
-
-//      ┌─── Effect<never, Error, never>
-//      ▼
-const failure = Effect.fail(new Error("Operation failed due to network error"));
 
 //      ┌─── Effect<number, never, never>
 //      ▼
 const success = Effect.succeed(42);
+
+//      ┌─── Effect<never, Error, never>
+//      ▼
+const failure = Effect.fail(new Error("Operation failed due to network error"));
 ```
+
+<!--
+Very similar to Promise.resolve() and Promise.reject() we can create effect that succeed with values or effect that fails with an error
+-->
 
 ---
 
-```twoslash ts
-import { Effect } from "effect"
+# Rewriting with Effect
+
+````md magic-move
+```ts
+import { Effect } from "effect";
 
 function divide(a: number, b: number): Effect.Effect<number, Error> {
+  if (b === 0) {
+    return Effect.fail(new Error("Cannot divide by zero"));
+  }
+  return Effect.succeed(a / b);
+}
+```
 
-  if(b === 0)
-    {
-      return Effect.fail(new Error("Cannot divide by zero"))
-    }
-   return Effect.succeed(a / b)
+```ts
+import { Data, Effect } from "effect";
+
+class CannotDivideByZeroError extends Data.TaggedError(
+  "CannotDivideByZeroError",
+) {}
+
+function divide(a: number, b: number): Effect.Effect<number, Error> {
+  if (b === 0) {
+    return Effect.fail(new CannotDivideByZeroError());
+  }
+  return Effect.succeed(a / b);
+}
+```
+````
+
+<!--
+Now if we go back to our example again - we can create it with effects.
+Now the type system infers that the program will result with Error or succeed with the result as number.
+Effect have a convenient way to create Tagged errors using Data.TaggedError
+-->
+
+---
+hide: true
+---
+
+# Running Effects
+
+```ts twoslash
+import { Effect } from "effect";
+
+const program = Effect.sync(() => {
+  console.log("Hello, World!");
+  return 1;
+});
+
+const result = Effect.runSync(program);
+// Output: Hello, World!
+
+console.log(result);
+// Output: 1
+```
+
+<!--
+Here we have an effect with Effect.sync - this result is an Effect even without specifying Effect.success / Effect.fail. TypeScript infers the result type.
+We can run the effect with Effect.runSync
+-->
+
+---
+
+# Running async effects
+
+```ts twoslash
+import { Data, Effect } from "effect";
+
+class CannotFetchNumber extends Data.TaggedError("CannotFetchNumber") {}
+
+const fetchNumberWithUnknownException = Effect.tryPromise(() => {
+  return Promise.resolve(42);
+});
+
+const fetchNumber = (max: number) =>
+  Effect.tryPromise({
+    try: () => Promise.resolve(Math.random() * max),
+    catch: () => new CannotFetchNumber(),
+  });
+
+//      ┌─── Effect<number, CannotFetchNumber, never>
+//      ▼
+const program = fetchNumber(0.5);
+
+Effect.runPromise(program).then(console.log);
+```
+
+<!--
+Here is the same but for async operations. Notice that most Effect APIs can be written in 2 forms - with the happy path and UnknownException or mapping the custom error with try...catch form
+-->
+
+---
+
+# Building Pipelines
+
+```ts
+import { pipe } from "effect"
+
+pipe(input, func1, func2, ..., funcN)
+
+┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌────────┐
+│ input │───►│ func1 │───►│ func2 │───►│  ...  │───►│ funcN │───►│ result │
+└───────┘    └───────┘    └───────┘    └───────┘    └───────┘    └────────┘
+
+import { pipe } from "effect"
+
+// Define simple arithmetic operations
+const increment = (x: number) => x + 1
+const double = (x: number) => x * 2
+const subtractTen = (x: number) => x - 10
+
+// Sequentially apply these operations using `pipe`
+const result = pipe(5, increment, double, subtractTen)
+
+console.log(result)
+// Output: 2
+
+```
+
+
+---
+
+# Async Generators
+
+```ts twoslash
+import { Data, Effect } from "effect";
+
+class CannotDivideByZeroError extends Data.TaggedError(
+  "CannotDivideByZeroError",
+) {}
+
+class CannotFetchNumber extends Data.TaggedError("CannotFetchNumber") {}
+
+function divide(
+  a: number,
+  b: number,
+): Effect.Effect<number, CannotDivideByZeroError> {
+  if (b === 0) {
+    return Effect.fail(new CannotDivideByZeroError());
+  }
+  return Effect.succeed(a / b);
 }
 
+const fetchNumberWithUnknownException = Effect.tryPromise(() => {
+  return Promise.resolve(42);
+});
+
+const fetchNumber = (max: number) =>
+  Effect.tryPromise({
+    try: () => Promise.resolve(Math.random() * max);,
+    catch: () => new CannotFetchNumber();
+  });
+
+// ---cut-before---
+
+const program = Effect.gen(function* () {
+  const numerator = yield* fetchNumberWithUnknownException
+  const denumerator = yield* fetchNumber(20);
+  return yield* divide(numerator, denumerator);
+});
+
+//                   ┌─── Effect<number, UnknownException | CannotFetchNumber | CannotDivideByZeroError, never>
+//                   ▼
+Effect.runPromise(program).then(console.log);
+```
+
+<!--
+Effect offers a convenient syntax, similar to async/await, to write effectful code using generators using yield* (asterisk).
+-->
+
+---
+
+# Handling errors
+
+```ts twoslash
+import { Data, Effect, UnknownException } from "effect";
+
+class CannotDivideByZeroError extends Data.TaggedError(
+  "CannotDivideByZeroError",
+) {}
+
+class CannotFetchNumber extends Data.TaggedError("CannotFetchNumber") {}
+
+function divide(
+  a: number,
+  b: number,
+): Effect.Effect<number, CannotDivideByZeroError> {
+  if (b === 0) {
+    return Effect.fail(new CannotDivideByZeroError());
+  }
+  return Effect.succeed(a / b);
+}
+
+const fetchNumberWithUnknownException = Effect.tryPromise(() => {
+  return Promise.resolve(42);
+});
+
+const fetchNumber = (max: number) =>
+  Effect.tryPromise({
+    try: () => Promise.resolve(Math.random() * max),
+    catch: () => new CannotFetchNumber(),
+  });
+
+// ---cut-before---
+//      ┌─── Effect<number, UnknownException | CannotFetchNumber | CannotDivideByZeroError, never>
+//      ▼
+const program = Effect.gen(function* () {
+  const numerator = yield* fetchNumberWithUnknownException;
+  const denumerator = yield* fetchNumber(20);
+  return yield* divide(numerator, denumerator);
+});
+//      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
+//      ▼
+const recovered = program.pipe(
+  Effect.catchTags({
+    UnknownException: (_UnknownException) =>
+      Effect.succeed(`Recovering from UnknownException`),
+    CannotDivideByZeroError: (_CannotDivideByZeroError) =>
+      Effect.succeed(`Recovering from CannotDivideByZeroError`),
+  }),
+);
+//                   ┌─── Effect<number, CannotFetchNumber, never>
+//                   ▼
+Effect.runPromise(recovered).then(console.log);
 ```
 
 ---
 
 # Erros vs Defects
 
----
-
----
-
-# Main
-
-```ts
-
-```
+There are two kinds of errors-those that we can expect, program defensively against, and analyze statically-and those that are truly exceptional and outside of our control.
 
 ---
 layout: center
@@ -371,6 +602,11 @@ layout: center
 
 ---
 
+# Effect helps you to fix your unsafe assumption
+
+---
+hide: true
+---
 ```ts twoslash
 import { $ } from "execa";
 try {
@@ -381,7 +617,8 @@ try {
 ```
 
 ---
-
+hide: true
+---
 ```ts twoslash
 import { Effect } from "effect";
 import { $ } from "execa";
@@ -405,7 +642,8 @@ Effect.runPromise(getCurrentBranch);
 ```
 
 ---
-
+hide: true
+---
 ```ts twoslash
 import { Data, Effect } from "effect";
 
@@ -503,7 +741,8 @@ Effect.runPromise(
 ```
 
 ---
-
+hide: true
+---
 ```ts twoslash
 import { Data, Effect } from "effect";
 
