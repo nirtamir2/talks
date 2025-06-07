@@ -15,6 +15,11 @@ title: "TypeScript Without Surprises: Smarter Error Handling with Effect-TS"
 <!--
 TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 -->
+---
+layout: fact
+---
+
+# TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 
 ---
 title: About me
@@ -427,60 +432,39 @@ We can run the effect with Effect.runSync
 
 # Running async effects
 
-```ts twoslash
+````md magic-move
+```ts
+import { Effect } from "effect";
+
+const fetchNumber = Effect.tryPromise(() => {
+  return Promise.resolve(42);
+});
+```
+```ts
 import { Data, Effect } from "effect";
 
 class CannotFetchNumber extends Data.TaggedError("CannotFetchNumber") {}
 
-const fetchNumberWithUnknownException = Effect.tryPromise(() => {
-  return Promise.resolve(42);
-});
+const fetchNumber = Effect.tryPromise({
+    try: () => Promise.resolve(42),
+    catch: () => new CannotFetchNumber(),
+  });
+```
+```ts
+import { Data, Effect } from "effect";
 
-const fetchNumber = (max: number) =>
-  Effect.tryPromise({
-    try: () => Promise.resolve(Math.random() * max),
+class CannotFetchNumber extends Data.TaggedError("CannotFetchNumber") {}
+
+const fetchNumber = Effect.tryPromise({
+    try: () => Promise.resolve(42),
     catch: () => new CannotFetchNumber(),
   });
 
 //      ┌─── Effect<number, CannotFetchNumber, never>
 //      ▼
-const program = fetchNumber(0.5);
-
-Effect.runPromise(program).then(console.log);
+Effect.runPromise(fetchNumber).then(console.log);
 ```
-
-<!--
-Here is the same but for async operations. Notice that most Effect APIs can be written in 2 forms - with the happy path and UnknownException or mapping the custom error with try...catch form
--->
-
----
-
-# Building Pipelines
-
-```ts
-import { pipe } from "effect"
-
-pipe(input, func1, func2, ..., funcN)
-
-┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌────────┐
-│ input │───►│ func1 │───►│ func2 │───►│  ...  │───►│ funcN │───►│ result │
-└───────┘    └───────┘    └───────┘    └───────┘    └───────┘    └────────┘
-
-import { pipe } from "effect"
-
-// Define simple arithmetic operations
-const increment = (x: number) => x + 1
-const double = (x: number) => x * 2
-const subtractTen = (x: number) => x - 10
-
-// Sequentially apply these operations using `pipe`
-const result = pipe(5, increment, double, subtractTen)
-
-console.log(result)
-// Output: 2
-
-```
-
+````
 
 ---
 
@@ -531,6 +515,37 @@ Effect.runPromise(program).then(console.log);
 <!--
 Effect offers a convenient syntax, similar to async/await, to write effectful code using generators using yield* (asterisk).
 -->
+
+---
+
+# Building Pipelines
+
+```ts
+import { pipe } from "effect"
+
+pipe(input, func1, func2, ..., funcN)
+
+┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌────────┐
+│ input │───►│ func1 │───►│ func2 │───►│  ...  │───►│ funcN │───►│ result │
+└───────┘    └───────┘    └───────┘    └───────┘    └───────┘    └────────┘
+```
+
+---
+
+```ts
+import { pipe } from "effect"
+
+// Define simple arithmetic operations
+const increment = (x: number) => x + 1
+const double = (x: number) => x * 2
+
+// Sequentially apply these operations using `pipe`
+const result = pipe(5, increment, double)
+
+console.log(result)
+// Output: 12
+
+```
 
 ---
 
