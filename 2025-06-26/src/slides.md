@@ -468,6 +468,37 @@ Effect.runPromise(fetchNumber).then(console.log);
 
 ---
 
+# Building Pipelines
+
+```ts
+import { pipe } from "effect"
+
+pipe(input, func1, func2, ..., funcN)
+
+┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌────────┐
+│ input │───►│ func1 │───►│ func2 │───►│  ...  │───►│ funcN │───►│ result │
+└───────┘    └───────┘    └───────┘    └───────┘    └───────┘    └────────┘
+```
+
+---
+
+```ts
+import { pipe } from "effect"
+
+// Define simple arithmetic operations
+const increment = (x: number) => x + 1
+const double = (x: number) => x * 2
+
+// Sequentially apply these operations using `pipe`
+const result = pipe(5, increment, double)
+
+console.log(result)
+// Output: 12
+
+```
+
+---
+
 # Async Generators
 
 ```ts twoslash
@@ -500,52 +531,57 @@ const fetchNumber = (max: number) =>
   });
 
 // ---cut-before---
-
 const program = Effect.gen(function* () {
-  const numerator = yield* fetchNumberWithUnknownException
-  const denumerator = yield* fetchNumber(20);
-  return yield* divide(numerator, denumerator);
+  const denumerator = yield* fetchNumber(20); // yields number or CannotFetchNumber
+  return yield* divide(40, denumerator); // yields number or CannotDivideByZero
 });
 
-//                   ┌─── Effect<number, UnknownException | CannotFetchNumber | CannotDivideByZeroError, never>
+//                   ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
 //                   ▼
 Effect.runPromise(program).then(console.log);
 ```
 
 <!--
 Effect offers a convenient syntax, similar to async/await, to write effectful code using generators using yield* (asterisk).
+It yields the error.
 -->
 
 ---
 
-# Building Pipelines
+# New ?
 
+````md magic-move
 ```ts
-import { pipe } from "effect"
+const program = Effect.gen(function* () {
+  const denumerator = yield* fetchNumber(20); // yields number or CannotFetchNumber
+  return yield* divide(40, denumerator); // yields number or CannotDivideByZero
+});
 
-pipe(input, func1, func2, ..., funcN)
-
-┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌───────┐    ┌────────┐
-│ input │───►│ func1 │───►│ func2 │───►│  ...  │───►│ funcN │───►│ result │
-└───────┘    └───────┘    └───────┘    └───────┘    └───────┘    └────────┘
+//                   ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
+//                   ▼
+Effect.runPromise(program).then(console.log);
 ```
-
----
-
 ```ts
-import { pipe } from "effect"
+//      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
+//      ▼
+const program = Effect.gen(function* () {
+  const denumerator = yield* fetchNumber(20); // yields number or CannotFetchNumber
+  return yield* divide(40, denumerator); // yields number or CannotDivideByZero
+});
+//      ┌─── Effect<number, never, never>
+//      ▼
+const recovered = program.pipe(
+  Effect.catchTags({
+    CannotDivideByZeroError: (_CannotDivideByZeroError) =>
+      Effect.succeed(0),
+  CannotFetchNumber: (_CannotFetchNumber) =>
+      Effect.succeed(`Recovering from CannotFetchNumber`),
+  }),
+);
 
-// Define simple arithmetic operations
-const increment = (x: number) => x + 1
-const double = (x: number) => x * 2
-
-// Sequentially apply these operations using `pipe`
-const result = pipe(5, increment, double)
-
-console.log(result)
-// Output: 12
-
+Effect.runPromise(recovered).then(console.log);
 ```
+````
 
 ---
 
@@ -570,10 +606,6 @@ function divide(
   return Effect.succeed(a / b);
 }
 
-const fetchNumberWithUnknownException = Effect.tryPromise(() => {
-  return Promise.resolve(42);
-});
-
 const fetchNumber = (max: number) =>
   Effect.tryPromise({
     try: () => Promise.resolve(Math.random() * max),
@@ -581,25 +613,23 @@ const fetchNumber = (max: number) =>
   });
 
 // ---cut-before---
-//      ┌─── Effect<number, UnknownException | CannotFetchNumber | CannotDivideByZeroError, never>
+//      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
 //      ▼
 const program = Effect.gen(function* () {
-  const numerator = yield* fetchNumberWithUnknownException;
   const denumerator = yield* fetchNumber(20);
-  return yield* divide(numerator, denumerator);
+  return yield* divide(40, denumerator);
 });
-//      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
+//      ┌─── Effect<number, never, never>
 //      ▼
 const recovered = program.pipe(
   Effect.catchTags({
-    UnknownException: (_UnknownException) =>
-      Effect.succeed(`Recovering from UnknownException`),
     CannotDivideByZeroError: (_CannotDivideByZeroError) =>
       Effect.succeed(`Recovering from CannotDivideByZeroError`),
+  CannotFetchNumber: (_CannotFetchNumber) =>
+      Effect.succeed(`Recovering from CannotFetchNumber`),
   }),
 );
-//                   ┌─── Effect<number, CannotFetchNumber, never>
-//                   ▼
+
 Effect.runPromise(recovered).then(console.log);
 ```
 
