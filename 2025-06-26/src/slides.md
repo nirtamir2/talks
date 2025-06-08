@@ -16,10 +16,12 @@ title: "TypeScript Without Surprises: Smarter Error Handling with Effect-TS"
 TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 -->
 ---
-layout: fact
+layout: center
 ---
 
 # TypeScript Without Surprises: Smarter Error Handling with Effect-TS
+
+<!--  Change the way you handle errors using Effect -->
 
 ---
 title: About me
