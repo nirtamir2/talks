@@ -21,7 +21,9 @@ layout: center
 
 # TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 
-<!--  Change the way you handle errors using Effect -->
+<!--  
+The goal: change the way you handle errors using Effect
+-->
 
 ---
 title: About me

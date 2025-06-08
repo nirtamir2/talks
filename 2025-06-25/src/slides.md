@@ -726,7 +726,7 @@ title: "Demo wow"
 </BrowserWrapper>
 
 ---
-layout: fact
+layout: section
 ---
 
 # Go build stuff
