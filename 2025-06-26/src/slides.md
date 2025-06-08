@@ -24,6 +24,31 @@ layout: center
 <!--  
 The goal: change the way you handle errors using Effect
 -->
+---
+hide: true
+---
+# Look at this function
+```ts twoslash
+// @filename: myFunction.ts
+export async function myFunction(){
+  const response = await fetch("")
+  const data = await response.json()
+  return data as Array<{}>;
+}
+
+
+// @filename: index.ts
+// ---cut-before---
+import { myFunction } from "./myFunction"
+const result = myFunction();
+```
+
+- Sync / Async?
+- What does it return?
+- How to call it?
+- What dependencies does it need?
+- Can it fail?
+- What does it throw?
 
 ---
 title: About me
