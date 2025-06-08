@@ -1,6 +1,7 @@
 :root {
   --slidev-code-padding: 8px 10px;
   --slidev-code-background: #16161680 !important;
+  --twoslash-popup-bg: #161616 !important;
 }
 
 .slidev-layout a {
