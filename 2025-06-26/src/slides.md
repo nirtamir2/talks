@@ -114,6 +114,12 @@ But error has an unknown type
 -->
 
 ---
+layout: section
+---
+
+# Error handling in TypeScript
+
+---
 
 # We need to check the error types ourself
 
