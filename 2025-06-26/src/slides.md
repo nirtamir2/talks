@@ -15,17 +15,16 @@ title: "TypeScript Without Surprises: Smarter Error Handling with Effect-TS"
 <!--
 TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 -->
+
 ---
 layout: center
 ---
 
 # TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 
-<!--  
-
+<!--
 This talk will hopefully change the way you think about handling errors — not just catching them, but modeling them.
 We’ll do that using the Effect library.
-
 -->
 
 ---
@@ -36,66 +35,57 @@ hide: true
 
 ```ts twoslash
 // @filename: fetchData.ts
-export async function fetchData(itemsCount: number){
-  const response = await fetch("/url")
-  const data = await response.json()
-  return data as Array<{name: string}>;
+export async function fetchData(itemsCount: number) {
+  const response = await fetch("/url");
+  const data = await response.json();
+  return data as Array<{ name: string }>;
 }
-
 
 // @filename: index.ts
 // ---cut-before---
-import { fetchData } from "./fetchData"
+import { fetchData } from "./fetchData";
 ```
-
 
 ````md magic-move
-
 ```ts
-const data = fetchData()
+const data = fetchData();
 ```
 
 ```ts
-const data = fetchData(3)
+const data = fetchData(3);
 ```
 
 ```ts
-const data = await fetchData(3)
-```
-
-```ts
-try {
-  const data = await fetchData(3)
-}
-catch(error) {
-
-}
+const data = await fetchData(3);
 ```
 
 ```ts
 try {
-  const data = await fetchData(3)
-}
-catch(error) {
-  console.log("Unexpected error")
+  const data = await fetchData(3);
+} catch (error) {}
+```
+
+```ts
+try {
+  const data = await fetchData(3);
+} catch (error) {
+  console.log("Unexpected error");
 }
 ```
 
 ```ts
 try {
-  const data = await fetchData(3)
-}
-catch(error) {
-  if(error instanceof NetworkError){
-    console.log("Network error")
-  }
-  else {
-    console.log("Unexpected error")
+  const data = await fetchData(3);
+} catch (error) {
+  if (error instanceof NetworkError) {
+    console.log("Network error");
+  } else {
+    console.log("Unexpected error");
   }
 }
 ```
 
-<!-- 
+<!--
 Look at this function
 - Which parameters it requires?
 - What does it return?
@@ -105,7 +95,6 @@ Look at this function
 - What does it throw?
 
  -->
-
 ````
 
 ---
@@ -127,11 +116,9 @@ class: pl-25
 - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
 
 <!--
-
 My name is Nir Tamir.
 I’ve been doing frontend for over a decade.
 You can find more about me at nirtamir.com.
-
 -->
 
 ---
@@ -175,7 +162,6 @@ const result = divide(4, 0); // Infinity
 In real-world apps, we need to handle edge cases.
 For example, dividing by 0 returns Infinity — it’s a valid number, but probably not what we expect.
 TypeScript doesn’t catch this, because the types are technically correct.
-
 -->
 
 ---
@@ -246,7 +232,6 @@ That way, we can check the type inside the catch block and handle it accordingly
 
  it’s still typed as unknown, so we need a type guard like instanceof.
 This works, but it’s manual and easy to forget or get wrong.
-
 -->
 
 ---
@@ -344,11 +329,10 @@ try {
 
   try {
     const data = await response.json();
-    try{
-      const parsedData = mySchema.parse(data)
-    }
-    catch(_parseFailed){
-      throw new Error("Invalid input: expected string, received number")
+    try {
+      const parsedData = mySchema.parse(data);
+    } catch (_parseFailed) {
+      throw new Error("Invalid input: expected string, received number");
     }
   } catch (_stringifyError) {
     throw new Error(
@@ -359,7 +343,6 @@ try {
   throw new Error("TypeError: Failed to fetch");
 }
 ```
-
 ````
 
 <!--
@@ -429,6 +412,7 @@ try {
 ---
 hide: true
 ---
+
 # The Effect type
 
 ```ts twoslash
@@ -458,8 +442,8 @@ type Requirements = never;
 import type { Effect } from "effect";
 //                                 ┌─── Represents the success type
 //                                 │        ┌─── Represents the error type
-//                                 │        │      
-//                                 ▼        ▼      
+//                                 │        │
+//                                 ▼        ▼
 type ProgramEffect = Effect.Effect<Success, Error>;
 ```
 
@@ -602,25 +586,27 @@ const fetchNumber = Effect.tryPromise(() => {
   return Promise.resolve(42);
 });
 ```
+
 ```ts
 import { Data, Effect } from "effect";
 
 class CannotFetchNumber extends Data.TaggedError("CannotFetchNumber") {}
 
 const fetchNumber = Effect.tryPromise({
-    try: () => Promise.resolve(42),
-    catch: () => new CannotFetchNumber(),
-  });
+  try: () => Promise.resolve(42),
+  catch: () => new CannotFetchNumber(),
+});
 ```
+
 ```ts
 import { Data, Effect } from "effect";
 
 class CannotFetchNumber extends Data.TaggedError("CannotFetchNumber") {}
 
 const fetchNumber = Effect.tryPromise({
-    try: () => Promise.resolve(42),
-    catch: () => new CannotFetchNumber(),
-  });
+  try: () => Promise.resolve(42),
+  catch: () => new CannotFetchNumber(),
+});
 
 //      ┌─── Effect<number, CannotFetchNumber, never>
 //      ▼
@@ -645,18 +631,17 @@ pipe(input, func1, func2, ..., funcN)
 ---
 
 ```ts
-import { pipe } from "effect"
+import { pipe } from "effect";
 
 // Define simple arithmetic operations
-const increment = (x: number) => x + 1
-const double = (x: number) => x * 2
+const increment = (x: number) => x + 1;
+const double = (x: number) => x * 2;
 
 // Sequentially apply these operations using `pipe`
-const result = pipe(5, increment, double)
+const result = pipe(5, increment, double);
 
-console.log(result)
+console.log(result);
 // Output: 12
-
 ```
 
 ---
@@ -723,6 +708,7 @@ const program = Effect.gen(function* () {
 //                   ▼
 Effect.runPromise(program).then(console.log);
 ```
+
 ```ts
 //      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
 //      ▼
@@ -734,9 +720,8 @@ const program = Effect.gen(function* () {
 //      ▼
 const recovered = program.pipe(
   Effect.catchTags({
-    CannotDivideByZeroError: (_CannotDivideByZeroError) =>
-      Effect.succeed(0),
-  CannotFetchNumber: (_CannotFetchNumber) =>
+    CannotDivideByZeroError: (_CannotDivideByZeroError) => Effect.succeed(0),
+    CannotFetchNumber: (_CannotFetchNumber) =>
       Effect.succeed(`Recovering from CannotFetchNumber`),
   }),
 );
@@ -787,7 +772,7 @@ const recovered = program.pipe(
   Effect.catchTags({
     CannotDivideByZeroError: (_CannotDivideByZeroError) =>
       Effect.succeed(`Recovering from CannotDivideByZeroError`),
-  CannotFetchNumber: (_CannotFetchNumber) =>
+    CannotFetchNumber: (_CannotFetchNumber) =>
       Effect.succeed(`Recovering from CannotFetchNumber`),
   }),
 );
@@ -811,7 +796,6 @@ layout: center
 
 # Effect helps you to fix your unsafe assumption
 
-
 ---
 layout: intro
 class: text-center pb-5
@@ -825,10 +809,10 @@ Thank you！
 
 Slides available at [nirtamir.com](https://nirtamir.com)
 
-
 ---
 hide: true
 ---
+
 ```ts twoslash
 import { $ } from "execa";
 try {
@@ -841,6 +825,7 @@ try {
 ---
 hide: true
 ---
+
 ```ts twoslash
 import { Effect } from "effect";
 import { $ } from "execa";
@@ -866,6 +851,7 @@ Effect.runPromise(getCurrentBranch);
 ---
 hide: true
 ---
+
 ```ts twoslash
 import { Data, Effect } from "effect";
 
@@ -965,6 +951,7 @@ Effect.runPromise(
 ---
 hide: true
 ---
+
 ```ts twoslash
 import { Data, Effect } from "effect";
 
