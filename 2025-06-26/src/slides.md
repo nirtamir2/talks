@@ -22,38 +22,95 @@ layout: center
 # TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 
 <!--  
-The goal: change the way you handle errors using Effect
+This talk is hopefully cahnge the way you think of handle errors using Effect.
 -->
+
 ---
-hide: true
+hide: false
 ---
+
 # Look at this function
+
 ```ts twoslash
-// @filename: myFunction.ts
-export async function myFunction(){
-  const response = await fetch("")
+// @filename: fetchData.ts
+export async function fetchData(itemsCount: number){
+  const response = await fetch("/url")
   const data = await response.json()
-  return data as Array<{}>;
+  return data as Array<{name: string}>;
 }
 
 
 // @filename: index.ts
 // ---cut-before---
-import { myFunction } from "./myFunction"
-const result = myFunction();
+import { fetchData } from "./fetchData"
 ```
 
-- Sync / Async?
+
+````md magic-move
+
+```ts
+const data = fetchData()
+```
+
+```ts
+const data = fetchData(3)
+```
+
+```ts
+const data = await fetchData(3)
+```
+
+```ts
+try {
+  const data = await fetchData(3)
+}
+catch(error) {
+
+}
+```
+
+```ts
+try {
+  const data = await fetchData(3)
+}
+catch(error) {
+  console.log("Unexpected error")
+}
+```
+
+```ts
+try {
+  const data = await fetchData(3)
+}
+catch(error) {
+  if(error instanceof NetworkError){
+    console.log("Network error")
+  }
+  else {
+    console.log("Unexpected error")
+  }
+}
+```
+
+<!-- 
+Look at this function
+- Which parameters it requires?
 - What does it return?
-- How to call it?
+- It it Sync / Async?
 - What dependencies does it need?
 - Can it fail?
 - What does it throw?
 
+ -->
+
+````
+
 ---
 title: About me
-layout: image-right
-image: ./nirtamir.png
+layout: intro
+glowSeed: 15
+glowOpacity: 0.3
+class: pl-25
 ---
 
 # Nir Tamir
@@ -219,7 +276,7 @@ But its not convenient that much - it's a lot more code. And when we composite i
 
 ---
 
-# Async TypeScript is a litte bit harder
+# Real world complexity
 
 ````md magic-move
 ```ts
@@ -323,7 +380,8 @@ try {
 ````
 
 ---
-
+hide: true
+---
 # The Effect type
 
 ```ts twoslash
@@ -342,6 +400,28 @@ type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
 Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
 -->
 
+---
+
+# The Effect type
+
+```ts twoslash
+type Success = number;
+type Requirements = never;
+// ---cut-before---
+import type { Effect } from "effect";
+//                                 ┌─── Represents the success type
+//                                 │        ┌─── Represents the error type
+//                                 │        │      
+//                                 ▼        ▼      
+type ProgramEffect = Effect.Effect<Success, Error>;
+```
+
+<!--
+Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
+-->
+
+---
+hide: true
 ---
 
 # The effect type conceptually
@@ -683,6 +763,21 @@ layout: center
 ---
 
 # Effect helps you to fix your unsafe assumption
+
+
+---
+layout: intro
+class: text-center pb-5
+glowX: 50
+glowY: 120
+---
+
+<h1 text-4xl>
+Thank you！
+</h1>
+
+Slides available at [nirtamir.com](https://nirtamir.com)
+
 
 ---
 hide: true
