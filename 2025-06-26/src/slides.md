@@ -906,6 +906,8 @@ pipe(input, func1, func2, ..., funcN)
 
 ---
 
+# Building Pipelines
+
 ```ts
 import { pipe } from "effect";
 
@@ -919,6 +921,64 @@ const result = pipe(5, increment, double);
 console.log(result);
 // Output: 12
 ```
+
+---
+
+# Effect pipelines
+
+```ts twoslash
+import { pipe, Effect } from "effect"
+
+// Function to apply a discount safely to a transaction amount
+const applyDiscount = (
+  total: number,
+  discountRate: number
+): Effect.Effect<number, Error> =>
+  discountRate === 0
+    ? Effect.fail(new Error("Discount rate cannot be zero"))
+    : Effect.succeed(total - (total * discountRate) / 100)
+
+// Simulated asynchronous task to fetch a transaction amount from database
+const fetchTransactionAmount = Effect.promise(() => Promise.resolve(100))
+
+// Using Effect.map and Effect.flatMap
+const result1 = pipe(
+  fetchTransactionAmount,
+  Effect.map((amount) => amount * 2),
+  Effect.flatMap((amount) => applyDiscount(amount, 5))
+)
+
+Effect.runPromise(result1).then(console.log) // Output: 190
+
+// Using Effect.andThen
+const result2 = pipe(
+  fetchTransactionAmount,
+  Effect.andThen((amount) => amount * 2),
+  Effect.andThen((amount) => applyDiscount(amount, 5))
+)
+
+Effect.runPromise(result2).then(console.log) // Output: 190
+```
+
+---
+
+# Effect Cheat Sheet
+
+| API       | Input                                     | Output                      |
+| --------- | ----------------------------------------- | --------------------------- |
+| `map`     | `Effect<A, E, R>`, `A => B`               | `Effect<B, E, R>`           |
+| `flatMap` | `Effect<A, E, R>`, `A => Effect<B, E, R>` | `Effect<B, E, R>`           |
+| `andThen` | `Effect<A, E, R>`, \*                     | `Effect<B, E, R>`           |
+| `tap`     | `Effect<A, E, R>`, `A => Effect<B, E, R>` | `Effect<A, E, R>`           |
+| `all`     | `[Effect<A, E, R>, Effect<B, E, R>, ...]` | `Effect<[A, B, ...], E, R>` |
+
+<!-- 
+Effect.map takes the effect value and transform it to a value (Not effect),
+Effect.flatMap takes the effect value and return a new Effect from it
+Effect.andThen - takes the effect value and transform it like flatMap
+Effect.tap tales the value, create a function that returns an effect and continue with the previous value - like console.log
+Effect.all is similar to Promise.akk and takes multiple effect and transform their values
+ -->
 
 ---
 
@@ -980,19 +1040,19 @@ const program = Effect.gen(function* () {
   return yield* divide(40, denumerator); // yields number or CannotDivideByZero
 });
 
-//                   ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
+//                   ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError>
 //                   ▼
 Effect.runPromise(program).then(console.log);
 ```
 
 ```ts
-//      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
+//      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError>
 //      ▼
 const program = Effect.gen(function* () {
   const denumerator = yield* fetchNumber(20); // yields number or CannotFetchNumber
   return yield* divide(40, denumerator); // yields number or CannotDivideByZero
 });
-//      ┌─── Effect<number, never, never>
+//      ┌─── Effect<number, never>
 //      ▼
 const recovered = program.pipe(
   Effect.catchTags({
@@ -1036,13 +1096,13 @@ const fetchNumber = (max: number) =>
   });
 
 // ---cut-before---
-//      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
+//      ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError>
 //      ▼
 const program = Effect.gen(function* () {
   const denumerator = yield* fetchNumber(20);
   return yield* divide(40, denumerator);
 });
-//      ┌─── Effect<number, never, never>
+//      ┌─── Effect<number, never>
 //      ▼
 const recovered = program.pipe(
   Effect.catchTags({
