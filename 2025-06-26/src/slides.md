@@ -709,7 +709,7 @@ type ProgramEffect = Effect.Effect<Success, Error>;
 ```
 
 <!--
-Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
+Let's start with the Effect type. It represent an action that can either success with Success type or fail with Error type.
 -->
 
 ---
@@ -758,11 +758,11 @@ type R = Effect.Effect.Context<typeof program>;
 ```ts twoslash
 import { Effect } from "effect";
 
-//      ┌─── Effect<number, never, never>
+//      ┌─── Effect<number, never>
 //      ▼
 const success = Effect.succeed(42);
 
-//      ┌─── Effect<never, Error, never>
+//      ┌─── Effect<never, Error>
 //      ▼
 const failure = Effect.fail(new Error("Operation failed due to network error"));
 ```
@@ -778,6 +778,21 @@ Very similar to Promise.resolve() and Promise.reject() we can create effect that
 ````md magic-move
 ```ts
 import { Effect } from "effect";
+
+function divide(a: number, b: number): Effect.Effect<number, Error> {
+  if (b === 0) {
+    return Effect.fail(new Error("Cannot divide by zero"));
+  }
+  return Effect.succeed(a / b);
+}
+```
+
+```ts
+import { Data, Effect } from "effect";
+
+class CannotDivideByZeroError extends Data.TaggedError(
+  "CannotDivideByZeroError",
+) {}
 
 function divide(a: number, b: number): Effect.Effect<number, Error> {
   if (b === 0) {
