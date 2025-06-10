@@ -22,11 +22,14 @@ layout: center
 # TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 
 <!--  
-This talk is hopefully cahnge the way you think of handle errors using Effect.
+
+This talk will hopefully change the way you think about handling errors — not just catching them, but modeling them.
+We’ll do that using the Effect library.
+
 -->
 
 ---
-hide: false
+hide: true
 ---
 
 # Look at this function
@@ -118,13 +121,17 @@ class: pl-25
 - Senior Frontend developer
 - Loves open source and tooling
 - <mdi-web /> [nirtamir.com](https://nirtamir.com)
+
 <!-- - <mdi-github /> [@nirtamir2](https://github.com/nirtamir2)
 - <mdi-twitter /> [@NirTamir](https://twitter.com/NirTamir)
 - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
 
 <!--
-My name is Nir Tamir and I'm a frontend developer more than a decade.
-You find me at nirtamir.com
+
+My name is Nir Tamir.
+I’ve been doing frontend for over a decade.
+You can find more about me at nirtamir.com.
+
 -->
 
 ---
@@ -142,12 +149,12 @@ divide("hi", 2);
 ```
 
 <!--
-TypeScript is great. It helps us prevent erros. If a function accept a value and we try to call it with a different type value - we get
-a compile time error.
+TypeScript is great — it helps us catch errors early.
+If a function expects a certain type and we pass something else, we get a compile-time error.
 
-> hover on result 
+> (Hover on result)
 
-TypeScript infers the response type automatically and this makes composition easier
+ TypeScript infers the return type automatically, which makes composition much easier.
 -->
 
 ---
@@ -165,9 +172,10 @@ const result = divide(4, 0); // Infinity
 <!--
 > <numerator/denomerator>
 
-But in real-world apps we need to take care of edge cases.
-If we call the `divide` function with 0 as the denomerator - we will get Infinity value.
-It's a valid number - but not expected.
+In real-world apps, we need to handle edge cases.
+For example, dividing by 0 returns Infinity — it’s a valid number, but probably not what we expect.
+TypeScript doesn’t catch this, because the types are technically correct.
+
 -->
 
 ---
@@ -190,11 +198,12 @@ try {
 ```
 
 <!--
-So we can throw an error and wrap the code with try-catch block.
+We can throw an error and catch it using a try-catch block.
 
-> hover over error
+> (hover over error)
 
-But error has an unknown type
+But if you hover over error, you’ll see it’s typed as unknown.
+That means we have to manually check its shape or cast it — not ideal for safety or DX.
 -->
 
 ---
@@ -205,7 +214,7 @@ layout: section
 
 ---
 
-# We need to check the error types ourself
+# We need to check the error types ourselves
 
 ```ts twoslash
 class DivededByZeroError extends Error {
@@ -230,11 +239,14 @@ try {
 ```
 
 <!--
-So we can throw a custom error to handle it.
+One option is to define a custom error class.
+That way, we can check the type inside the catch block and handle it accordingly.
 
-> hover on `error`
+> (Hover on error)
 
- Error in catch is still unknown but we can check if it looks like our Error type and handle it.
+ it’s still typed as unknown, so we need a type guard like instanceof.
+This works, but it’s manual and easy to forget or get wrong.
+
 -->
 
 ---
@@ -267,11 +279,16 @@ if (result.error == null) {
 ```
 
 <!--
-In language like Go we usually don't have the concept of throwing errors so we can have a return value and propegate it.
-TypeScript is very good in infering the result type - so we can use it too.
-We can define a type that returns either the result or an error but not both. We can also use discriminator.
-The way we know which errors do the function throw and we can sure we handle them even without looking into the implementation - from the type system.
-But its not convenient that much - it's a lot more code. And when we composite it with other functions and don't want to ignore the error and don't want to immediately handle it - we need to wrap the data and the errors for all the functions.
+In languages like Go, there’s no concept of throwing errors — you return them instead.
+We can do something similar in TypeScript.
+Here, the Result type makes sure we either get data or error, but not both.
+
+> hover the console.log()
+
+TypeScript infers the structure nicely, and we can pattern match or check discriminators.
+This also makes the function’s possible errors explicit in the type.
+But — and it’s a big but — it’s verbose.
+Composing multiple such functions gets messy, since we now have to wrap and unwrap manually all the way through.
 -->
 
 ---
@@ -290,7 +307,6 @@ const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
 if (response.ok) {
   // Parsing to JSON can go wrong
   const data = await response.json();
-  // What about the result - validation with a schema
 }
 ```
 
@@ -315,6 +331,35 @@ try {
   throw new Error("TypeError: Failed to fetch");
 }
 ```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
+  try {
+    const data = await response.json();
+    try{
+      const parsedData = mySchema.parse(data)
+    }
+    catch(_parseFailed){
+      throw new Error("Invalid input: expected string, received number")
+    }
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
 ````
 
 <!--
@@ -325,10 +370,12 @@ SyntaxError: Unexpected token ... in JSON at position ...
  -->
 
 <!--
-Here is another real-world example.
-This code can fail for so many reasons. Network error, Server internal error, JSON parse error, Authentication error...
-Once we have to call async function that and "await" for its result - we need to "color" this function with async and we get many async functions in the codebase.
-And in async javascript code we don't want to have floating promises - so we need to handle every "await" statement function with try-catch blocks so we won't miss the error handling.
+Real-world async code is tricky.
+A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
+Even if the response is ok, parsing JSON might throw syntax errors.
+So we end up with nested try-catch blocks and lots of error handling boilerplate.
+Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
+This complexity quickly grows and is hard to maintain.
 -->
 
 ---
