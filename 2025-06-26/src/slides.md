@@ -277,6 +277,8 @@ Composing multiple such functions gets messy, since we now have to wrap and unwr
 -->
 
 ---
+hide: true
+---
 
 # Real world complexity
 
@@ -286,7 +288,6 @@ const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
 const data = await response.json();
 const parsedData = mySchema.parse(data);
 ```
-
 
 ```ts
 const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
@@ -313,7 +314,6 @@ try {
 
   const data = await response.json();
   const parsedData = mySchema.parse(data);
-
 } catch (_fetchError) {
   throw new Error("TypeError: Failed to fetch");
 }
@@ -352,6 +352,242 @@ try {
     );
   }
 
+  try {
+    const data = await response.json();
+    try {
+      const parsedData = mySchema.parse(data);
+    } catch (_parseFailed) {
+      throw new Error("Invalid input: expected string, received number");
+    }
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+````
+
+<!--
+TypeError: Failed to fetch
+Non-OK responses (like 404, 500) response.ok
+SyntaxError: Unexpected token ... in JSON at position ...
+
+ -->
+
+<!--
+Real-world async code is tricky.
+A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
+Even if the response is ok, parsing JSON might throw syntax errors.
+So we end up with nested try-catch blocks and lots of error handling boilerplate.
+Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
+This complexity quickly grows and is hard to maintain.
+-->
+
+---
+hide: true
+---
+
+# Real world complexity
+
+````md magic-move
+```ts
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+const data = await response.json();
+const parsedData = mySchema.parse(data);
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  const data = await response.json();
+  const parsedData = mySchema.parse(data);
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  try {
+    const data = await response.json();
+    const parsedData = mySchema.parse(data);
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  try {
+    const data = await response.json();
+    try {
+      const parsedData = mySchema.parse(data);
+    } catch (_parseFailed) {
+      throw new Error("Invalid input: expected string, received number");
+    }
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
+  try {
+    const data = await response.json();
+    try {
+      const parsedData = mySchema.parse(data);
+    } catch (_parseFailed) {
+      throw new Error("Invalid input: expected string, received number");
+    }
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+````
+
+<!--
+TypeError: Failed to fetch
+Non-OK responses (like 404, 500) response.ok
+SyntaxError: Unexpected token ... in JSON at position ...
+
+ -->
+
+<!--
+Real-world async code is tricky.
+A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
+Even if the response is ok, parsing JSON might throw syntax errors.
+So we end up with nested try-catch blocks and lots of error handling boilerplate.
+Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
+This complexity quickly grows and is hard to maintain.
+-->
+
+---
+
+# Real world complexity
+
+````md magic-move
+```ts
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+const data = await response.json();
+const parsedData = mySchema.parse(data);
+```
+
+```ts
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+  const data = await response.json();
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+  try {
+    const data = await response.json();
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+  try {
+    const data = await response.json();
+    const parsedData = mySchema.parse(data);
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
   try {
     const data = await response.json();
     try {
