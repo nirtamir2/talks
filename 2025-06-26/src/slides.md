@@ -1072,6 +1072,55 @@ layout: center
 
 # Effect helps you to fix your unsafe assumption
 
+
+---
+layout: two-cols
+---
+
+![tweet-dillon](/tweet-1898590282020450681-no-image.png)
+
+<div class="flex gap-4 flew-wrap">
+
+[<mdi-twitter /> Source](https://x.com/dillon_mulroy/status/1898590282020450681)
+
+[<mdi-youtube /> Talk](https://www.youtube.com/watch?v=VcOIz7tOBoM)
+
+</div>
+
+::right::
+
+````md magic-move
+```ts
+type RenewDomainError =
+| ApiError
+| StripePaymentError
+| StripePaymentMethodError
+```
+
+```ts
+type RenewDomainError =
+| CannotRenewError
+| CustomerIdNotFoundError
+| DomainsMutexError
+| DraftInvoiceError
+| ExpirationDateOutOfRangeError
+| GetDomainInvoiceError
+| GetDomainPriceError
+| GetUpstreamRegistrarDomainError
+| InvalidDomainStatusError
+| UpstreamRegistrarDomainNotFoundError
+| UpstreamRegistrarRenewDomainError
+| PayInvoiceError
+| RefundDomainInvoiceError
+| RenewFailureError
+| SyncDomainError
+| TLDConfigNotFoundError
+| UpdateVercelDomainError;
+```
+````
+
+
+
 ---
 layout: intro
 class: text-center pb-5
