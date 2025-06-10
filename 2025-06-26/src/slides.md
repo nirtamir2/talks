@@ -284,14 +284,38 @@ Composing multiple such functions gets messy, since we now have to wrap and unwr
 ```ts
 const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
 const data = await response.json();
+const parsedData = mySchema.parse(data);
 ```
+
 
 ```ts
 const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-// TODO: Network errors, CORS, Server internal errors, Auth failed errros
-if (response.ok) {
-  // Parsing to JSON can go wrong
+
+if (!response.ok) {
+  throw new Error(
+    `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+  );
+}
+
+const data = await response.json();
+const parsedData = mySchema.parse(data);
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
   const data = await response.json();
+  const parsedData = mySchema.parse(data);
+
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
 }
 ```
 
@@ -307,6 +331,7 @@ try {
 
   try {
     const data = await response.json();
+    const parsedData = mySchema.parse(data);
   } catch (_stringifyError) {
     throw new Error(
       "SyntaxError: Unexpected token ... in JSON at position ...",
