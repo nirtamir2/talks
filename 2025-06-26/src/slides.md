@@ -250,8 +250,10 @@ type Result<Data, Error> =
 function divide(a: number, b: number): Result<number, DivededByZeroError> {
   if (b === 0) {
     return { error: new DivededByZeroError() };
+    //       ^^^^^
   }
   return { data: a / b };
+  //       ^^^^
 }
 
 const result = divide(4, 0);
@@ -884,7 +886,7 @@ const fetchNumber = Effect.tryPromise({
   catch: () => new CannotFetchNumber(),
 });
 
-//      ┌─── Effect<number, CannotFetchNumber, never>
+//      ┌─── Effect<number, CannotFetchNumber>
 //      ▼
 Effect.runPromise(fetchNumber).then(console.log);
 ```
@@ -927,37 +929,37 @@ console.log(result);
 # Effect pipelines
 
 ```ts twoslash
-import { pipe, Effect } from "effect"
+import { pipe, Effect } from "effect";
 
 // Function to apply a discount safely to a transaction amount
 const applyDiscount = (
   total: number,
-  discountRate: number
+  discountRate: number,
 ): Effect.Effect<number, Error> =>
   discountRate === 0
     ? Effect.fail(new Error("Discount rate cannot be zero"))
-    : Effect.succeed(total - (total * discountRate) / 100)
+    : Effect.succeed(total - (total * discountRate) / 100);
 
 // Simulated asynchronous task to fetch a transaction amount from database
-const fetchTransactionAmount = Effect.promise(() => Promise.resolve(100))
+const fetchTransactionAmount = Effect.promise(() => Promise.resolve(100));
 
 // Using Effect.map and Effect.flatMap
 const result1 = pipe(
   fetchTransactionAmount,
   Effect.map((amount) => amount * 2),
-  Effect.flatMap((amount) => applyDiscount(amount, 5))
-)
+  Effect.flatMap((amount) => applyDiscount(amount, 5)),
+);
 
-Effect.runPromise(result1).then(console.log) // Output: 190
+Effect.runPromise(result1).then(console.log); // Output: 190
 
 // Using Effect.andThen
 const result2 = pipe(
   fetchTransactionAmount,
   Effect.andThen((amount) => amount * 2),
-  Effect.andThen((amount) => applyDiscount(amount, 5))
-)
+  Effect.andThen((amount) => applyDiscount(amount, 5)),
+);
 
-Effect.runPromise(result2).then(console.log) // Output: 190
+Effect.runPromise(result2).then(console.log); // Output: 190
 ```
 
 ---
@@ -972,13 +974,13 @@ Effect.runPromise(result2).then(console.log) // Output: 190
 | `tap`     | `Effect<A, E, R>`, `A => Effect<B, E, R>` | `Effect<A, E, R>`           |
 | `all`     | `[Effect<A, E, R>, Effect<B, E, R>, ...]` | `Effect<[A, B, ...], E, R>` |
 
-<!-- 
+<!--
 Effect.map takes the effect value and transform it to a value (Not effect),
 Effect.flatMap takes the effect value and return a new Effect from it
 Effect.andThen - takes the effect value and transform it like flatMap
 Effect.tap tales the value, create a function that returns an effect and continue with the previous value - like console.log
 Effect.all is similar to Promise.akk and takes multiple effect and transform their values
- -->
+-->
 
 ---
 
@@ -1132,7 +1134,6 @@ layout: center
 
 # Effect helps you to fix your unsafe assumption
 
-
 ---
 layout: two-cols
 ---
@@ -1152,34 +1153,32 @@ layout: two-cols
 ````md magic-move
 ```ts
 type RenewDomainError =
-| ApiError
-| StripePaymentError
-| StripePaymentMethodError
+  | ApiError
+  | StripePaymentError
+  | StripePaymentMethodError;
 ```
 
 ```ts
 type RenewDomainError =
-| CannotRenewError
-| CustomerIdNotFoundError
-| DomainsMutexError
-| DraftInvoiceError
-| ExpirationDateOutOfRangeError
-| GetDomainInvoiceError
-| GetDomainPriceError
-| GetUpstreamRegistrarDomainError
-| InvalidDomainStatusError
-| UpstreamRegistrarDomainNotFoundError
-| UpstreamRegistrarRenewDomainError
-| PayInvoiceError
-| RefundDomainInvoiceError
-| RenewFailureError
-| SyncDomainError
-| TLDConfigNotFoundError
-| UpdateVercelDomainError;
+  | CannotRenewError
+  | CustomerIdNotFoundError
+  | DomainsMutexError
+  | DraftInvoiceError
+  | ExpirationDateOutOfRangeError
+  | GetDomainInvoiceError
+  | GetDomainPriceError
+  | GetUpstreamRegistrarDomainError
+  | InvalidDomainStatusError
+  | UpstreamRegistrarDomainNotFoundError
+  | UpstreamRegistrarRenewDomainError
+  | PayInvoiceError
+  | RefundDomainInvoiceError
+  | RenewFailureError
+  | SyncDomainError
+  | TLDConfigNotFoundError
+  | UpdateVercelDomainError;
 ```
 ````
-
-
 
 ---
 layout: intro
