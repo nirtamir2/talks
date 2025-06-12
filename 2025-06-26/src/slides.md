@@ -28,76 +28,6 @@ We’ll do that using the Effect library.
 -->
 
 ---
-hide: true
----
-
-# Look at this function
-
-```ts twoslash
-// @filename: fetchData.ts
-export async function fetchData(itemsCount: number) {
-  const response = await fetch("/url");
-  const data = await response.json();
-  return data as Array<{ name: string }>;
-}
-
-// @filename: index.ts
-// ---cut-before---
-import { fetchData } from "./fetchData";
-```
-
-````md magic-move
-```ts
-const data = fetchData();
-```
-
-```ts
-const data = fetchData(3);
-```
-
-```ts
-const data = await fetchData(3);
-```
-
-```ts
-try {
-  const data = await fetchData(3);
-} catch (error) {}
-```
-
-```ts
-try {
-  const data = await fetchData(3);
-} catch (error) {
-  console.log("Unexpected error");
-}
-```
-
-```ts
-try {
-  const data = await fetchData(3);
-} catch (error) {
-  if (error instanceof NetworkError) {
-    console.log("Network error");
-  } else {
-    console.log("Unexpected error");
-  }
-}
-```
-
-<!--
-Look at this function
-- Which parameters it requires?
-- What does it return?
-- It it Sync / Async?
-- What dependencies does it need?
-- Can it fail?
-- What does it throw?
-
- -->
-````
-
----
 title: About me
 layout: intro
 glowSeed: 15
@@ -279,219 +209,6 @@ Composing multiple such functions gets messy, since we now have to wrap and unwr
 -->
 
 ---
-hide: true
----
-
-# Real world complexity
-
-````md magic-move
-```ts
-const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-const data = await response.json();
-const parsedData = mySchema.parse(data);
-```
-
-```ts
-const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-
-if (!response.ok) {
-  throw new Error(
-    `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-  );
-}
-
-const data = await response.json();
-const parsedData = mySchema.parse(data);
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-
-  const data = await response.json();
-  const parsedData = mySchema.parse(data);
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-
-  try {
-    const data = await response.json();
-    const parsedData = mySchema.parse(data);
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-
-  try {
-    const data = await response.json();
-    try {
-      const parsedData = mySchema.parse(data);
-    } catch (_parseFailed) {
-      throw new Error("Invalid input: expected string, received number");
-    }
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-````
-
-<!--
-TypeError: Failed to fetch
-Non-OK responses (like 404, 500) response.ok
-SyntaxError: Unexpected token ... in JSON at position ...
-
- -->
-
-<!--
-Real-world async code is tricky.
-A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
-Even if the response is ok, parsing JSON might throw syntax errors.
-So we end up with nested try-catch blocks and lots of error handling boilerplate.
-Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
-This complexity quickly grows and is hard to maintain.
--->
-
----
-hide: true
----
-
-# Real world complexity
-
-````md magic-move
-```ts
-const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-const data = await response.json();
-const parsedData = mySchema.parse(data);
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  const data = await response.json();
-  const parsedData = mySchema.parse(data);
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  try {
-    const data = await response.json();
-    const parsedData = mySchema.parse(data);
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  try {
-    const data = await response.json();
-    try {
-      const parsedData = mySchema.parse(data);
-    } catch (_parseFailed) {
-      throw new Error("Invalid input: expected string, received number");
-    }
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-
-  try {
-    const data = await response.json();
-    try {
-      const parsedData = mySchema.parse(data);
-    } catch (_parseFailed) {
-      throw new Error("Invalid input: expected string, received number");
-    }
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-````
-
-<!--
-TypeError: Failed to fetch
-Non-OK responses (like 404, 500) response.ok
-SyntaxError: Unexpected token ... in JSON at position ...
-
- -->
-
-<!--
-Real-world async code is tricky.
-A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
-Even if the response is ok, parsing JSON might throw syntax errors.
-So we end up with nested try-catch blocks and lots of error handling boilerplate.
-Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
-This complexity quickly grows and is hard to maintain.
--->
-
----
 
 # Real world complexity
 
@@ -651,50 +368,6 @@ is a powerful TypeScript library designed to help developers easily create compl
 </div>
 
 ---
-hide: true
----
-
-# I had such use case
-
-````md magic-move
-```ts
-import { $ } from "execa";
-const { message: currentBranch } = await $`git branch --show-current`;
-```
-
-```ts
-import { $ } from "execa";
-try {
-  const { message: currentBranch } = await $`git branch --show-current`;
-} catch (error) {
-  //  a lot of things can go wrong here
-}
-```
-````
-
----
-hide: true
----
-
-# The Effect type
-
-```ts twoslash
-type Success = number;
-type Requirements = never;
-// ---cut-before---
-import type { Effect } from "effect";
-//                                 ┌─── Represents the success type
-//                                 │        ┌─── Represents the error type
-//                                 │        │      ┌─── Represents required dependencies
-//                                 ▼        ▼      ▼
-type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
-```
-
-<!--
-Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
--->
-
----
 
 # The Effect type
 
@@ -713,45 +386,6 @@ type ProgramEffect = Effect.Effect<Success, Error>;
 <!--
 Let's start with the Effect type. It represent an action that can either success with Success type or fail with Error type.
 -->
-
----
-hide: true
----
-
-# The effect type conceptually
-
-```ts
-type Effect<Success, Error, Requirements> = (
-  context: Context<Requirements>,
-) => Error | Success;
-```
-
-<!--
-Conceptually - we can thing about Effect type like this one
--->
-
----
-hide: true
----
-
-```ts twoslash
-import { Effect, Context } from "effect";
-
-class SomeContext extends Context.Tag("SomeContext")<SomeContext, {}>() {}
-
-// Assume we have an effect that succeeds with a number,
-// fails with an Error, and requires SomeContext
-declare const program: Effect.Effect<number, Error, SomeContext>;
-
-// Extract the success type, which is number
-type A = Effect.Effect.Success<typeof program>;
-
-// Extract the error type, which is Error
-type E = Effect.Effect.Error<typeof program>;
-
-// Extract the context type, which is SomeContext
-type R = Effect.Effect.Context<typeof program>;
-```
 
 ---
 
@@ -826,8 +460,6 @@ Now the type system infers that the program will result with Error or succeed wi
 Effect have a convenient way to create Tagged errors using Data.TaggedError
 -->
 
----
-hide: true
 ---
 
 # Running Effects
@@ -944,22 +576,47 @@ const applyDiscount = (
 const fetchTransactionAmount = Effect.promise(() => Promise.resolve(100));
 
 // Using Effect.map and Effect.flatMap
-const result1 = pipe(
+const result = pipe(
   fetchTransactionAmount,
   Effect.map((amount) => amount * 2),
+  //     ^^^
   Effect.flatMap((amount) => applyDiscount(amount, 5)),
+  //     ^^^^^^^
 );
 
-Effect.runPromise(result1).then(console.log); // Output: 190
+Effect.runPromise(result).then(console.log); // Output: 190
+```
+
+---
+
+# Effect pipelines
+
+```ts twoslash
+import { pipe, Effect } from "effect";
+
+// Function to apply a discount safely to a transaction amount
+const applyDiscount = (
+  total: number,
+  discountRate: number,
+): Effect.Effect<number, Error> =>
+  discountRate === 0
+    ? Effect.fail(new Error("Discount rate cannot be zero"))
+    : Effect.succeed(total - (total * discountRate) / 100);
+
+// Simulated asynchronous task to fetch a transaction amount from database
+const fetchTransactionAmount = Effect.promise(() => Promise.resolve(100));
 
 // Using Effect.andThen
-const result2 = pipe(
+const result = pipe(
   fetchTransactionAmount,
   Effect.andThen((amount) => amount * 2),
+  //     ^^^^^^^
   Effect.andThen((amount) => applyDiscount(amount, 5)),
+  //     ^^^^^^^
 );
 
-Effect.runPromise(result2).then(console.log); // Output: 190
+Effect.runPromise(result).then(console.log); // Output: 190
+
 ```
 
 ---
@@ -983,8 +640,10 @@ Effect.all is similar to Promise.akk and takes multiple effect and transform the
 -->
 
 ---
+transition: view-transition
+---
 
-# Async Generators
+# Using generators for pipelines
 
 ```ts twoslash
 import { Data, Effect } from "effect";
@@ -1021,7 +680,7 @@ const program = Effect.gen(function* () {
   return yield* divide(40, denumerator); // yields number or CannotDivideByZero
 });
 
-//                   ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError, never>
+//                   ┌─── Effect<number, CannotFetchNumber | CannotDivideByZeroError>
 //                   ▼
 Effect.runPromise(program).then(console.log);
 ```
@@ -1032,8 +691,10 @@ It yields the error.
 -->
 
 ---
+transition: view-transition
+---
 
-# New ?
+# Using generators for pipelines
 
 ````md magic-move
 ```ts
@@ -1108,6 +769,7 @@ const program = Effect.gen(function* () {
 //      ▼
 const recovered = program.pipe(
   Effect.catchTags({
+    //   ^^^^^^^^^
     CannotDivideByZeroError: (_CannotDivideByZeroError) =>
       Effect.succeed(`Recovering from CannotDivideByZeroError`),
     CannotFetchNumber: (_CannotFetchNumber) =>
@@ -1518,3 +1180,333 @@ catch
 > we did this with part of our domain renewal flow.
 >
 > from 3 errors to 17
+
+
+---
+hide: true
+---
+
+# Look at this function
+
+```ts twoslash
+// @filename: fetchData.ts
+export async function fetchData(itemsCount: number) {
+  const response = await fetch("/url");
+  const data = await response.json();
+  return data as Array<{ name: string }>;
+}
+
+// @filename: index.ts
+// ---cut-before---
+import { fetchData } from "./fetchData";
+```
+
+````md magic-move
+```ts
+const data = fetchData();
+```
+
+```ts
+const data = fetchData(3);
+```
+
+```ts
+const data = await fetchData(3);
+```
+
+```ts
+try {
+  const data = await fetchData(3);
+} catch (error) {}
+```
+
+```ts
+try {
+  const data = await fetchData(3);
+} catch (error) {
+  console.log("Unexpected error");
+}
+```
+
+```ts
+try {
+  const data = await fetchData(3);
+} catch (error) {
+  if (error instanceof NetworkError) {
+    console.log("Network error");
+  } else {
+    console.log("Unexpected error");
+  }
+}
+```
+
+<!--
+Look at this function
+- Which parameters it requires?
+- What does it return?
+- It it Sync / Async?
+- What dependencies does it need?
+- Can it fail?
+- What does it throw?
+
+ -->
+````
+
+---
+hide: true
+---
+
+# Real world complexity
+
+````md magic-move
+```ts
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+const data = await response.json();
+const parsedData = mySchema.parse(data);
+```
+
+```ts
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+if (!response.ok) {
+  throw new Error(
+    `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+  );
+}
+
+const data = await response.json();
+const parsedData = mySchema.parse(data);
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
+  const data = await response.json();
+  const parsedData = mySchema.parse(data);
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
+  try {
+    const data = await response.json();
+    const parsedData = mySchema.parse(data);
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
+  try {
+    const data = await response.json();
+    try {
+      const parsedData = mySchema.parse(data);
+    } catch (_parseFailed) {
+      throw new Error("Invalid input: expected string, received number");
+    }
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+````
+
+<!--
+TypeError: Failed to fetch
+Non-OK responses (like 404, 500) response.ok
+SyntaxError: Unexpected token ... in JSON at position ...
+
+ -->
+
+<!--
+Real-world async code is tricky.
+A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
+Even if the response is ok, parsing JSON might throw syntax errors.
+So we end up with nested try-catch blocks and lots of error handling boilerplate.
+Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
+This complexity quickly grows and is hard to maintain.
+-->
+
+---
+hide: true
+---
+
+# Real world complexity
+
+````md magic-move
+```ts
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+const data = await response.json();
+const parsedData = mySchema.parse(data);
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  const data = await response.json();
+  const parsedData = mySchema.parse(data);
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  try {
+    const data = await response.json();
+    const parsedData = mySchema.parse(data);
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  try {
+    const data = await response.json();
+    try {
+      const parsedData = mySchema.parse(data);
+    } catch (_parseFailed) {
+      throw new Error("Invalid input: expected string, received number");
+    }
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
+  try {
+    const data = await response.json();
+    try {
+      const parsedData = mySchema.parse(data);
+    } catch (_parseFailed) {
+      throw new Error("Invalid input: expected string, received number");
+    }
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+````
+
+<!--
+TypeError: Failed to fetch
+Non-OK responses (like 404, 500) response.ok
+SyntaxError: Unexpected token ... in JSON at position ...
+
+ -->
+
+<!--
+Real-world async code is tricky.
+A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
+Even if the response is ok, parsing JSON might throw syntax errors.
+So we end up with nested try-catch blocks and lots of error handling boilerplate.
+Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
+This complexity quickly grows and is hard to maintain.
+-->
+
+---
+hide: true
+---
+
+# I had such use case
+
+````md magic-move
+```ts
+import { $ } from "execa";
+const { message: currentBranch } = await $`git branch --show-current`;
+```
+
+```ts
+import { $ } from "execa";
+try {
+  const { message: currentBranch } = await $`git branch --show-current`;
+} catch (error) {
+  //  a lot of things can go wrong here
+}
+```
+````
+
+---
+hide: true
+---
+
+# The Effect type
+
+```ts twoslash
+type Success = number;
+type Requirements = never;
+// ---cut-before---
+import type { Effect } from "effect";
+//                                 ┌─── Represents the success type
+//                                 │        ┌─── Represents the error type
+//                                 │        │      ┌─── Represents required dependencies
+//                                 ▼        ▼      ▼
+type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
+```
+
+<!--
+Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
+-->
+
+
