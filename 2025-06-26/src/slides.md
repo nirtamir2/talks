@@ -23,12 +23,12 @@ layout: center
 # TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 
 <!--
-This talk will hopefully change the way you think about handling errors — not just catching them, but modeling them.
+This talk will hopefully change the way you think about handling errors in TypeScript. 🟡
 We’ll do that using the Effect library.
 -->
 
 ---
-title: About me
+title: "About me"
 layout: intro
 glowSeed: 15
 glowOpacity: 0.3
@@ -52,6 +52,39 @@ You can find more about me at nirtamir.com.
 -->
 
 ---
+layout: section
+---
+
+# TypeScript is great
+
+<!--
+TypeScript is great - It helps us catch errors before they happen.
+-->
+
+---
+transition: view-transition
+---
+
+# TypeScript is great
+
+```ts twoslash
+function divide(a: number, b: number) {
+  return a / b;
+}
+
+const result = divide("hi", 2);
+```
+
+
+<!--
+
+If a function expects a certain type and we pass something else, we get a compile-time error.
+
+-->
+
+---
+transition: view-transition
+---
 
 # TypeScript is great
 
@@ -61,19 +94,26 @@ function divide(a: number, b: number) {
 }
 
 const result = divide(10, 2); // 5
+//    ^?
+//    ^ number
 
-divide("hi", 2);
+
+
+
+const anotherNumber = result + 1 // 6
+//    ^ also a number
+
 ```
 
-<!--
-TypeScript is great — it helps us catch errors early.
-If a function expects a certain type and we pass something else, we get a compile-time error.
+<!-- 
 
-> (Hover on result)
+And after we fix the error - TypeScript infers the return type automatically, which makes composition much easier.
 
- TypeScript infers the return type automatically, which makes composition much easier.
--->
+ -->
 
+
+---
+transition: view-transition
 ---
 
 # Edge cases
@@ -94,6 +134,8 @@ For example, dividing by 0 returns Infinity — it’s a valid number, but proba
 TypeScript doesn’t catch this, because the types are technically correct.
 -->
 
+---
+transition: view-transition
 ---
 
 # Errors in TypeScript are unknown
@@ -128,6 +170,11 @@ layout: section
 
 # Error handling in TypeScript
 
+<!-- 
+
+So how we handle errors in TypeScript?
+
+ -->
 ---
 
 # We need to check the error types ourselves
@@ -334,6 +381,9 @@ SyntaxError: Unexpected token ... in JSON at position ...
 
 <!--
 Real-world async code is tricky.
+Let's start with the happy path.
+:click
+Now split it
 A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
 Even if the response is ok, parsing JSON might throw syntax errors.
 So we end up with nested try-catch blocks and lots of error handling boilerplate.
@@ -404,7 +454,8 @@ const failure = Effect.fail(new Error("Operation failed due to network error"));
 ```
 
 <!--
-Very similar to Promise.resolve() and Promise.reject() we can create effect that succeed with values or effect that fails with an error
+Very similar to Promise.resolve() and Promise.reject() we can create effect that succeed with values or effect that fails with an error.
+Notice that effect is a description of a program (like a function). But unlike Promise - it does not execute the code yet. 
 -->
 
 ---
@@ -445,7 +496,10 @@ class CannotDivideByZeroError extends Data.TaggedError(
   "CannotDivideByZeroError",
 ) {}
 
-function divide(a: number, b: number): Effect.Effect<number, Error> {
+function divide(
+  a: number,
+  b: number,
+): Effect.Effect<number, CannotDivideByZeroError> {
   if (b === 0) {
     return Effect.fail(new CannotDivideByZeroError());
   }
@@ -456,6 +510,7 @@ function divide(a: number, b: number): Effect.Effect<number, Error> {
 
 <!--
 Now if we go back to our example again - we can create it with effects.
+:click
 Now the type system infers that the program will result with Error or succeed with the result as number.
 Effect have a convenient way to create Tagged errors using Data.TaggedError
 -->
@@ -492,6 +547,16 @@ We can run the effect with Effect.runSync
 ```ts
 import { Effect } from "effect";
 
+// Effect<number, never>
+const fetchNumber = Effect.promise(() => {
+  return Promise.resolve(42);
+});
+```
+
+```ts
+import { Effect } from "effect";
+
+// Effect<number, UnknownException>
 const fetchNumber = Effect.tryPromise(() => {
   return Promise.resolve(42);
 });
@@ -502,6 +567,7 @@ import { Data, Effect } from "effect";
 
 class CannotFetchNumber extends Data.TaggedError("CannotFetchNumber") {}
 
+// Effect<number, CannotFetchNumber>
 const fetchNumber = Effect.tryPromise({
   try: () => Promise.resolve(42),
   catch: () => new CannotFetchNumber(),
@@ -524,6 +590,13 @@ Effect.runPromise(fetchNumber).then(console.log);
 ```
 ````
 
+<!-- 
+We can create effects that describes async programs with Effect.promise
+But it may fail so we will use Effect.tryPromise which may fail with UnknownException
+We can map the error ourself using try-catch form
+And we run the effect using runPromise
+ -->
+
 ---
 
 # Building Pipelines
@@ -537,6 +610,18 @@ pipe(input, func1, func2, ..., funcN)
 │ input │───►│ func1 │───►│ func2 │───►│  ...  │───►│ funcN │───►│ result │
 └───────┘    └───────┘    └───────┘    └───────┘    └───────┘    └────────┘
 ```
+
+<!-- 
+
+In order to build pipelines like control flow we need to get the value inside the effect.
+We usually use pipe for it.
+pipe takes the result of a function and provides ("pipes") it to the next one in the chain.
+You can now read the program as a series of steps executed top-to-bottom.
+
+Notice how this is similar to then with Promise.then
+
+
+ -->
 
 ---
 
@@ -555,6 +640,9 @@ const result = pipe(5, increment, double);
 console.log(result);
 // Output: 12
 ```
+<!-- 
+So here we start with 5, then call increment with 5 as param so we get 6 and then we double the result to 12
+ -->
 
 ---
 
@@ -587,6 +675,10 @@ const result = pipe(
 Effect.runPromise(result).then(console.log); // Output: 190
 ```
 
+<!-- 
+Here we start with the fetchTransactionAmount which is 100, then we use Effect.map to take this value and create a new effect with 200, then we use flatMap to map this value to a different effect. Map and FlatMap both returns an effect, the diffrence between map and flatMap is that flatMap parameter is a function that returns an effect while map function returns a value that is wrapped with effect
+ -->
+
 ---
 
 # Effect pipelines
@@ -616,7 +708,6 @@ const result = pipe(
 );
 
 Effect.runPromise(result).then(console.log); // Output: 190
-
 ```
 
 ---
@@ -843,10 +934,12 @@ type RenewDomainError =
 ````
 
 ---
+
 layout: intro
 class: text-center pb-5
 glowX: 50
 glowY: 120
+
 ---
 
 <h1 text-4xl>
@@ -1103,10 +1196,74 @@ pre.twoslash {
 }
 </style>
 
+
 ---
+hide: true
+---
+
+```ts
+
+class FetchError extends Data.TaggedError("FetchError")<Readonly<{}>> {}
+
+class JsonError extends Data.TaggedError("JsonError")<Readonly<{}>> {}
+
+const fetchRequest = Effect.tryPromise({
+  try: () => fetch("https://pokeapi.co/api/v2/psadokemon/garchomp/"),
+  catch: () => new FetchError(),
+});
+
+const jsonResponse = (response: Response) =>
+  Effect.tryPromise({
+    try: () => response.json(),
+    catch: () => new JsonError(),
+  });
+
+const main = fetchRequest.pipe(
+  Effect.filterOrFail(
+    (response) => response.ok,
+    () => new FetchError()
+  ),
+  Effect.flatMap(jsonResponse),
+  Effect.catchTags({
+    FetchError: () => Effect.succeed("Fetch error"),
+    JsonError: () => Effect.succeed("Json error"),
+  })
+);
+
+```
+
+```ts
+const main = Effect.gen(function* () {
+  const response = yield* fetchRequest;
+  if (!response.ok) {
+    return yield* new FetchError();
+  }
+
+  return yield* jsonResponse(response);
+});
+```
+---
+title: notes
+---
+
+When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
+
+Error handling in practice is 2 steps:
+
+Collecting possible errors
+Handling errors
+
+Before running the effect we write some code to define what happens if Effect contains UnknownException.
+
+This operation is called Recovering from an error.
+
+we always know from the type what errors can happen.
+
+Separate program definition from error handling
 
 # Links
 
+- [Effect website](https://www.effect.website)
 - [Effect: Beginners Complete Getting Started](https://www.typeonce.dev/course/effect-beginners-complete-getting-started)
 
 # The tweet about types
@@ -1181,9 +1338,6 @@ catch
 >
 > from 3 errors to 17
 
-
----
-hide: true
 ---
 
 # Look at this function
@@ -1508,5 +1662,3 @@ type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
 <!--
 Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
 -->
-
-
