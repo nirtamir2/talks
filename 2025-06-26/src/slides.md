@@ -75,11 +75,8 @@ function divide(a: number, b: number) {
 const result = divide("hi", 2);
 ```
 
-
 <!--
-
 If a function expects a certain type and we pass something else, we get a compile-time error.
-
 -->
 
 ---
@@ -97,20 +94,13 @@ const result = divide(10, 2); // 5
 //    ^?
 //    ^ number
 
-
-
-
-const anotherNumber = result + 1 // 6
+const anotherNumber = result + 1; // 6
 //    ^ also a number
-
 ```
 
-<!-- 
-
+<!--
 And after we fix the error - TypeScript infers the return type automatically, which makes composition much easier.
-
- -->
-
+-->
 
 ---
 transition: view-transition
@@ -170,11 +160,10 @@ layout: section
 
 # Error handling in TypeScript
 
-<!-- 
-
+<!--
 So how we handle errors in TypeScript?
+-->
 
- -->
 ---
 
 # We need to check the error types ourselves
@@ -455,7 +444,7 @@ const failure = Effect.fail(new Error("Operation failed due to network error"));
 
 <!--
 Very similar to Promise.resolve() and Promise.reject() we can create effect that succeed with values or effect that fails with an error.
-Notice that effect is a description of a program (like a function). But unlike Promise - it does not execute the code yet. 
+Notice that effect is a description of a program (like a function). But unlike Promise - it does not execute the code yet.
 -->
 
 ---
@@ -590,12 +579,12 @@ Effect.runPromise(fetchNumber).then(console.log);
 ```
 ````
 
-<!-- 
+<!--
 We can create effects that describes async programs with Effect.promise
 But it may fail so we will use Effect.tryPromise which may fail with UnknownException
 We can map the error ourself using try-catch form
 And we run the effect using runPromise
- -->
+-->
 
 ---
 
@@ -611,17 +600,14 @@ pipe(input, func1, func2, ..., funcN)
 └───────┘    └───────┘    └───────┘    └───────┘    └───────┘    └────────┘
 ```
 
-<!-- 
-
+<!--
 In order to build pipelines like control flow we need to get the value inside the effect.
 We usually use pipe for it.
 pipe takes the result of a function and provides ("pipes") it to the next one in the chain.
 You can now read the program as a series of steps executed top-to-bottom.
 
 Notice how this is similar to then with Promise.then
-
-
- -->
+-->
 
 ---
 
@@ -640,9 +626,10 @@ const result = pipe(5, increment, double);
 console.log(result);
 // Output: 12
 ```
-<!-- 
+
+<!--
 So here we start with 5, then call increment with 5 as param so we get 6 and then we double the result to 12
- -->
+-->
 
 ---
 
@@ -675,9 +662,9 @@ const result = pipe(
 Effect.runPromise(result).then(console.log); // Output: 190
 ```
 
-<!-- 
+<!--
 Here we start with the fetchTransactionAmount which is 100, then we use Effect.map to take this value and create a new effect with 200, then we use flatMap to map this value to a different effect. Map and FlatMap both returns an effect, the diffrence between map and flatMap is that flatMap parameter is a function that returns an effect while map function returns a value that is wrapped with effect
- -->
+-->
 
 ---
 
@@ -1196,13 +1183,11 @@ pre.twoslash {
 }
 </style>
 
-
 ---
 hide: true
 ---
 
 ```ts
-
 class FetchError extends Data.TaggedError("FetchError")<Readonly<{}>> {}
 
 class JsonError extends Data.TaggedError("JsonError")<Readonly<{}>> {}
@@ -1221,15 +1206,14 @@ const jsonResponse = (response: Response) =>
 const main = fetchRequest.pipe(
   Effect.filterOrFail(
     (response) => response.ok,
-    () => new FetchError()
+    () => new FetchError(),
   ),
   Effect.flatMap(jsonResponse),
   Effect.catchTags({
     FetchError: () => Effect.succeed("Fetch error"),
     JsonError: () => Effect.succeed("Json error"),
-  })
+  }),
 );
-
 ```
 
 ```ts
@@ -1242,6 +1226,7 @@ const main = Effect.gen(function* () {
   return yield* jsonResponse(response);
 });
 ```
+
 ---
 title: notes
 ---
