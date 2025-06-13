@@ -764,12 +764,17 @@ Effect.runPromise(program).then(console.log);
 ```
 
 <!--
+
+Sometimes it looks unfamilier and more complex to define the pipelines using pipes and functional programming form.
 Effect offers a convenient syntax, similar to async/await, to write effectful code using generators using yield* (asterisk).
-It yields the error.
+We can create a new effect using Effect.get. We need to provide a generator function to it.
+Now very similar to await in async function - we can use yield astriks to get the effect resolved value and apply our transformations like in procedural programming
+
 -->
 
 ---
 transition: view-transition
+hide: true
 ---
 
 # Using generators for pipelines
@@ -807,6 +812,29 @@ Effect.runPromise(recovered).then(console.log);
 ```
 ````
 
+
+---
+
+# Error hadnling in practice
+
+<v-clicks>
+- Collecting possible errors
+- Handling errors
+</v-clicks>
+
+<!-- 
+
+Error handling in practice is 2 steps:
+- Collecting possible errors
+- Handling errors
+
+This way we can separate program definition from error handling
+
+
+We talked about how effect handle collecting the possible errors
+
+ -->
+
 ---
 
 # Handling errors
@@ -843,7 +871,7 @@ const program = Effect.gen(function* () {
   const denumerator = yield* fetchNumber(20);
   return yield* divide(40, denumerator);
 });
-//      ┌─── Effect<number, never>
+//      ┌─── Effect<number | string, never>
 //      ▼
 const recovered = program.pipe(
   Effect.catchTags({
@@ -858,8 +886,20 @@ const recovered = program.pipe(
 Effect.runPromise(recovered).then(console.log);
 ```
 
----
+<!-- 
 
+Now we need to handle those errors.
+This operation is called Recovering from an error.
+We can use Effect catchTag or catchTags for it. It accept the error tag and returns a new effect.
+We always know from the type what errors can happen so we get auto-completion about the error types.
+So we can write the code like the happy path and handle them seperately
+
+
+ -->
+
+---
+hide: true
+---
 # Erros vs Defects
 
 There are two kinds of errors-those that we can expect, program defensively against, and analyze statically-and those that are truly exceptional and outside of our control.
@@ -871,8 +911,34 @@ layout: center
 # We can use the type system to track **errors** and **context**, not only **success** values.
 
 ---
+layout: section
+---
 
-# Effect helps you to fix your unsafe assumption
+# TypeScript is great
+
+<div v-click class="text-2xl">
+For the happy path
+</div>
+
+<!-- 
+When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation 
+-->
+
+---
+layout: section
+---
+
+# Effect can help
+
+<div v-click class="text-2xl">
+When the happy path ends
+</div>
+
+<!-- 
+
+# Effect helps you to fix your unsafe assumption. You can write your code in the happy path just like TypeScript, and handle errors later. This way you won't have suprises about how do the function failes - and you can handle not only generic errors - but also recover from them.
+
+ -->
 
 ---
 layout: two-cols
@@ -921,12 +987,10 @@ type RenewDomainError =
 ````
 
 ---
-
 layout: intro
 class: text-center pb-5
 glowX: 50
 glowY: 120
-
 ---
 
 <h1 text-4xl>
