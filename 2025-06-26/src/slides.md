@@ -77,10 +77,13 @@ const result = divide("hi", 2);
 
 <!--
 If a function expects a certain type and we pass something else, we get a compile-time error.
+And after we fix the error - TypeScript infers the return type automatically, which makes composition much easier.
+
 -->
 
 ---
 transition: view-transition
+hide: true
 ---
 
 # TypeScript is great
@@ -99,7 +102,6 @@ const anotherNumber = result + 1; // 6
 ```
 
 <!--
-And after we fix the error - TypeScript infers the return type automatically, which makes composition much easier.
 -->
 
 ---
@@ -504,6 +506,8 @@ Now the type system infers that the program will result with Error or succeed wi
 Effect have a convenient way to create Tagged errors using Data.TaggedError
 -->
 
+---
+hide: true
 ---
 
 # Running Effects
@@ -987,6 +991,11 @@ type RenewDomainError =
   | UpdateVercelDomainError;
 ```
 ````
+
+<!-- 
+At vercel they had supported audo renewals for domains and they had a lot of issues.
+But using neverthrow and similar concepts from effect they 
+ -->
 
 ---
 layout: intro
