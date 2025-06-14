@@ -818,8 +818,10 @@ Effect.runPromise(recovered).then(console.log);
 # Error hadnling in practice
 
 <v-clicks>
+
 - Collecting possible errors
 - Handling errors
+
 </v-clicks>
 
 <!-- 
