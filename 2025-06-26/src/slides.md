@@ -410,6 +410,198 @@ is a powerful TypeScript library designed to help developers easily create compl
 
 ---
 
+# Rewriting with Effect
+
+````md magic-move
+```ts
+class DivededByZeroError extends Error {
+  _tag = "DivededByZeroError";
+}
+
+function divide(a: number, b: number) {
+  if (b === 0) {
+    throw new DivededByZeroError();
+  }
+  return a / b;
+}
+
+try {
+  const result = divide(4, 0);
+} catch (error) {
+  // Error type is unknown
+  if (error instanceof DivededByZeroError) {
+    console.error(error);
+  }
+}
+
+```
+
+```ts
+import { Data, Effect } from "effect";
+
+class CannotDivideByZeroError extends Data.TaggedError(
+  "CannotDivideByZeroError",
+) {}
+
+function divide(a: number, b: number): Effect.Effect<number, Error> {
+  if (b === 0) {
+    return Effect.fail(new CannotDivideByZeroError());
+  }
+  return Effect.succeed(a / b);
+}
+
+// Effect<number, CannotDivideByZeroError>
+const program = divide(4, 0);
+
+const result = Effect.runSync(program);
+
+```
+````
+
+<!-- 
+
+אני יודע שזה טיפה מסובך אבל הקטע זה שאני כבר יודע מה הסוגי שגיאות שיכולים להיות לי
+
+TypeScript is aware of the errors here!
+
+program.pipe(
+  Effect.catchTags({
+    CannotDivideByZeroError: (_CannotDivideByZeroError) => Effect.succeed(0),
+);
+
+ -->
+
+---
+
+# 
+ 
+````md magic-move
+
+```ts
+async function main(){
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new HttpError()
+  }
+  try {
+    const data = await response.json();
+  } catch (_stringifyError) {
+    throw new JsonError();
+  }
+} catch (_fetchError) {
+  throw new FetchError();
+}
+}
+```
+
+```ts
+const fetchRequest = async () => {
+  try {
+    return await fetch("https://pokeapi.co/api/v2/pokemon/garchomp/");
+  }
+  catch() {
+    throw new FetchError()
+  }
+}
+
+const jsonResponse = async (response: Response) =>{ 
+  try {
+    return await response.json();
+  };
+  catch(){
+    throw new JsonError()
+  }
+}
+  
+
+function main(){
+  const response = await fetchRequest();
+  if(!response.ok){
+    throw new HttpError()
+  }
+  const json = await jsonResponse(response);
+  return json;
+}
+
+await main()
+```
+
+```ts
+const fetchRequest = async () => {return 
+try{
+
+  return await fetch("https://pokeapi.co/api/v2/pokemon/garchomp/");
+  }
+  catch(){
+    throw new Error()
+  }
+}
+
+const jsonResponse = async (response: Response) =>{ return await response.json();};
+
+function main(){
+  const response = await fetchRequest();
+  const json = await jsonResponse(response);
+  return json;
+}
+
+await main()
+```
+
+try {
+
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+
+  try {
+    const data = await response.json();
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+class FetchError extends Data.TaggedError("FetchError")<Readonly<{}>> {}
+
+class JsonError extends Data.TaggedError("JsonError")<Readonly<{}>> {}
+
+const fetchRequest = Effect.tryPromise({
+  try: () => fetch("https://pokeapi.co/api/v2/psadokemon/garchomp/"),
+  catch: () => new FetchError(),
+});
+
+const jsonResponse = (response: Response) =>
+  Effect.tryPromise({
+    try: () => response.json(),
+    catch: () => new JsonError(),
+  });
+
+const main = Effect.gen(function* () {
+  const response = yield* fetchRequest;
+  if (!response.ok) {
+    return yield* new FetchError();
+  }
+
+  return yield* jsonResponse(response);
+});
+
+```
+
+````
+
+---
+hide: true
+---
+
 # The Effect type
 
 ```ts twoslash
@@ -428,6 +620,8 @@ type ProgramEffect = Effect.Effect<Success, Error>;
 Let's start with the Effect type. It represent an action that can either success with Success type or fail with Error type.
 -->
 
+---
+hide: true
 ---
 
 # Effect values
@@ -449,6 +643,8 @@ Very similar to Promise.resolve() and Promise.reject() we can create effect that
 Notice that effect is a description of a program (like a function). But unlike Promise - it does not execute the code yet.
 -->
 
+---
+hide: true
 ---
 
 # Rewriting with Effect
@@ -532,6 +728,8 @@ Here we have an effect with Effect.sync - this result is an Effect even without 
 We can run the effect with Effect.runSync
 -->
 
+---
+hide: true
 ---
 
 # Running async effects
@@ -1722,3 +1920,4 @@ type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
 <!--
 Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
 -->
+
