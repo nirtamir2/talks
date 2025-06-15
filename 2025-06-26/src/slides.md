@@ -127,8 +127,6 @@ TypeScript doesn’t catch this, because the types are technically correct.
 -->
 
 ---
-transition: view-transition
----
 
 # Errors in TypeScript are unknown
 
