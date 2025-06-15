@@ -169,13 +169,13 @@ So how we handle errors in TypeScript?
 # We need to check the error types ourselves
 
 ```ts twoslash
-class DivededByZeroError extends Error {
-  _tag = "DivededByZeroError";
+class CannotDivideByZeroError extends Error {
+  _tag = "CannotDivideByZeroError";
 }
 
 function divide(a: number, b: number) {
   if (b === 0) {
-    throw new DivededByZeroError();
+    throw new CannotDivideByZeroError();
   }
   return a / b;
 }
@@ -184,7 +184,7 @@ try {
   const result = divide(4, 0);
 } catch (error) {
   // Error type is unknown
-  if (error instanceof DivededByZeroError) {
+  if (error instanceof CannotDivideByZeroError) {
     console.error(error);
   }
 }
@@ -205,17 +205,17 @@ This works, but it’s manual and easy to forget or get wrong.
 # Wrap the results instead of throwing
 
 ```ts twoslash
-class DivededByZeroError extends Error {
-  _tag = "DivededByZeroError";
+class CannotDivideByZeroError extends Error {
+  _tag = "CannotDivideByZeroError";
 }
 
 type Result<Data, Error> =
   | { data: Data; error?: never }
   | { data?: never; error: Error };
 
-function divide(a: number, b: number): Result<number, DivededByZeroError> {
+function divide(a: number, b: number): Result<number, CannotDivideByZeroError> {
   if (b === 0) {
-    return { error: new DivededByZeroError() };
+    return { error: new CannotDivideByZeroError() };
     //       ^^^^^
   }
   return { data: a / b };
@@ -253,6 +253,17 @@ Composing multiple such functions gets messy, since we now have to wrap and unwr
 const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
 const data = await response.json();
 const parsedData = mySchema.parse(data);
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  const data = await response.json();
+  const parsedData = mySchema.parse(data);
+}
+catch(error){
+  console.log("Could not fetch data")
+}
 ```
 
 ```ts
@@ -369,6 +380,15 @@ SyntaxError: Unexpected token ... in JSON at position ...
  -->
 
 <!--
+
+מתחיל עם ה3 שורות - כולנו מכירים אותם
+אבל בטח אתם מטפלים בזה ככה
+אתם יכולים. אבל הקוד מתעלם מהרבה דברים יותר גרנולרים שקורים. 
+נכון - פה ליוזר זה בטח לא הכי משנה - אבל לנו כמתכנתים כן כשאנחנו באים לדאבג את זה.
+ויש הרבה מקרים אחרים שגם בתור יוזר היינו שמחים לקבל הודעה מה נכשל בדיוק ומה אפשר לעשות את זה חוץ מאשר הודעה גנרית.
+משהו נכשל פה והמטרה של להביא את הדאטה לא הצליחה - אבל למה בדיוק ומה אפשר לעשות.
+אנחנו לא רוצים שיהיה לנו שגיאה גנרית. יותר עוזר שיהיה לנו מידע
+
 Real-world async code is tricky.
 Let's start with the happy path.
 :click
@@ -412,13 +432,13 @@ is a powerful TypeScript library designed to help developers easily create compl
 
 ````md magic-move
 ```ts
-class DivededByZeroError extends Error {
-  _tag = "DivededByZeroError";
+class CannotDivideByZeroError extends Error {
+  _tag = "CannotDivideByZeroError";
 }
 
 function divide(a: number, b: number) {
   if (b === 0) {
-    throw new DivededByZeroError();
+    throw new CannotDivideByZeroError();
   }
   return a / b;
 }
@@ -427,7 +447,7 @@ try {
   const result = divide(4, 0);
 } catch (error) {
   // Error type is unknown
-  if (error instanceof DivededByZeroError) {
+  if (error instanceof CannotDivideByZeroError) {
     console.error(error);
   }
 }
@@ -462,6 +482,18 @@ const result = Effect.runSync(program);
 
 TypeScript is aware of the errors here!
 
+אז הדבר הראשון זה לשנות את השגיאה ל
+Data.TaggedError
+ שזה די דומה לError עם _tag
+
+ הדבר השני זה שבמקום לזרוק - אנחנו מחזירים fail או succeed 
+ ואז ברמת ה
+ type 
+ אנחנו מקבלים Effect<number, CannotDivideByZeroError>
+ 
+ והדבר השלישי שאנחנו מריצים את התוכנית. אפקט לא מריץ כלום עדיין זה רק התרשים איך נראית התוכנית.
+ צריך להריץ אותה עם runSync
+
 program.pipe(
   Effect.catchTags({
     CannotDivideByZeroError: (_CannotDivideByZeroError) => Effect.succeed(0),
@@ -474,6 +506,136 @@ program.pipe(
 # 
  
 ````md magic-move
+
+```ts
+const main = async () => {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/garchomp/");
+  const json = await response.json();
+  return json;
+};
+
+main().then(console.log);
+```
+
+```ts
+const fetchRequest = () => fetch("https://pokeapi.co/api/v2/pokemon/garchomp/");
+
+const jsonResponse = (response: Response) => response.json();
+
+const main = async () => {
+  const response = await fetchRequest();
+  const json = await jsonResponse(response);
+  return json;
+};
+
+main().then(console.log);
+```
+
+```ts
+import { Effect, pipe } from "effect";
+
+const fetchRequest = Effect.promise(() =>
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+);
+
+const jsonResponse = (response: Response) =>
+  Effect.promise(() => response.json());
+
+// Effect<any, never>
+const main = pipe(
+  fetchRequest,
+  Effect.flatMap(jsonResponse),
+);
+
+Effect.runPromise(main);
+```
+
+```ts
+import { Effect, pipe } from "effect";
+
+const fetchRequest = Effect.tryPromise(() =>
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+);
+
+const jsonResponse = (response: Response) =>
+  Effect.tryPromise(() => response.json());
+
+// Effect<any, UnknownException>
+const main = pipe(
+  fetchRequest,
+  Effect.flatMap(jsonResponse),
+);
+
+Effect.runPromise(main);
+```
+
+```ts
+import { Effect, pipe } from "effect";
+
+const fetchRequest = Effect.tryPromise(() =>
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+);
+
+const jsonResponse = (response: Response) =>
+  Effect.tryPromise(() => response.json());
+
+// Effect<any, UnknownException>
+const main = pipe(
+  fetchRequest,
+  Effect.flatMap(jsonResponse),
+);
+
+// Effect<any, never>
+const revovered = pipe(
+  main,
+  Effect.catchTag("UnknownException", () =>
+    Effect.succeed("There was an error")
+  )
+)
+
+Effect.runPromise(recovered);
+```
+
+```ts
+import { Effect, pipe } from "effect";
+
+
+
+const fetchRequest = Effect.tryPromise(() =>
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+);
+
+const jsonResponse = (response: Response) =>
+  Effect.tryPromise(() => response.json());
+
+
+const main = pipe(
+  fetchRequest,
+  Effect.flatMap(jsonResponse),
+  Effect.catchTag("UnknownException", () =>
+    Effect.succeed("There was an error")
+  )
+);
+
+Effect.runPromise(main);
+```
+
+```ts
+const fetchRequest = Effect.promise(() =>
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+);
+
+const jsonResponse = (response: Response) =>
+  Effect.promise(() => response.json());
+
+const main = Effect.flatMap(
+  fetchRequest,
+  jsonResponse
+);
+
+Effect.runPromise(main);
+```
+
 
 ```ts
 async function main(){
@@ -1015,7 +1177,7 @@ Effect.runPromise(recovered).then(console.log);
 
 ---
 
-# Error hadnling in practice
+# Error handling in practice
 
 <v-clicks>
 
