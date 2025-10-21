@@ -42,12 +42,12 @@ const redirects = bases
       parts.push(`
 [[redirects]]
 from = "${base}pdf"
-to = "https://github.com/antfu/talks/blob/main/${dir}/${pdfFile}?raw=true"
+to = "https://github.com/nirtamir/talks/blob/main/${dir}/${pdfFile}?raw=true"
 status = 302
 
 [[redirects]]
 from = "/${dir}/pdf"
-to = "https://github.com/antfu/talks/blob/main/${dir}/${pdfFile}?raw=true"
+to = "https://github.com/nirtamir/talks/blob/main/${dir}/${pdfFile}?raw=true"
 status = 302`);
     }
 
@@ -55,12 +55,12 @@ status = 302`);
       `
 [[redirects]]
 from = "${base}src"
-to = "https://github.com/antfu/talks/tree/main/${dir}"
+to = "https://github.com/nirtamir2/talks/tree/main/${dir}"
 status = 302`,
       `
 [[redirects]]
 from = "${dir}"
-to = "https://talks.antfu.me${base}"
+to = "https://talks.nirtamir.me${base}"
 status = 301
 
 [[redirects]]
@@ -86,7 +86,7 @@ ${redirects}
 
 [[redirects]]
 from = "/"
-to = "https://antfu.me/talks"
+to = "https://nirtamir.me/talks"
 status = 302
 `;
 
