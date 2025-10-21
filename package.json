@@ -46,7 +46,6 @@
     "eslint-plugin-format": "catalog:",
     "eslint-plugin-react-hooks": "catalog:",
     "eslint-plugin-react-refresh": "catalog:",
-    "eslint-plugin-tailwindcss": "^3.18.2",
     "eslint-typegen": "catalog:",
     "execa": "catalog:",
     "fast-glob": "catalog:",
