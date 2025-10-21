@@ -60,7 +60,7 @@ function divide(a: number, b: number) {
   return a / b;
 }
 
-divide("hi", 4)
+divide("hi", 4);
 ```
 
 ---
@@ -75,9 +75,9 @@ function divide(a: number, b: number) {
 const result = divide(10, 0); // Infinity 🤔
 ```
 
-<!-- 
- TypeScript catches type errors beautifully, but runtime errors? Not so much. Division by zero returns Infinity - technically correct, but probably not what we want
- -->
+<!--
+TypeScript catches type errors beautifully, but runtime errors? Not so much. Division by zero returns Infinity - technically correct, but probably not what we want
+-->
 
 ---
 
@@ -92,15 +92,14 @@ try {
 }
 ```
 
-<!-- 
-
+<!--
 When we do handle errors with try-catch, we lose all type safety. The error is typed as `unknown`, forcing us to do manual type checking.
-
- -->
+-->
 
 ---
 
 # Real-world complexity explodes
+
 
 ````md magic-move
 ```ts
@@ -134,10 +133,10 @@ try {
 ```
 ````
 
-<!-- 
- What starts as 3 simple lines becomes a nightmare of nested try-catch blocks. Each async operation can fail in different ways, and we lose track of what can go wrong where.
- -->
- 
+<!--
+What starts as 3 simple lines becomes a nightmare of nested try-catch blocks. Each async operation can fail in different ways, and we lose track of what can go wrong where.
+-->
+
 ---
 layout: center
 ---
@@ -152,7 +151,7 @@ layout: section
 
 # Enter Effect-TS
 
-*"Make the impossible states impossible"*
+_"Make the impossible states impossible"_
 
 ---
 
@@ -161,26 +160,22 @@ layout: section
 ```ts
 //   Success      Error          Context
 //      ↓           ↓               ↓
-Effect<Data,    ErrorType,    Requirements>
+Effect<Data, ErrorType, Requirements>;
 ```
 
 - **Success type**: What you get when things go right
 - **Error type**: What can go wrong (typed!)
 - **Context**: What you need to run this (we'll ignore this today)
 
-
-<!-- 
-
+<!--
 Effect is like Promise, but with typed errors. The type system now tracks both success and failure cases.
-
- -->
+-->
 
 ---
 
 # From throwing to failing
 
 ````md magic-move
-
 ```ts
 // Before: Throws unknown errors
 function divide(a: number, b: number) {
@@ -193,7 +188,7 @@ function divide(a: number, b: number) {
 
 ```ts
 // After: Typed errors
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 class DivisionByZeroError extends Data.TaggedError("DivisionByZeroError") {}
 
@@ -204,7 +199,6 @@ function divide(a: number, b: number): Effect<number, DivisionByZeroError> {
   return Effect.succeed(a / b);
 }
 ```
-
 ````
 
 <!--
@@ -226,11 +220,9 @@ const program = Effect.gen(function* () {
 // Type: Effect<ValidatedData, FetchError | JsonError | ValidationError>
 ```
 
-<!-- 
-
+<!--
 Using generators (similar to async/await), we can compose effects naturally. TypeScript automatically unions all possible error types.
-
- -->
+-->
 
 ---
 
@@ -241,18 +233,16 @@ const safeProgram = program.pipe(
   Effect.catchTags({
     FetchError: () => Effect.succeed("Network is down"),
     JsonError: () => Effect.succeed("Invalid response format"),
-    ValidationError: (error) => Effect.succeed(`Bad data: ${error.message}`)
-  })
+    ValidationError: (error) => Effect.succeed(`Bad data: ${error.message}`),
+  }),
 );
 
 // Type: Effect<ValidatedData | string, never>
 ```
 
-<!-- 
-
+<!--
 We handle errors by their specific types, not with generic catch blocks. TypeScript provides autocomplete for all possible error types.
-
- -->
+-->
 
 ---
 
@@ -263,33 +253,36 @@ class NetworkError extends Data.TaggedError("NetworkError") {}
 class InvalidJsonError extends Data.TaggedError("InvalidJsonError") {}
 class ValidationError extends Data.TaggedError("ValidationError") {}
 
-const fetchPokemon = (name: string) => Effect.gen(function* () {
-  const response = yield* Effect.tryPromise({
-    try: () => fetch(`https://pokeapi.co/api/v2/pokemon/${name}`),
-    catch: () => new NetworkError()
+const fetchPokemon = (name: string) =>
+  Effect.gen(function* () {
+    const response = yield* Effect.tryPromise({
+      try: () => fetch(`https://pokeapi.co/api/v2/pokemon/${name}`),
+      catch: () => new NetworkError(),
+    });
+
+    if (!response.ok) {
+      return yield* Effect.fail(new NetworkError());
+    }
+
+    const data = yield* Effect.tryPromise({
+      try: () => response.json(),
+      catch: () => new InvalidJsonError(),
+    });
+
+    const pokemon = yield* Effect.try({
+      try: () => pokemonSchema.parse(data),
+      catch: () => new ValidationError(),
+    });
+
+    return pokemon;
   });
-  
-  if (!response.ok) {
-    return yield* Effect.fail(new NetworkError());
-  }
-  
-  const data = yield* Effect.tryPromise({
-    try: () => response.json(),
-    catch: () => new InvalidJsonError()
-  });
-  
-  const pokemon = yield* Effect.try({
-    try: () => pokemonSchema.parse(data),
-    catch: () => new ValidationError()
-  });
-  
-  return pokemon;
-});
 
 // Type: Effect<Pokemon, NetworkError | InvalidJsonError | ValidationError>
 ```
 
-<!-- Each step can fail with a specific error type. The final type signature tells us exactly what can go wrong and why. -->
+<!--
+Each step can fail with a specific error type. The final type signature tells us exactly what can go wrong and why.
+-->
 
 ---
 
@@ -309,26 +302,28 @@ const safeProgram = program.pipe(
   Effect.catchTags({
     UserNotFound: () => Effect.succeed([]),
     PreferencesError: () => getDefaultRecommendations(),
-    RecommendationServiceDown: () => getCachedRecommendations()
-  })
+    RecommendationServiceDown: () => getCachedRecommendations(),
+  }),
 );
 ```
 
-<!-- 
+<!--
 Write your business logic first, handle errors second. This separation makes code more readable and maintainable.
- -->
+-->
 
 ---
 
 # Before vs After
 
 **Traditional TypeScript:**
+
 - ✅ Type safety for success cases
-- ❌ Unknown error types  
+- ❌ Unknown error types
 - ❌ Nested try-catch hell
 - ❌ No compile-time error tracking
 
 **With Effect:**
+
 - ✅ Type safety for success cases
 - ✅ Typed error handling
 - ✅ Composable error recovery
@@ -351,7 +346,7 @@ npm install effect
 ```
 
 ```ts
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 // Start small: convert one error-prone function
 class MyError extends Data.TaggedError("MyError") {}
@@ -361,18 +356,16 @@ const myFunction = (): Effect<string, MyError> => {
 };
 ```
 
-<!-- 
-
- You don't need to rewrite everything at once. Start with one function, then gradually expand. Effect plays well with existing TypeScript code.
- 
-  -->
+<!--
+You don't need to rewrite everything at once. Start with one function, then gradually expand. Effect plays well with existing TypeScript code.
+-->
 
 ---
 
 # Key takeaways
 
 1. **Make errors visible** in your type signatures
-2. **Separate program logic** from error handling  
+2. **Separate program logic** from error handling
 3. **Compose effects** like you compose functions
 4. **Handle specific errors** instead of generic ones
 5. **Let TypeScript guide you** to handle all error cases
@@ -384,6 +377,7 @@ layout: center
 # Questions?
 
 ### Resources:
+
 - [effect.website](https://effect.website)
 - [Effect-TS Discord](https://discord.gg/effect-ts)
 - This talk: [nirtamir.com/talks/effect-errors](https://nirtamir.com/talks/effect-errors)
@@ -394,4 +388,4 @@ layout: center
 
 # Thank you!
 
-*No more surprises. Just predictable, typed error handling.*
+_No more surprises. Just predictable, typed error handling._

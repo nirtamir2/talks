@@ -6,7 +6,7 @@ import {
   SandpackProvider,
   defaultDark,
 } from "sandpack-vue3";
-import { computed, ref, useSlots } from "vue";
+import { computed, ref } from "vue";
 import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 import ActiveSandpackFile from "./ActiveSandpackFile.vue";
 
@@ -122,8 +122,8 @@ function handleToggleEditMode() {
       <PanelGroup direction="horizontal" class="flex size-full">
         <Panel :default-size="70" class="h-full">
           <SandpackCodeEditor v-if="isEditMode" class="h-full" />
-          <ActiveSandpackFile :index="index" v-else class="h-full">
-            <template v-for="(_, name) in $slots" :key="name" v-slot:[name]>
+          <ActiveSandpackFile v-else :index="index" class="h-full">
+            <template v-for="(_, name) in $slots" :key="name" #[name]>
               <slot :name="name" />
             </template>
           </ActiveSandpackFile>

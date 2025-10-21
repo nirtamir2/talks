@@ -21,7 +21,7 @@ const props = withDefaults(
         <div class="minimize-btn" />
         <div class="maximize-btn" />
       </div>
-      <div class="text-sm" v-if="props.title">{{ props.title }}</div>
+      <div v-if="props.title" class="text-sm">{{ props.title }}</div>
     </div>
     <div
       class="browser-content"

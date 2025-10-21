@@ -2,11 +2,10 @@
 import { useSandpack } from "sandpack-vue3";
 import { computed } from "vue";
 
-const { sandpack } = useSandpack();
 const props = defineProps<{
   index: number;
 }>();
-
+const { sandpack } = useSandpack();
 // Same like in setup preparser.ts
 const slotName = computed(() => {
   const activeFileName = sandpack.activeFile
@@ -17,15 +16,10 @@ const slotName = computed(() => {
 </script>
 <template>
   <div class="flex w-full appearance-none flex-wrap gap-2 pb-4">
-    <template
-      v-if="sandpack.visibleFiles.length > 1"
-      v-for="visibleFile in sandpack.visibleFiles"
-    >
+    <template v-for="visibleFile in sandpack.visibleFiles" :key="visibleFile">
       <button
-        :class="[
-          'appearance-none p-2',
-          visibleFile === sandpack.activeFile && 'border-b',
-        ]"
+        class="appearance-none p-2"
+        :class="[visibleFile === sandpack.activeFile && 'border-b']"
         @click="sandpack.setActiveFile(visibleFile)"
       >
         {{ visibleFile.replace("/", "") }}

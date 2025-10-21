@@ -103,7 +103,7 @@ function divide(a: number, b: number) {
 
 try {
   const result = divide(4, 0);
-} catch (error) {
+} catch {
   // `error` is unknown - no type safety!
 }
 ```
@@ -150,17 +150,17 @@ Let's look at a real example. This simple function looks clean, but it hides mul
 try {
   const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
   // TypeError: Failed to fetch
-  
+
   if (!response.ok) {
     // HTTP 404, 500, etc.
   }
-  
+
   const data = await response.json();
   // SyntaxError: Invalid JSON
-  
+
   const result = mySchema.parse(data);
   // ValidationError: Invalid schema
-} catch (error) {
+} catch {
   // Which error is this? 🤷‍♂️
 }
 ```
@@ -192,7 +192,7 @@ type Effect<Success, Error> = ...
 
 // Examples:
 Effect<number, never>                    // Always succeeds with number
-Effect<User, DatabaseError>              // User or DatabaseError  
+Effect<User, DatabaseError>              // User or DatabaseError
 Effect<Data, NetworkError | ParseError>  // Multiple possible errors
 ```
 
@@ -205,11 +205,14 @@ The Effect type represents a computation that can either succeed with a value of
 # Creating Effects
 
 ```ts twoslash
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 class DivisionByZeroError extends Data.TaggedError("DivisionByZeroError") {}
 
-function divide(a: number, b: number): Effect.Effect<number, DivisionByZeroError> {
+function divide(
+  a: number,
+  b: number,
+): Effect.Effect<number, DivisionByZeroError> {
   if (b === 0) {
     return Effect.fail(new DivisionByZeroError());
   }
@@ -229,7 +232,7 @@ Here's how we rewrite our divide function with Effect. Instead of throwing, we r
 
 ````md magic-move
 ```ts
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError") {}
 class ParseError extends Data.TaggedError("ParseError") {}
@@ -237,14 +240,14 @@ class ParseError extends Data.TaggedError("ParseError") {}
 const fetchUser = (): Effect.Effect<Response, NetworkError> => {
   return Effect.tryPromise({
     try: () => fetch("/api/user"),
-    catch: () => new NetworkError()
+    catch: () => new NetworkError(),
   });
 };
 
 const parseJson = (response: Response): Effect.Effect<User, ParseError> => {
   return Effect.tryPromise({
     try: () => response.json(),
-    catch: () => new ParseError()
+    catch: () => new ParseError(),
   });
 };
 ```
@@ -270,20 +273,22 @@ When we compose Effects together, the error types automatically union. This prog
 # Handling errors with precision
 
 ```ts twoslash
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError") {}
 class ParseError extends Data.TaggedError("ParseError") {}
 
 declare const program: Effect.Effect<User, NetworkError | ParseError>;
-type User = { name: string };
+interface User {
+  name: string;
+}
 
 // ---cut-before---
 const handled = program.pipe(
   Effect.catchTags({
     NetworkError: () => Effect.succeed({ name: "Guest User" }),
     ParseError: () => Effect.succeed({ name: "Unknown User" }),
-  })
+  }),
 );
 
 // Type: Effect<User, never> - all errors handled!
@@ -298,7 +303,7 @@ Now comes the beautiful part - error handling. With catchTags, we can handle eac
 # Real-world example
 
 ```ts twoslash
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError") {}
 class HttpError extends Data.TaggedError("HttpError")<{ status: number }> {}
@@ -307,18 +312,18 @@ class ParseError extends Data.TaggedError("ParseError") {}
 const fetchPokemon = Effect.gen(function* () {
   const response = yield* Effect.tryPromise({
     try: () => fetch("https://pokeapi.co/api/v2/pokemon/ditto"),
-    catch: () => new NetworkError()
+    catch: () => new NetworkError(),
   });
-  
+
   if (!response.ok) {
     yield* Effect.fail(new HttpError({ status: response.status }));
   }
-  
+
   const data = yield* Effect.tryPromise({
     try: () => response.json(),
-    catch: () => new ParseError()
+    catch: () => new ParseError(),
   });
-  
+
   return data;
 });
 
@@ -334,26 +339,27 @@ Here's our Pokemon example rewritten with Effect. Now we have precise error type
 # Handling different errors differently
 
 ```ts twoslash
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError") {}
 class HttpError extends Data.TaggedError("HttpError")<{ status: number }> {}
 class ParseError extends Data.TaggedError("ParseError") {}
 
-declare const fetchPokemon: Effect.Effect<any, NetworkError | HttpError | ParseError>;
+declare const fetchPokemon: Effect.Effect<
+  any,
+  NetworkError | HttpError | ParseError
+>;
 
 // ---cut-before---
 const robustPokemonFetch = fetchPokemon.pipe(
   Effect.catchTags({
-    NetworkError: () => 
-      Effect.succeed({ name: "Offline Mode", id: -1 }),
-    HttpError: ({ status }) => 
-      status === 404 
+    NetworkError: () => Effect.succeed({ name: "Offline Mode", id: -1 }),
+    HttpError: ({ status }) =>
+      status === 404
         ? Effect.succeed({ name: "Not Found", id: 0 })
         : Effect.fail(new Error(`Server error: ${status}`)),
-    ParseError: () => 
-      Effect.succeed({ name: "Invalid Data", id: -2 }),
-  })
+    ParseError: () => Effect.succeed({ name: "Invalid Data", id: -2 }),
+  }),
 );
 ```
 
@@ -373,7 +379,7 @@ try {
   // What errors can happen? 🤷‍♂️
   // Have to read the implementation
   // Generic error handling
-} catch (error) {
+} catch {
   console.error("Something went wrong");
   // Hope for the best
 }
@@ -392,7 +398,7 @@ const handled = result.pipe(
   Effect.catchTags({
     NetworkError: handleNetwork,
     ValidationError: handleValidation,
-  })
+  }),
 );
 // Precise, type-safe error handling
 ```
@@ -458,7 +464,7 @@ layout: center
 <v-clicks>
 
 - **Errors should be part of your type signature**
-- **Write code like the happy path, handle errors separately**  
+- **Write code like the happy path, handle errors separately**
 - **Different errors need different handling strategies**
 - **The type system can guide your error handling**
 

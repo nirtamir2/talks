@@ -1,4 +1,5 @@
 import { definePreparserSetup } from "@slidev/types";
+import { html } from "code-tag";
 
 type FileObject = {
   index: number;
@@ -15,11 +16,11 @@ type FileObject = {
 };
 
 interface ParsedAttributes {
+  [key: string]: unknown; // Allow any other attributes
   file?: string;
   index?: number;
   hidden?: boolean;
   active?: boolean;
-  [key: string]: unknown; // Allow any other attributes
 }
 
 const SANDPACK_BLOCK_REGEX =
@@ -43,29 +44,23 @@ function transformSandpackBlock(match: string, blocksContent: string): string {
   const templates = files
     .flatMap((file, index) => {
       return Object.entries(file).map(([filename, data]) => {
-        // console.log(data.blocksContent);
-        return `
-<template v-slot:index_${index}_filename_${filename.replaceAll(".", "_")}>
-\`\`\`tsx 
-${data.code}
-\`\`\`
-
-
-
-</template>
-`;
+        return html`
+          <template
+            v-slot:index_${String(index)}_filename_${filename.replaceAll(
+              ".",
+              "_",
+            )}
+          >
+            \`\`\`tsx ${data.code} \`\`\`
+          </template>
+        `;
       });
     })
     .join("\n");
 
-  // return `<Debug :data="${filesJson}"/>`;
-
-  return `<FilesPlayground :files="${filesJson}">
-${templates}
-</FilesPlayground>
-  `;
-
-  return `<Debug :data="${templates}"/>`;
+  return html`<FilesPlayground :files="${filesJson}">
+    ${templates}
+  </FilesPlayground> `;
 }
 
 function createFileObject(

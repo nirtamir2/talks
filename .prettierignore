@@ -1,1 +1,7 @@
 pnpm-lock.yaml
+
+.vinxi/
+
+dist-stale/
+
+.output/

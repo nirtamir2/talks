@@ -7,6 +7,9 @@ export default nirtamir2(
     typescript: {
       // tsconfigPath: "tsconfig.json",
     },
+    tailwindcss: {
+      entryPoint: "src/globals.css",
+    },
     // formatters: {
     //   css: true,
     //   markdown: true,
@@ -14,12 +17,18 @@ export default nirtamir2(
     //     files: ["*/src/slides.md"],
     //   },
     // },
-    ignores: ["**/demo/eslint/**", "**/routeTree.gen.ts"],
+    ignores: [
+      "**/demo/eslint/**",
+      "**/routeTree.gen.ts",
+      "**/dist-stale/**",
+      "**/.vinxi/**",
+      "**/.output/**",
+    ],
   },
   [
     {
       rules: {
-        "tailwindcss/no-custom-classname": "off",
+        "better-tailwindcss/no-unregistered-classes": "off",
       },
     },
     {

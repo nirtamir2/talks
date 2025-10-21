@@ -8,7 +8,7 @@ const packageFiles = (
   })
 )
   // eslint-disable-next-line unicorn/no-await-expression-member
-  .sort();
+  .toSorted();
 
 const bases = (
   await Promise.all(
@@ -21,7 +21,7 @@ const bases = (
       });
       const command = json.scripts?.build;
       if (!command) return;
-      const base = command.match(/ --base (.*?)\s/)?.[1];
+      const base = command.match(/ (\S*)$/)?.[1];
       if (!base) return;
       return {
         dir: talkRoot,
@@ -79,7 +79,7 @@ publish = "dist"
 command = "pnpm run build"
 
 [build.environment]
-NODE_VERSION = "20"
+NODE_VERSION = "22"
 PLAYWRIGHT_BROWSERS_PATH = "0"
 
 ${redirects}

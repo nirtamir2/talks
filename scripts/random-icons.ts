@@ -34,4 +34,3 @@ function shuffle(array: Array<unknown>) {
 shuffle(icons);
 
 console.log(icons.slice(0, 100));
-export {};

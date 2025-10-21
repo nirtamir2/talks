@@ -78,7 +78,6 @@ const result = divide("hi", 2);
 <!--
 If a function expects a certain type and we pass something else, we get a compile-time error.
 And after we fix the error - TypeScript infers the return type automatically, which makes composition much easier.
-
 -->
 
 ---
@@ -100,9 +99,6 @@ const result = divide(10, 2); // 5
 const anotherNumber = result + 1; // 6
 //    ^ also a number
 ```
-
-<!--
--->
 
 ---
 transition: view-transition
@@ -140,7 +136,7 @@ function divide(a: number, b: number) {
 
 try {
   const result = divide(4, 0); // throws new Error("Cannot divide by 0")
-} catch (error) {
+} catch {
   // `error` is unknown
 }
 ```
@@ -260,9 +256,8 @@ try {
   const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
   const data = await response.json();
   const parsedData = mySchema.parse(data);
-}
-catch(error){
-  console.log("Could not fetch data")
+} catch (error) {
+  console.log("Could not fetch data");
 }
 ```
 
@@ -380,7 +375,6 @@ SyntaxError: Unexpected token ... in JSON at position ...
  -->
 
 <!--
-
 מתחיל עם ה3 שורות - כולנו מכירים אותם
 אבל בטח אתם מטפלים בזה ככה
 אתם יכולים. אבל הקוד מתעלם מהרבה דברים יותר גרנולרים שקורים. 
@@ -451,7 +445,6 @@ try {
     console.error(error);
   }
 }
-
 ```
 
 ```ts
@@ -472,12 +465,10 @@ function divide(a: number, b: number): Effect.Effect<number, Error> {
 const program = divide(4, 0);
 
 const result = Effect.runSync(program);
-
 ```
 ````
 
-<!-- 
-
+<!--
 אני יודע שזה טיפה מסובך אבל הקטע זה שאני כבר יודע מה הסוגי שגיאות שיכולים להיות לי
 
 TypeScript is aware of the errors here!
@@ -498,15 +489,13 @@ program.pipe(
   Effect.catchTags({
     CannotDivideByZeroError: (_CannotDivideByZeroError) => Effect.succeed(0),
 );
-
- -->
+-->
 
 ---
 
-# 
- 
-````md magic-move
+#
 
+````md magic-move
 ```ts
 const main = async () => {
   const response = await fetch("https://pokeapi.co/api/v2/pokemon/garchomp/");
@@ -535,17 +524,14 @@ main().then(console.log);
 import { Effect, pipe } from "effect";
 
 const fetchRequest = Effect.promise(() =>
-  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/"),
 );
 
 const jsonResponse = (response: Response) =>
   Effect.promise(() => response.json());
 
 // Effect<any, never>
-const main = pipe(
-  fetchRequest,
-  Effect.flatMap(jsonResponse),
-);
+const main = pipe(fetchRequest, Effect.flatMap(jsonResponse));
 
 Effect.runPromise(main);
 ```
@@ -554,17 +540,14 @@ Effect.runPromise(main);
 import { Effect, pipe } from "effect";
 
 const fetchRequest = Effect.tryPromise(() =>
-  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/"),
 );
 
 const jsonResponse = (response: Response) =>
   Effect.tryPromise(() => response.json());
 
 // Effect<any, UnknownException>
-const main = pipe(
-  fetchRequest,
-  Effect.flatMap(jsonResponse),
-);
+const main = pipe(fetchRequest, Effect.flatMap(jsonResponse));
 
 Effect.runPromise(main);
 ```
@@ -573,25 +556,22 @@ Effect.runPromise(main);
 import { Effect, pipe } from "effect";
 
 const fetchRequest = Effect.tryPromise(() =>
-  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/"),
 );
 
 const jsonResponse = (response: Response) =>
   Effect.tryPromise(() => response.json());
 
 // Effect<any, UnknownException>
-const main = pipe(
-  fetchRequest,
-  Effect.flatMap(jsonResponse),
-);
+const main = pipe(fetchRequest, Effect.flatMap(jsonResponse));
 
 // Effect<any, never>
 const revovered = pipe(
   main,
   Effect.catchTag("UnknownException", () =>
-    Effect.succeed("There was an error")
-  )
-)
+    Effect.succeed("There was an error"),
+  ),
+);
 
 Effect.runPromise(recovered);
 ```
@@ -599,22 +579,19 @@ Effect.runPromise(recovered);
 ```ts
 import { Effect, pipe } from "effect";
 
-
-
 const fetchRequest = Effect.tryPromise(() =>
-  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/"),
 );
 
 const jsonResponse = (response: Response) =>
   Effect.tryPromise(() => response.json());
 
-
 const main = pipe(
   fetchRequest,
   Effect.flatMap(jsonResponse),
   Effect.catchTag("UnknownException", () =>
-    Effect.succeed("There was an error")
-  )
+    Effect.succeed("There was an error"),
+  ),
 );
 
 Effect.runPromise(main);
@@ -622,36 +599,32 @@ Effect.runPromise(main);
 
 ```ts
 const fetchRequest = Effect.promise(() =>
-  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/")
+  fetch("https://pokeapi.co/api/v2/pokemon/garchomp/"),
 );
 
 const jsonResponse = (response: Response) =>
   Effect.promise(() => response.json());
 
-const main = Effect.flatMap(
-  fetchRequest,
-  jsonResponse
-);
+const main = Effect.flatMap(fetchRequest, jsonResponse);
 
 Effect.runPromise(main);
 ```
 
-
 ```ts
-async function main(){
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  if (!response.ok) {
-    throw new HttpError()
-  }
+async function main() {
   try {
-    const data = await response.json();
-  } catch (_stringifyError) {
-    throw new JsonError();
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+    if (!response.ok) {
+      throw new HttpError();
+    }
+    try {
+      const data = await response.json();
+    } catch (_stringifyError) {
+      throw new JsonError();
+    }
+  } catch (_fetchError) {
+    throw new FetchError();
   }
-} catch (_fetchError) {
-  throw new FetchError();
-}
 }
 ```
 
@@ -665,7 +638,7 @@ const fetchRequest = async () => {
   }
 }
 
-const jsonResponse = async (response: Response) =>{ 
+const jsonResponse = async (response: Response) =>{
   try {
     return await response.json();
   };
@@ -673,7 +646,7 @@ const jsonResponse = async (response: Response) =>{
     throw new JsonError()
   }
 }
-  
+
 
 function main(){
   const response = await fetchRequest();
@@ -688,7 +661,7 @@ await main()
 ```
 
 ```ts
-const fetchRequest = async () => {return 
+const fetchRequest = async () => {return
 try{
 
   return await fetch("https://pokeapi.co/api/v2/pokemon/garchomp/");
@@ -711,23 +684,23 @@ await main()
 
 try {
 
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-
-  try {
-    const data = await response.json();
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
+if (!response.ok) {
+throw new Error(
+`HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+);
 }
-```
+
+try {
+const data = await response.json();
+} catch (\_stringifyError) {
+throw new Error(
+"SyntaxError: Unexpected token ... in JSON at position ...",
+);
+}
+} catch (\_fetchError) {
+throw new Error("TypeError: Failed to fetch");
+}
+````
 
 ```ts
 class FetchError extends Data.TaggedError("FetchError")<Readonly<{}>> {}
@@ -753,14 +726,13 @@ const main = Effect.gen(function* () {
 
   return yield* jsonResponse(response);
 });
-
 ```
 
-````
+`````
 
 ---
-hide: true
----
+
+## hide: true
 
 # The Effect type
 
@@ -781,8 +753,8 @@ Let's start with the Effect type. It represent an action that can either success
 -->
 
 ---
-hide: true
----
+
+## hide: true
 
 # Effect values
 
@@ -804,8 +776,8 @@ Notice that effect is a description of a program (like a function). But unlike P
 -->
 
 ---
-hide: true
----
+
+## hide: true
 
 # Rewriting with Effect
 
@@ -853,7 +825,7 @@ function divide(
   return Effect.succeed(a / b);
 }
 ```
-````
+`````
 
 <!--
 Now if we go back to our example again - we can create it with effects.
@@ -863,8 +835,8 @@ Effect have a convenient way to create Tagged errors using Data.TaggedError
 -->
 
 ---
-hide: true
----
+
+## hide: true
 
 # Running Effects
 
@@ -889,8 +861,8 @@ We can run the effect with Effect.runSync
 -->
 
 ---
-hide: true
----
+
+## hide: true
 
 # Running async effects
 
@@ -998,7 +970,7 @@ So here we start with 5, then call increment with 5 as param so we get 6 and the
 # Effect pipelines
 
 ```ts twoslash
-import { pipe, Effect } from "effect";
+import { Effect, pipe } from "effect";
 
 // Function to apply a discount safely to a transaction amount
 const applyDiscount = (
@@ -1033,7 +1005,7 @@ Here we start with the fetchTransactionAmount which is 100, then we use Effect.m
 # Effect pipelines
 
 ```ts twoslash
-import { pipe, Effect } from "effect";
+import { Effect, pipe } from "effect";
 
 // Function to apply a discount safely to a transaction amount
 const applyDiscount = (
@@ -1080,8 +1052,8 @@ Effect.all is similar to Promise.akk and takes multiple effect and transform the
 -->
 
 ---
-transition: view-transition
----
+
+## transition: view-transition
 
 # Using generators for pipelines
 
@@ -1135,8 +1107,10 @@ Now very similar to await in async function - we can use yield astriks to get th
 -->
 
 ---
+
 transition: view-transition
 hide: true
+
 ---
 
 # Using generators for pipelines
@@ -1174,7 +1148,6 @@ Effect.runPromise(recovered).then(console.log);
 ```
 ````
 
-
 ---
 
 # Error handling in practice
@@ -1186,7 +1159,7 @@ Effect.runPromise(recovered).then(console.log);
 
 </v-clicks>
 
-<!-- 
+<!--
 
 Error handling in practice is 2 steps:
 - Collecting possible errors
@@ -1250,7 +1223,7 @@ const recovered = program.pipe(
 Effect.runPromise(recovered).then(console.log);
 ```
 
-<!-- 
+<!--
 
 Now we need to handle those errors.
 This operation is called Recovering from an error.
@@ -1262,21 +1235,22 @@ So we can write the code like the happy path and handle them seperately
  -->
 
 ---
-hide: true
----
+
+## hide: true
+
 # Erros vs Defects
 
 There are two kinds of errors-those that we can expect, program defensively against, and analyze statically-and those that are truly exceptional and outside of our control.
 
 ---
-layout: center
----
+
+## layout: center
 
 # We can use the type system to track **errors** and **context**, not only **success** values.
 
 ---
-layout: section
----
+
+## layout: section
 
 # TypeScript is great
 
@@ -1284,13 +1258,13 @@ layout: section
 For the happy path
 </div>
 
-<!-- 
-When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation 
+<!--
+When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
 -->
 
 ---
-layout: section
----
+
+## layout: section
 
 # Effect can help
 
@@ -1298,15 +1272,15 @@ layout: section
 When the happy path ends
 </div>
 
-<!-- 
+<!--
 
 # Effect helps you to fix your unsafe assumption. You can write your code in the happy path just like TypeScript, and handle errors later. This way you won't have suprises about how do the function failes - and you can handle not only generic errors - but also recover from them.
 
  -->
 
 ---
-layout: two-cols
----
+
+## layout: two-cols
 
 ![tweet-dillon](/tweet-1898590282020450681-no-image.png)
 
@@ -1350,16 +1324,18 @@ type RenewDomainError =
 ```
 ````
 
-<!-- 
+<!--
 At vercel they had supported audo renewals for domains and they had a lot of issues.
-But using neverthrow and similar concepts from effect they 
+But using neverthrow and similar concepts from effect they
  -->
 
 ---
+
 layout: intro
 class: text-center pb-5
 glowX: 50
 glowY: 120
+
 ---
 
 <h1 text-4xl>
@@ -1369,8 +1345,8 @@ Thank you！
 Slides available at [nirtamir.com](https://nirtamir.com)
 
 ---
-hide: true
----
+
+## hide: true
 
 ```ts twoslash
 import { $ } from "execa";
@@ -1382,8 +1358,8 @@ try {
 ```
 
 ---
-hide: true
----
+
+## hide: true
 
 ```ts twoslash
 import { Effect } from "effect";
@@ -1408,8 +1384,8 @@ Effect.runPromise(getCurrentBranch);
 ```
 
 ---
-hide: true
----
+
+## hide: true
 
 ```ts twoslash
 import { Data, Effect } from "effect";
@@ -1508,8 +1484,8 @@ Effect.runPromise(
 ```
 
 ---
-hide: true
----
+
+## hide: true
 
 ```ts twoslash
 import { Data, Effect } from "effect";
@@ -1617,8 +1593,8 @@ pre.twoslash {
 </style>
 
 ---
-hide: true
----
+
+## hide: true
 
 ```ts
 class FetchError extends Data.TaggedError("FetchError")<Readonly<{}>> {}
@@ -1661,8 +1637,8 @@ const main = Effect.gen(function* () {
 ```
 
 ---
-title: notes
----
+
+## title: notes
 
 When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
 
@@ -1697,6 +1673,10 @@ https://x.com/dillon_mulroy/status/1803430049254633492
 
 Also -
 https://x.com/dillon_mulroy/status/1799811526020538555
+
+Also:
+
+https://x.com/RhysSullivan/status/1971409275152130541
 
 https://www.youtube.com/watch?v=VcOIz7tOBoM&list=PL4mWVugy3a2il28mbeNmyjJDoHOvw4JTK&index=13
 
@@ -1762,15 +1742,15 @@ catch
 
 ```ts twoslash
 // @filename: fetchData.ts
+// @filename: index.ts
+// ---cut-before---
+import { fetchData } from "./fetchData";
+
 export async function fetchData(itemsCount: number) {
   const response = await fetch("/url");
   const data = await response.json();
   return data as Array<{ name: string }>;
 }
-
-// @filename: index.ts
-// ---cut-before---
-import { fetchData } from "./fetchData";
 ```
 
 ````md magic-move
@@ -1825,8 +1805,8 @@ Look at this function
 ````
 
 ---
-hide: true
----
+
+## hide: true
 
 # Real world complexity
 
@@ -1935,8 +1915,8 @@ This complexity quickly grows and is hard to maintain.
 -->
 
 ---
-hide: true
----
+
+## hide: true
 
 # Real world complexity
 
@@ -2038,8 +2018,8 @@ This complexity quickly grows and is hard to maintain.
 -->
 
 ---
-hide: true
----
+
+## hide: true
 
 # I had such use case
 
@@ -2060,16 +2040,16 @@ try {
 ````
 
 ---
-hide: true
----
+
+## hide: true
 
 # The Effect type
 
 ```ts twoslash
-type Success = number;
-type Requirements = never;
 // ---cut-before---
 import type { Effect } from "effect";
+type Success = number;
+type Requirements = never;
 //                                 ┌─── Represents the success type
 //                                 │        ┌─── Represents the error type
 //                                 │        │      ┌─── Represents required dependencies
@@ -2080,4 +2060,3 @@ type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
 <!--
 Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
 -->
-

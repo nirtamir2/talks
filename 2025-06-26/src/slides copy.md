@@ -9,6 +9,7 @@ glowSeed: 4
 lang: en-US
 title: "TypeScript Without Surprises: Smarter Error Handling with Effect-TS"
 ---
+
 # TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 
 ---
@@ -16,6 +17,7 @@ layout: intro
 ---
 
 # Nir Tamir
+
 - Senior Frontend Developer
 - Passionate about type safety and developer experience
 - [nirtamir.com](https://nirtamir.com)
@@ -105,7 +107,7 @@ try {
 } catch (error) {
   // error is unknown - no type safety!
   console.log(error.message); // ❌ TypeScript error
-//            ~~~~~
+  //            ~~~~~
 }
 ```
 ````
@@ -173,7 +175,7 @@ What starts as 3 simple lines becomes a nightmare of nested try-catch blocks. Ea
 # The core problems
 
 1. **Error types are unknown** - no compile-time safety
-2. **Nested try-catch hell** - hard to read and maintain  
+2. **Nested try-catch hell** - hard to read and maintain
 3. **No visibility into possible failures** - have to read implementation
 4. **Can't compose error handling** - each function handles its own errors
 
@@ -224,13 +226,13 @@ import { Effect } from "effect";
 const success = Effect.succeed(42);
 //    ^?
 
-// Failure  
+// Failure
 const failure = Effect.fail(new Error("Something went wrong"));
 //    ^?
 ```
 
 ```ts
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 // Tagged errors for better type safety
 class DivisionByZeroError extends Data.TaggedError("DivisionByZeroError") {}
@@ -265,12 +267,15 @@ function divide(a: number, b: number) {
 ```
 
 ```ts
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 // After: Typed errors
 class DivisionByZeroError extends Data.TaggedError("DivisionByZeroError") {}
 
-function divide(a: number, b: number): Effect.Effect<number, DivisionByZeroError> {
+function divide(
+  a: number,
+  b: number,
+): Effect.Effect<number, DivisionByZeroError> {
   if (b === 0) {
     return Effect.fail(new DivisionByZeroError());
   }
@@ -292,38 +297,40 @@ Now the function signature tells us exactly what can go wrong. No need to dive i
 # Composing effects naturally
 
 ````md magic-move
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError") {}
 class JsonError extends Data.TaggedError("JsonError") {}
 
 const fetchData = Effect.tryPromise({
   try: () => fetch("/api/data"),
-  catch: () => new NetworkError()
+  catch: () => new NetworkError(),
 });
 
-const parseJson = (response: Response) => Effect.tryPromise({
-  try: () => response.json(),
-  catch: () => new JsonError()
-});
+const parseJson = (response: Response) =>
+  Effect.tryPromise({
+    try: () => response.json(),
+    catch: () => new JsonError(),
+  });
 ```
 
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError") {}
 class JsonError extends Data.TaggedError("JsonError") {}
 
 const fetchData = Effect.tryPromise({
   try: () => fetch("/api/data"),
-  catch: () => new NetworkError()
+  catch: () => new NetworkError(),
 });
 
-const parseJson = (response: Response) => Effect.tryPromise({
-  try: () => response.json(),
-  catch: () => new JsonError()
-});
+const parseJson = (response: Response) =>
+  Effect.tryPromise({
+    try: () => response.json(),
+    catch: () => new JsonError(),
+  });
 
 // Compose them - looks like happy path code!
 const program = Effect.gen(function* () {
@@ -346,21 +353,22 @@ Using generators (similar to async/await), we write code that looks like the hap
 # Error handling becomes explicit and typed
 
 ````md magic-move
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError") {}
 class JsonError extends Data.TaggedError("JsonError") {}
 
 const fetchData = Effect.tryPromise({
   try: () => fetch("/api/data"),
-  catch: () => new NetworkError()
+  catch: () => new NetworkError(),
 });
 
-const parseJson = (response: Response) => Effect.tryPromise({
-  try: () => response.json(),
-  catch: () => new JsonError()
-});
+const parseJson = (response: Response) =>
+  Effect.tryPromise({
+    try: () => response.json(),
+    catch: () => new JsonError(),
+  });
 
 const program = Effect.gen(function* () {
   const response = yield* fetchData;
@@ -369,21 +377,22 @@ const program = Effect.gen(function* () {
 });
 ```
 
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError") {}
 class JsonError extends Data.TaggedError("JsonError") {}
 
 const fetchData = Effect.tryPromise({
   try: () => fetch("/api/data"),
-  catch: () => new NetworkError()
+  catch: () => new NetworkError(),
 });
 
-const parseJson = (response: Response) => Effect.tryPromise({
-  try: () => response.json(),
-  catch: () => new JsonError()
-});
+const parseJson = (response: Response) =>
+  Effect.tryPromise({
+    try: () => response.json(),
+    catch: () => new JsonError(),
+  });
 
 const program = Effect.gen(function* () {
   const response = yield* fetchData;
@@ -395,8 +404,8 @@ const program = Effect.gen(function* () {
 const safeProgram = program.pipe(
   Effect.catchTags({
     NetworkError: () => Effect.succeed("Offline mode"),
-    JsonError: () => Effect.succeed("Invalid response format")
-  })
+    JsonError: () => Effect.succeed("Invalid response format"),
+  }),
 );
 
 //    ^?
@@ -412,8 +421,8 @@ We handle errors by their specific types, not with generic catch blocks. TypeScr
 # Real-world example: Pokemon API
 
 ````md magic-move
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError")<{
   readonly status?: number;
@@ -429,12 +438,12 @@ const pokemonSchema = {
   parse: (data: any) => {
     if (!data.name) throw new Error("Missing name");
     return data as { name: string; id: number };
-  }
+  },
 };
 ```
 
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError")<{
   readonly status?: number;
@@ -450,35 +459,36 @@ const pokemonSchema = {
   parse: (data: any) => {
     if (!data.name) throw new Error("Missing name");
     return data as { name: string; id: number };
-  }
+  },
 };
 
-const fetchPokemon = (name: string) => Effect.gen(function* () {
-  // Step 1: Fetch data
-  const response = yield* Effect.tryPromise({
-    try: () => fetch(`https://pokeapi.co/api/v2/pokemon/${name}`),
-    catch: () => new NetworkError({ status: 0 })
+const fetchPokemon = (name: string) =>
+  Effect.gen(function* () {
+    // Step 1: Fetch data
+    const response = yield* Effect.tryPromise({
+      try: () => fetch(`https://pokeapi.co/api/v2/pokemon/${name}`),
+      catch: () => new NetworkError({ status: 0 }),
+    });
+
+    // Step 2: Check response status
+    if (!response.ok) {
+      return yield* Effect.fail(new NetworkError({ status: response.status }));
+    }
+
+    // Step 3: Parse JSON
+    const data = yield* Effect.tryPromise({
+      try: () => response.json(),
+      catch: () => new InvalidJsonError(),
+    });
+
+    // Step 4: Validate data
+    const pokemon = yield* Effect.try({
+      try: () => pokemonSchema.parse(data),
+      catch: () => new ValidationError({ field: "name" }),
+    });
+
+    return pokemon;
   });
-  
-  // Step 2: Check response status
-  if (!response.ok) {
-    return yield* Effect.fail(new NetworkError({ status: response.status }));
-  }
-  
-  // Step 3: Parse JSON
-  const data = yield* Effect.tryPromise({
-    try: () => response.json(),
-    catch: () => new InvalidJsonError()
-  });
-  
-  // Step 4: Validate data
-  const pokemon = yield* Effect.try({
-    try: () => pokemonSchema.parse(data),
-    catch: () => new ValidationError({ field: "name" })
-  });
-  
-  return pokemon;
-});
 
 //    ^?
 ```
@@ -493,52 +503,69 @@ Each step can fail with a specific error type. The function signature tells us e
 # The magic: Separation of concerns
 
 ````md magic-move
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class UserNotFound extends Data.TaggedError("UserNotFound") {}
 class DatabaseError extends Data.TaggedError("DatabaseError") {}
 class ValidationError extends Data.TaggedError("ValidationError") {}
 
-declare const getUser: (id: string) => Effect.Effect<{id: string}, UserNotFound | DatabaseError>;
-declare const validateUser: (user: {id: string}) => Effect.Effect<{id: string, valid: boolean}, ValidationError>;
-declare const updateUser: (user: {id: string, valid: boolean}) => Effect.Effect<void, DatabaseError>;
+declare const getUser: (
+  id: string,
+) => Effect.Effect<{ id: string }, UserNotFound | DatabaseError>;
+declare const validateUser: (user: {
+  id: string;
+}) => Effect.Effect<{ id: string; valid: boolean }, ValidationError>;
+declare const updateUser: (user: {
+  id: string;
+  valid: boolean;
+}) => Effect.Effect<void, DatabaseError>;
 
 // 1. Write business logic (happy path)
-const updateUserProgram = (userId: string) => Effect.gen(function* () {
-  const user = yield* getUser(userId);
-  const validatedUser = yield* validateUser(user);
-  yield* updateUser(validatedUser);
-  return "User updated successfully";
-});
+const updateUserProgram = (userId: string) =>
+  Effect.gen(function* () {
+    const user = yield* getUser(userId);
+    const validatedUser = yield* validateUser(user);
+    yield* updateUser(validatedUser);
+    return "User updated successfully";
+  });
 ```
 
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class UserNotFound extends Data.TaggedError("UserNotFound") {}
 class DatabaseError extends Data.TaggedError("DatabaseError") {}
 class ValidationError extends Data.TaggedError("ValidationError") {}
 
-declare const getUser: (id: string) => Effect.Effect<{id: string}, UserNotFound | DatabaseError>;
-declare const validateUser: (user: {id: string}) => Effect.Effect<{id: string, valid: boolean}, ValidationError>;
-declare const updateUser: (user: {id: string, valid: boolean}) => Effect.Effect<void, DatabaseError>;
+declare const getUser: (
+  id: string,
+) => Effect.Effect<{ id: string }, UserNotFound | DatabaseError>;
+declare const validateUser: (user: {
+  id: string;
+}) => Effect.Effect<{ id: string; valid: boolean }, ValidationError>;
+declare const updateUser: (user: {
+  id: string;
+  valid: boolean;
+}) => Effect.Effect<void, DatabaseError>;
 
-const updateUserProgram = (userId: string) => Effect.gen(function* () {
-  const user = yield* getUser(userId);
-  const validatedUser = yield* validateUser(user);
-  yield* updateUser(validatedUser);
-  return "User updated successfully";
-});
+const updateUserProgram = (userId: string) =>
+  Effect.gen(function* () {
+    const user = yield* getUser(userId);
+    const validatedUser = yield* validateUser(user);
+    yield* updateUser(validatedUser);
+    return "User updated successfully";
+  });
 
 // 2. Handle errors separately and specifically
-const safeUpdateUser = (userId: string) => updateUserProgram(userId).pipe(
-  Effect.catchTags({
-    UserNotFound: () => Effect.succeed("User not found - created new user"),
-    DatabaseError: () => Effect.succeed("Database temporarily unavailable"),
-    ValidationError: (error) => Effect.succeed(`Validation failed: ${error}`)
-  })
-);
+const safeUpdateUser = (userId: string) =>
+  updateUserProgram(userId).pipe(
+    Effect.catchTags({
+      UserNotFound: () => Effect.succeed("User not found - created new user"),
+      DatabaseError: () => Effect.succeed("Database temporarily unavailable"),
+      ValidationError: (error) => Effect.succeed(`Validation failed: ${error}`),
+    }),
+  );
 
 //    ^?
 ```
@@ -553,8 +580,8 @@ This is the key insight: write your business logic first in the happy path style
 # Running Effects
 
 ````md magic-move
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class MyError extends Data.TaggedError("MyError") {}
 
@@ -563,8 +590,8 @@ const program = Effect.gen(function* () {
 });
 ```
 
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class MyError extends Data.TaggedError("MyError") {}
 
@@ -577,8 +604,8 @@ const syncResult = Effect.runSync(program);
 console.log(syncResult); // "Hello Effect!"
 ```
 
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
 class MyError extends Data.TaggedError("MyError") {}
 
@@ -600,7 +627,7 @@ Effects are descriptions of programs - they don't run until you explicitly execu
 # Integration with existing code
 
 ````md magic-move
-```ts 
+```ts
 // Your existing async function
 async function fetchUserData(id: string) {
   const response = await fetch(`/api/users/${id}`);
@@ -611,28 +638,29 @@ async function fetchUserData(id: string) {
 }
 ```
 
-```ts 
-import { Effect, Data } from "effect";
+```ts
+import { Data, Effect } from "effect";
 
-class HttpError extends Data.TaggedError("HttpError")<{status: number}> {}
+class HttpError extends Data.TaggedError("HttpError")<{ status: number }> {}
 class NetworkError extends Data.TaggedError("NetworkError") {}
 
 // Gradually convert to Effect
-const fetchUserData = (id: string) => Effect.gen(function* () {
-  const response = yield* Effect.tryPromise({
-    try: () => fetch(`/api/users/${id}`),
-    catch: () => new NetworkError()
+const fetchUserData = (id: string) =>
+  Effect.gen(function* () {
+    const response = yield* Effect.tryPromise({
+      try: () => fetch(`/api/users/${id}`),
+      catch: () => new NetworkError(),
+    });
+
+    if (!response.ok) {
+      return yield* Effect.fail(new HttpError({ status: response.status }));
+    }
+
+    return yield* Effect.tryPromise({
+      try: () => response.json(),
+      catch: () => new NetworkError(),
+    });
   });
-  
-  if (!response.ok) {
-    return yield* Effect.fail(new HttpError({ status: response.status }));
-  }
-  
-  return yield* Effect.tryPromise({
-    try: () => response.json(),
-    catch: () => new NetworkError()
-  });
-});
 
 //    ^?
 ```
@@ -651,8 +679,9 @@ You don't need to rewrite everything at once. Start with one function, gradually
 <div>
 
 ## Traditional TypeScript
+
 - ✅ Type safety for success cases
-- ❌ Unknown error types  
+- ❌ Unknown error types
 - ❌ Nested try-catch complexity
 - ❌ Hidden failure modes
 - ❌ Generic error handling
@@ -662,6 +691,7 @@ You don't need to rewrite everything at once. Start with one function, gradually
 <div>
 
 ## With Effect-TS
+
 - ✅ Type safety for success cases
 - ✅ Typed error handling
 - ✅ Happy path code style
@@ -697,8 +727,7 @@ These are the core benefits that address the pain points we started with. Effect
 ```ts twoslash
 // Install Effect
 // npm install effect
-
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 // Start with one function
 class MyError extends Data.TaggedError("MyError") {}
@@ -730,8 +759,9 @@ layout: center
 # Questions?
 
 ### Resources:
+
 - [effect.website](https://effect.website) - Official documentation
-- [Effect Discord](https://discord.gg/effect-ts) - Community support  
+- [Effect Discord](https://discord.gg/effect-ts) - Community support
 - [GitHub examples](https://github.com/Effect-TS/effect/tree/main/examples)
 
 <!--
@@ -744,8 +774,8 @@ layout: center
 
 # Thank you!
 
-*Write TypeScript without surprises.*  
-*Handle errors with confidence.*
+_Write TypeScript without surprises._  
+_Handle errors with confidence._
 
 <!--
 Effect transforms error handling from TypeScript's biggest weakness into one of its greatest strengths. Your future self will thank you for the predictability and type safety.
