@@ -40,7 +40,7 @@ if (existsSync(dirStale)) {
     ...args,
   ];
 
-  console.log("Building", command.path.join(" "));
+  console.log("Building", command.join(" "));
 
   await x("npx", command, {
     nodeOptions: {
