@@ -86,7 +86,7 @@ ${redirects}
 
 [[redirects]]
 from = "/"
-to = "https://nirtamir.me/talks"
+to = "https://talks.nirtamir.com"
 status = 302
 `;
 
