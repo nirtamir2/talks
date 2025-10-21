@@ -15,7 +15,7 @@ status = 302
 
 [[redirects]]
 from = "2024-06-27"
-to = "https://talks.nirtamir.mebuild"
+to = "https://talks.nirtamir.combuild"
 status = 301
 
 [[redirects]]
@@ -30,7 +30,7 @@ status = 302
 
 [[redirects]]
 from = "2025-06-25"
-to = "https://talks.nirtamir.me/2025/react-next/"
+to = "https://talks.nirtamir.com/2025/react-next/"
 status = 301
 
 [[redirects]]
@@ -45,7 +45,7 @@ status = 302
 
 [[redirects]]
 from = "2025-06-26"
-to = "https://talks.nirtamir.me/2025/node-tlv/"
+to = "https://talks.nirtamir.com/2025/node-tlv/"
 status = 301
 
 [[redirects]]

@@ -60,7 +60,7 @@ status = 302`,
       `
 [[redirects]]
 from = "${dir}"
-to = "https://talks.nirtamir.me${base}"
+to = "https://talks.nirtamir.com${base}"
 status = 301
 
 [[redirects]]

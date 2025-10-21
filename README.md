@@ -22,3 +22,14 @@ Slides &amp; code for my talks, using [Slidev](https://sli.dev).
 ##### Thanks
 
 To [Anthony Fu](https://antfu.me/) for his [website](https://antfu.me/talks) and talks [repository](https://github.com/antfu/talks)
+
+### Interesting projects
+- https://github.com/leochiu-a/slidev-workspace-starter
+- https://github.com/AlbertBrand/slidev-addon-tldraw
+- https://github.com/leochiu-a/slidev-workspace
+- https://github.com/bitovi/react-to-web-component
+- https://github.com/estruyf/slidev-addon-demotime
+- https://github.com/Smile-SA/slidev-component-spotlight
+- https://github.com/Smile-SA/slidev-component-zoom
+- https://github.com/levchak0910/slidev-addon-eslint-editor-vue
+- https://github.com/caluckenbach/slidev-components
