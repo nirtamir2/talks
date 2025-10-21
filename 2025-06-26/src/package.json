@@ -4,16 +4,8 @@
   "private": true,
   "packageManager": "pnpm@8.8.0+sha1.9922e8b650d393700209ccd81e0ebdbcbe43b0d3",
   "scripts": {
-    "build": "slidev build",
-    "dev": "slidev --open",
-    "export": "slidev export"
-  },
-  "dependencies": {
-    "@iconify-json/mdi": "^1.2.3",
-    "@slidev/cli": "^51.4.0",
-    "@slidev/theme-default": "latest",
-    "@slidev/theme-seriph": "latest",
-    "seedrandom": "^3.0.5",
-    "vue": "^3.5.13"
+    "dev": "slidev",
+    "build": "tsx ../../scripts/build.ts /2025/node-tlv/",
+    "export": "slidev export --per-slide --output ../2025-06-26-09-effect-ts.pdf"
   }
 }

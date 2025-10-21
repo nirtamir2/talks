@@ -39,7 +39,7 @@ async function startPicker(args: Array<string>) {
 
   if (result.folder) {
     if (args[0] === "dev")
-      execa("cursor", [
+      execa("code", [
         fileURLToPath(
           new URL(`../${result.folder}/src/slides.md`, import.meta.url),
         ),
