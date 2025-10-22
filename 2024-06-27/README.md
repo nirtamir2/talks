@@ -6,6 +6,8 @@ utilize real-time response streaming. We'll also dive into handling structured o
 chatbot with server-rendered components for smooth conversation management. Get ready to unlock the potential of AI in
 your apps with simple, hands-on techniques!
 
+<!--  -->
+
 ## Links
 
 [Video](https://www.youtube.com/watch?v=AoN7VFXiQt0)

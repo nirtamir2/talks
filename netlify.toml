@@ -9,18 +9,18 @@ PLAYWRIGHT_BROWSERS_PATH = "0"
 
 
 [[redirects]]
-from = "buildsrc"
+from = "/2024/javascript-israel/ai-sdk/src"
 to = "https://github.com/nirtamir2/talks/tree/main/2024-06-27"
 status = 302
 
 [[redirects]]
 from = "2024-06-27"
-to = "https://talks.nirtamir.combuild"
+to = "https://talks.nirtamir.com/2024/javascript-israel/ai-sdk/"
 status = 301
 
 [[redirects]]
-from = "build*"
-to = "buildindex.html"
+from = "/2024/javascript-israel/ai-sdk/*"
+to = "/2024/javascript-israel/ai-sdk/index.html"
 status = 200
 
 [[redirects]]
@@ -55,5 +55,5 @@ status = 200
 
 [[redirects]]
 from = "/"
-to = "https://talks.nirtamir.com"
+to = "https://nirtamir.com/talks"
 status = 302
