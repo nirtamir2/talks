@@ -238,6 +238,7 @@ class CannotDivideByZeroError extends Error {
   _tag = "CannotDivideByZeroError";
 }
 
+// ---cut-before---
 function divide(a: number, b: number) {
   if (b === 0) {
     throw new CannotDivideByZeroError();
@@ -255,13 +256,26 @@ try {
 }
 ```
 
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 75, height:130 }" :click-2="{ y: 75, height:130 }" :click-3="{ y: 75, height:130 }" :click-4="{ y: 205, height:160 }" :click-5="{ y: 205, height:160 }" :click-6="{ y: 205, height:160 }" />
+
+<img v-click="[2]" v-drag="[380,125,482,98]" src="/error-class-definition.png" class="z-30" />
+
+<img v-click="[5]" v-drag="[96,292,108,98]" src="/error-unknown.png" class="z-30" />
+
+<img v-click="[6]" v-drag="[174,349,212,64]" src="/error-cannot-divide-by-zero.png" class="z-30" />
+
+
 <!--
-One option is to define a custom error class.
+[click]
+One option is to define a custom error class
+[click]
+That extends error
+[click]
+This lets us throw a specific type of error instead of a generic one.
+[click]
 That way, we can check the type inside the catch block and handle it accordingly.
-
-> (Hover on error)
-
- it’s still typed as unknown, so we need a type guard like instanceof.
+[click]
+it’s still typed as unknown, so we need a type guard like instanceof.
 This works, but it’s manual and easy to forget or get wrong.
 -->
 
@@ -274,6 +288,7 @@ class CannotDivideByZeroError extends Error {
   _tag = "CannotDivideByZeroError";
 }
 
+// ---cut-before---
 type Result<Data, Error> =
   | { data: Data; error?: never }
   | { data?: never; error: Error };
