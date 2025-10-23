@@ -77,12 +77,8 @@ const result = divide("hi", 2);
 
 <!--
 If a function expects a certain type and we pass something else, we get a compile-time error.
-And after we fix the error - TypeScript infers the return type automatically, which makes composition much easier.
 -->
 
----
-transition: view-transition
-hide: true
 ---
 
 # TypeScript is great
@@ -92,13 +88,14 @@ function divide(a: number, b: number) {
   return a / b;
 }
 
-const result = divide(10, 2); // 5
-//    ^?
-//    ^ number
-
-const anotherNumber = result + 1; // 6
-//    ^ also a number
+const result = divide(1, 2); // number
 ```
+
+ <img src="/result-number.png" v-drag="[92,198,67,68]" />
+
+<!--
+And after we fix the error - TypeScript infers the return type automatically, which makes composition much easier.
+-->
 
 ---
 transition: view-transition
@@ -114,12 +111,15 @@ function divide(a: number, b: number) {
 const result = divide(4, 0); // Infinity
 ```
 
+<img src="/result-number.png" v-drag="[92,198,67,68]" />
+
 <!--
 > <numerator/denomerator>
 
-In real-world apps, we need to handle edge cases.
-For example, dividing by 0 returns Infinity — it’s a valid number, but probably not what we expect.
-TypeScript doesn’t catch this, because the types are technically correct.
+In real-world apps, we hit edge cases the type system can’t catch.
+For example, dividing by zero returns Infinity.
+It’s a valid number, so TypeScript’s fine with it —
+but it’s probably not what we expect.
 -->
 
 ---
@@ -136,18 +136,87 @@ function divide(a: number, b: number) {
 
 try {
   const result = divide(4, 0); // throws new Error("Cannot divide by 0")
-} catch {
-  // `error` is unknown
-}
+} catch (error) {}
 ```
+
+ <img src="/error-unknown.png" v-drag="[114,293,67,68]" v-click />
 
 <!--
 We can throw an error and catch it using a try-catch block.
 
-> (hover over error)
+[click]
 
-But if you hover over error, you’ll see it’s typed as unknown.
-That means we have to manually check its shape or cast it — not ideal for safety or DX.
+But notice — the error variable is typed as unknown.
+That means it has no idea what the error looks like —
+so we have to manually check its shape or cast it.
+It works, but it’s not very safe or convenient.
+-->
+
+---
+hide: true
+---
+
+# Watch for Unexpected Throws
+
+```ts twoslash
+// @filename: divide.ts
+export function divide(a: number, b: number) {
+  if (b === 0) {
+    throw new Error("Cannot divide by 0");
+  }
+  return a / b;
+}
+
+// @filename: index.ts
+
+// ---cut-before---
+import { divide } from "./divide";
+
+try {
+  const result = divide(4, 0); // throws new Error("Cannot divide by 0")
+} catch (error) {
+  //
+}
+```
+
+<!--
+We also need to remember that a function can throw an error,
+and TypeScript won’t tell us.
+There’s no throws annotation, so we have to be careful when calling functions that might fail.
+-->
+
+---
+
+# Watch for Unexpected Throws
+
+````md magic-move
+```ts
+import { divide } from "./divide";
+
+const result = divide(4, 0);
+```
+
+```ts
+import { divide } from "./divide";
+
+const result = divide(4, 0); // throws new Error("Cannot divide by 0") 🚨
+```
+
+```ts
+import { divide } from "./divide";
+
+try {
+  const result = divide(4, 0); // throws new Error("Cannot divide by 0") 🚨
+} catch (error) {
+  handleError(error);
+}
+```
+````
+
+<!--
+We also need to remember that a function can throw an error,
+and TypeScript won’t tell us.
+There’s no throws annotation, so we have to be careful when calling functions that might fail.
 -->
 
 ---
@@ -367,6 +436,8 @@ try {
 ```
 ````
 
+`````
+
 <!--
 TypeError: Failed to fetch
 Non-OK responses (like 404, 500) response.ok
@@ -377,7 +448,7 @@ SyntaxError: Unexpected token ... in JSON at position ...
 <!--
 מתחיל עם ה3 שורות - כולנו מכירים אותם
 אבל בטח אתם מטפלים בזה ככה
-אתם יכולים. אבל הקוד מתעלם מהרבה דברים יותר גרנולרים שקורים. 
+אתם יכולים. אבל הקוד מתעלם מהרבה דברים יותר גרנולרים שקורים.
 נכון - פה ליוזר זה בטח לא הכי משנה - אבל לנו כמתכנתים כן כשאנחנו באים לדאבג את זה.
 ויש הרבה מקרים אחרים שגם בתור יוזר היינו שמחים לקבל הודעה מה נכשל בדיוק ומה אפשר לעשות את זה חוץ מאשר הודעה גנרית.
 משהו נכשל פה והמטרה של להביא את הדאטה לא הצליחה - אבל למה בדיוק ומה אפשר לעשות.
@@ -395,8 +466,8 @@ This complexity quickly grows and is hard to maintain.
 -->
 
 ---
-layout: section
----
+
+## layout: section
 
 # TypeScript is great
 
@@ -405,14 +476,14 @@ For the happy path
 </div>
 
 ---
-layout: section
----
+
+## layout: section
 
 # No **type-safety** for **errors**
 
 ---
-layout: section
----
+
+## layout: section
 
 # [Effect](https://effect.website/docs/getting-started/introduction/)
 
@@ -477,11 +548,11 @@ TypeScript is aware of the errors here!
 Data.TaggedError
  שזה די דומה לError עם _tag
 
- הדבר השני זה שבמקום לזרוק - אנחנו מחזירים fail או succeed 
+ הדבר השני זה שבמקום לזרוק - אנחנו מחזירים fail או succeed
  ואז ברמת ה
- type 
+ type
  אנחנו מקבלים Effect<number, CannotDivideByZeroError>
- 
+
  והדבר השלישי שאנחנו מריצים את התוכנית. אפקט לא מריץ כלום עדיין זה רק התרשים איך נראית התוכנית.
  צריך להריץ אותה עם runSync
 
@@ -728,7 +799,9 @@ const main = Effect.gen(function* () {
 });
 ```
 
-`````
+```
+
+```
 
 ---
 
@@ -825,7 +898,7 @@ function divide(
   return Effect.succeed(a / b);
 }
 ```
-`````
+````
 
 <!--
 Now if we go back to our example again - we can create it with effects.
@@ -1098,12 +1171,10 @@ Effect.runPromise(program).then(console.log);
 ```
 
 <!--
-
 Sometimes it looks unfamilier and more complex to define the pipelines using pipes and functional programming form.
 Effect offers a convenient syntax, similar to async/await, to write effectful code using generators using yield* (asterisk).
 We can create a new effect using Effect.get. We need to provide a generator function to it.
 Now very similar to await in async function - we can use yield astriks to get the effect resolved value and apply our transformations like in procedural programming
-
 -->
 
 ---
@@ -1160,7 +1231,6 @@ Effect.runPromise(recovered).then(console.log);
 </v-clicks>
 
 <!--
-
 Error handling in practice is 2 steps:
 - Collecting possible errors
 - Handling errors
@@ -1169,8 +1239,7 @@ This way we can separate program definition from error handling
 
 
 We talked about how effect handle collecting the possible errors
-
- -->
+-->
 
 ---
 
@@ -1224,15 +1293,12 @@ Effect.runPromise(recovered).then(console.log);
 ```
 
 <!--
-
 Now we need to handle those errors.
 This operation is called Recovering from an error.
 We can use Effect catchTag or catchTags for it. It accept the error tag and returns a new effect.
 We always know from the type what errors can happen so we get auto-completion about the error types.
 So we can write the code like the happy path and handle them seperately
-
-
- -->
+-->
 
 ---
 
@@ -1273,10 +1339,8 @@ When the happy path ends
 </div>
 
 <!--
-
 # Effect helps you to fix your unsafe assumption. You can write your code in the happy path just like TypeScript, and handle errors later. This way you won't have suprises about how do the function failes - and you can handle not only generic errors - but also recover from them.
-
- -->
+-->
 
 ---
 
@@ -1327,7 +1391,7 @@ type RenewDomainError =
 <!--
 At vercel they had supported audo renewals for domains and they had a lot of issues.
 But using neverthrow and similar concepts from effect they
- -->
+-->
 
 ---
 
@@ -2056,6 +2120,7 @@ type Requirements = never;
 //                                 ▼        ▼      ▼
 type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
 ```
+`````
 
 <!--
 Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection

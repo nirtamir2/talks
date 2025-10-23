@@ -35,6 +35,9 @@ export default nirtamir2(
       // Lint rules inside code snippets in markdown files
       files: ["**/slides.md/**"],
       rules: {
+        "sonarjs/no-ignored-exceptions": "off",
+        "unicorn/prefer-optional-catch-binding": "off",
+        "import-x/first": "off",
         "sonarjs/no-commented-code": "off",
         "sonarjs/unused-import": "off",
         "sonarjs/no-unused-vars": "off",
