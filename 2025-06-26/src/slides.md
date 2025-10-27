@@ -442,6 +442,14 @@ function doSomething(): DoSomethingResult {
 }
 ```
 
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 120, height:60 }"  />
+
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 213, height:60 }"  />
+
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 308, height:60 }"  />
+
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 400, height:60 }"  />
+
 <!--
 Composing multiple such functions gets messy, since we now have to wrap and unwrap manually all the way through.
 -->
@@ -573,8 +581,6 @@ try {
 ```
 ````
 
-`````
-
 <!--
 TypeError: Failed to fetch
 Non-OK responses (like 404, 500) response.ok
@@ -603,8 +609,8 @@ This complexity quickly grows and is hard to maintain.
 -->
 
 ---
-
-## layout: section
+layout: section
+---
 
 # TypeScript is great
 
@@ -613,14 +619,14 @@ For the happy path
 </div>
 
 ---
-
-## layout: section
+layout: section
+---
 
 # No **type-safety** for **errors**
 
 ---
-
-## layout: section
+layout: section
+---
 
 # [Effect](https://effect.website/docs/getting-started/introduction/)
 
@@ -941,8 +947,8 @@ const main = Effect.gen(function* () {
 ```
 
 ---
-
-## hide: true
+hide: true
+---
 
 # The Effect type
 
@@ -963,8 +969,8 @@ Let's start with the Effect type. It represent an action that can either success
 -->
 
 ---
-
-## hide: true
+hide: true
+---
 
 # Effect values
 
@@ -986,8 +992,8 @@ Notice that effect is a description of a program (like a function). But unlike P
 -->
 
 ---
-
-## hide: true
+hide: true
+---
 
 # Rewriting with Effect
 
@@ -1045,8 +1051,8 @@ Effect have a convenient way to create Tagged errors using Data.TaggedError
 -->
 
 ---
-
-## hide: true
+hide: true
+---
 
 # Running Effects
 
@@ -1071,8 +1077,8 @@ We can run the effect with Effect.runSync
 -->
 
 ---
-
-## hide: true
+hide: true
+---
 
 # Running async effects
 
@@ -1262,8 +1268,8 @@ Effect.all is similar to Promise.akk and takes multiple effect and transform the
 -->
 
 ---
-
-## transition: view-transition
+transition: view-transition
+---
 
 # Using generators for pipelines
 
@@ -1315,10 +1321,8 @@ Now very similar to await in async function - we can use yield astriks to get th
 -->
 
 ---
-
 transition: view-transition
 hide: true
-
 ---
 
 # Using generators for pipelines
@@ -1438,22 +1442,22 @@ So we can write the code like the happy path and handle them seperately
 -->
 
 ---
-
-## hide: true
+hide: true
+---
 
 # Erros vs Defects
 
 There are two kinds of errors-those that we can expect, program defensively against, and analyze statically-and those that are truly exceptional and outside of our control.
 
 ---
-
-## layout: center
+layout: center
+---
 
 # We can use the type system to track **errors** and **context**, not only **success** values.
 
 ---
-
-## layout: section
+layout: section
+---
 
 # TypeScript is great
 
@@ -1466,8 +1470,8 @@ When you execute any plain typescript function you have no way of knowing what m
 -->
 
 ---
-
-## layout: section
+layout: section
+---
 
 # Effect can help
 
@@ -1480,8 +1484,8 @@ When the happy path ends
 -->
 
 ---
-
-## layout: two-cols
+layout: two-cols
+---
 
 ![tweet-dillon](/tweet-1898590282020450681-no-image.png)
 
@@ -1531,12 +1535,10 @@ But using neverthrow and similar concepts from effect they
 -->
 
 ---
-
 layout: intro
 class: text-center pb-5
 glowX: 50
 glowY: 120
-
 ---
 
 <h1 text-4xl>
@@ -1546,8 +1548,8 @@ Thank you！
 Slides available at [nirtamir.com](https://nirtamir.com)
 
 ---
-
-## hide: true
+hide: true
+---
 
 ```ts twoslash
 import { $ } from "execa";
@@ -1559,8 +1561,8 @@ try {
 ```
 
 ---
-
-## hide: true
+hide: true
+---
 
 ```ts twoslash
 import { Effect } from "effect";
@@ -1585,8 +1587,8 @@ Effect.runPromise(getCurrentBranch);
 ```
 
 ---
-
-## hide: true
+hide: true
+---
 
 ```ts twoslash
 import { Data, Effect } from "effect";
@@ -1685,8 +1687,8 @@ Effect.runPromise(
 ```
 
 ---
-
-## hide: true
+hide: true
+---
 
 ```ts twoslash
 import { Data, Effect } from "effect";
@@ -1794,8 +1796,8 @@ pre.twoslash {
 </style>
 
 ---
-
-## hide: true
+hide: true
+---
 
 ```ts
 class FetchError extends Data.TaggedError("FetchError")<Readonly<{}>> {}
@@ -1838,8 +1840,8 @@ const main = Effect.gen(function* () {
 ```
 
 ---
-
-## title: notes
+title: notes
+---
 
 When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
 
@@ -2006,8 +2008,8 @@ Look at this function
 ````
 
 ---
-
-## hide: true
+hide: true
+---
 
 # Real world complexity
 
@@ -2116,8 +2118,8 @@ This complexity quickly grows and is hard to maintain.
 -->
 
 ---
-
-## hide: true
+hide: true
+---
 
 # Real world complexity
 
@@ -2219,8 +2221,8 @@ This complexity quickly grows and is hard to maintain.
 -->
 
 ---
-
-## hide: true
+hide: true
+---
 
 # I had such use case
 
@@ -2241,8 +2243,8 @@ try {
 ````
 
 ---
-
-## hide: true
+hide: true
+---
 
 # The Effect type
 
@@ -2257,7 +2259,10 @@ type Requirements = never;
 //                                 ▼        ▼      ▼
 type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
 ```
-`````
+
+```
+
+```
 
 <!--
 Let's start with the Effect type. It represent an action that can success with type Success, fail with Error and may depend on Requirements for dependency injection
