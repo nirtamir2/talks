@@ -242,6 +242,7 @@ class CannotDivideByZeroError extends Error {
 function divide(a: number, b: number) {
   if (b === 0) {
     throw new CannotDivideByZeroError();
+    //        ^^^^^^^^^^^^^^^^^^^^^^^^^^
   }
   return a / b;
 }
@@ -256,27 +257,43 @@ try {
 }
 ```
 
-<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 75, height:130 }" :click-2="{ y: 75, height:130 }" :click-3="{ y: 75, height:130 }" :click-4="{ y: 205, height:160 }" :click-5="{ y: 205, height:160 }" :click-6="{ y: 205, height:160 }" />
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 75, height:130 }" :click-3="{ y: 205, height:160 }" />
 
 <img v-click="[2]" v-drag="[380,125,482,98]" src="/error-class-definition.png" class="z-30" />
 
-<img v-click="[5]" v-drag="[96,292,108,98]" src="/error-unknown.png" class="z-30" />
+<img v-click="[4]" v-drag="[96,292,108,98]" src="/error-unknown.png" class="z-30" />
 
-<img v-click="[6]" v-drag="[174,349,212,64]" src="/error-cannot-divide-by-zero.png" class="z-30" />
-
+<img v-click="[5]" v-drag="[174,349,212,64]" src="/error-cannot-divide-by-zero.png" class="z-30" />
 
 <!--
 [click]
-One option is to define a custom error class
-[click]
-That extends error
+One option is to define a custom error that extends error.
 [click]
 This lets us throw a specific type of error instead of a generic one.
 [click]
 That way, we can check the type inside the catch block and handle it accordingly.
 [click]
 it’s still typed as unknown, so we need a type guard like instanceof.
+[click]
 This works, but it’s manual and easy to forget or get wrong.
+-->
+
+---
+hide: true
+---
+
+# Wrap the results instead of throwing
+
+```ts twoslash
+type Result<Data, Error> =
+  | { data: Data; error?: never }
+  | { data?: never; error: Error };
+```
+
+<!--
+In languages like Go, there’s no concept of throwing errors — you return them instead.
+We can do something similar in TypeScript. By defining a Result type with Data and Error generics,
+we can return either the data or the error — but never both
 -->
 
 ---
@@ -288,11 +305,11 @@ class CannotDivideByZeroError extends Error {
   _tag = "CannotDivideByZeroError";
 }
 
-// ---cut-before---
 type Result<Data, Error> =
   | { data: Data; error?: never }
   | { data?: never; error: Error };
 
+// ---cut-before---
 function divide(a: number, b: number): Result<number, CannotDivideByZeroError> {
   if (b === 0) {
     return { error: new CannotDivideByZeroError() };
@@ -311,16 +328,121 @@ if (result.error == null) {
 }
 ```
 
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 75, height:130 }" :click-3="{ y: 205, height:150 }"  />
+
+<img v-click="[2]" v-drag="[473,139,393,98]" src="/result-type.png" class="z-30" />
+
+<img v-click="[5]" v-drag="[205,346,211,60]" src="/error-cannot-divide-prop.png" class="z-30" />
+
+<img v-click="[4]" v-drag="[183,311,89,68]" src="/data-number.png" class="z-30" />
+
 <!--
+[click]
 In languages like Go, there’s no concept of throwing errors — you return them instead.
 We can do something similar in TypeScript.
+[click]
 Here, the Result type makes sure we either get data or error, but not both.
 
-> hover the console.log()
-
-TypeScript infers the structure nicely, and we can pattern match or check discriminators.
-This also makes the function’s possible errors explicit in the type.
+[click]
+[click] 
+TypeScript even infers the structure for us, so we can easily pattern match or check which case we’re in.
+[click]
+And the nice part is, it makes the function’s possible errors explicit in the type system.
+[click]
 But — and it’s a big but — it’s verbose.
+-->
+
+---
+
+# Wrapping and Unwrapping Gets Messy
+
+```ts twoslash
+type Result<Data, Error> =
+  | { data: Data; error: never }
+  | { data: never; error: Error };
+
+class StepOneError extends Error {
+  _tag = "StepOneError";
+}
+class StepTwoError extends Error {
+  _tag = "StepTwoError";
+}
+class StepThreeError extends Error {
+  _tag = "StepThreeError";
+}
+class StepFourError extends Error {
+  _tag = "StepFourError";
+}
+class StepFiveError extends Error {
+  _tag = "StepFiveError";
+}
+
+function stepOne(a: number): Result<number, CannotDivideByZeroError> {
+  if (a === 0) {
+    return { error: new StepOneError() };
+  }
+  return { data: a };
+}
+function stepTwo(a: number): Result<number, CannotDivideByZeroError> {
+  if (a === 0) {
+    return { error: new StepTwoError() };
+  }
+  return { data: a };
+}
+function stepThree(a: number): Result<number, CannotDivideByZeroError> {
+  if (a === 0) {
+    return { error: new StepThreeError() };
+  }
+  return { data: a };
+}
+function stepFour(a: number): Result<number, CannotDivideByZeroError> {
+  if (a === 0) {
+    return { error: new StepFourError() };
+  }
+  return { data: a };
+}
+function stepFive(a: number): Result<number, CannotDivideByZeroError> {
+  if (a === 0) {
+    return { error: new StepFiveError() };
+  }
+  return { data: a };
+}
+
+type DoSomethingResult = Result<
+  | number
+  | StepOneError
+  | StepTwoError
+  | StepThreeError
+  | StepFourError
+  | StepFiveError
+>;
+
+// ---cut-before---
+function doSomething(): DoSomethingResult {
+  const a = stepOne(1);
+  if (a.error != null) {
+    return a;
+  }
+
+  const b = stepTwo(a.data);
+  if (b.error != null) {
+    return b;
+  }
+
+  const c = stepThree(b.data);
+  if (c.error != null) {
+    return c;
+  }
+
+  const d = stepFour(c.data);
+  if (d.error != null) {
+    return c;
+  }
+  return stepFive(c.data);
+}
+```
+
+<!--
 Composing multiple such functions gets messy, since we now have to wrap and unwrap manually all the way through.
 -->
 
