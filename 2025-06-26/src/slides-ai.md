@@ -100,7 +100,6 @@ When we do handle errors with try-catch, we lose all type safety. The error is t
 
 # Real-world complexity explodes
 
-
 ````md magic-move
 ```ts
 // Simple code...

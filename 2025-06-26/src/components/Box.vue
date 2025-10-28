@@ -6,41 +6,42 @@ Usage:
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed } from "vue";
 
-  const props = defineProps<{
-    top: number | string
-    left: number | string
-    backgroundColor?: string
-    borderColor?: string
-    borderStyle?: string
-    borderWidth?: string
-    width?: string
-    height?: string
-    title?: string
-    description?: string
-    textColor?: string
-  }>()
+const props = defineProps<{
+  top: number | string;
+  left: number | string;
+  backgroundColor?: string;
+  borderColor?: string;
+  borderStyle?: string;
+  borderWidth?: string;
+  width?: string;
+  height?: string;
+  title?: string;
+  description?: string;
+  textColor?: string;
+}>();
 
-  const style = computed(() => ({
-    'width': props.width || `100px`,
-    'height': props.height || `100px`,
-    'top': props.top,
-    'left': props.left,
-    'background-color': props.backgroundColor || undefined,
-    'border-color': props.borderColor || `#fff`,
-    'border-width': props.borderWidth || `2px`,
-    'border-style': props.borderStyle || `solid`,
-    'color': props.textColor || "inherit",
-    'content': `' '`
-  }))
+const style = computed(() => ({
+  width: props.width || `100px`,
+  height: props.height || `100px`,
+  top: props.top,
+  left: props.left,
+  "background-color": props.backgroundColor || undefined,
+  "border-color": props.borderColor || `#fff`,
+  "border-width": props.borderWidth || `2px`,
+  "border-style": props.borderStyle || `solid`,
+  color: props.textColor || "inherit",
+  content: `' '`,
+}));
 </script>
 
 <template>
-  <div 
+  <div
     v-if="top && left"
-    class="absolute flex flex-col justify-center items-center text-base text-center p-4 space-y-2"
-    :style="style">
+    class="absolute flex flex-col items-center justify-center space-y-2 p-4 text-center text-base"
+    :style="style"
+  >
     <h2 v-if="title">{{ title }}</h2>
     <p v-if="description">{{ description }}</p>
   </div>

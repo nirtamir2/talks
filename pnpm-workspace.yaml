@@ -1,8 +1,8 @@
 packages:
   - "*/src"
   - "*/demo"
-  - '!2023-08-20/src/**'
-  - '!2024-06-27/src/**'
+  - "!2023-08-20/src/**"
+  - "!2024-06-27/src/**"
 catalog:
   "@antfu/eslint-config": ^6.0.0
   "@eslint-react/eslint-plugin": ^2.2.2

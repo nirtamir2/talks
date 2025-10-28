@@ -24,6 +24,7 @@ Slides &amp; code for my talks, using [Slidev](https://sli.dev).
 To [Anthony Fu](https://antfu.me/) for his [website](https://antfu.me/talks) and talks [repository](https://github.com/antfu/talks)
 
 ### Interesting projects
+
 - https://github.com/leochiu-a/slidev-workspace-starter
 - https://github.com/AlbertBrand/slidev-addon-tldraw
 - https://github.com/leochiu-a/slidev-workspace
