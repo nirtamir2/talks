@@ -10,6 +10,8 @@ const packageFiles = (
   // eslint-disable-next-line unicorn/no-await-expression-member
   .toSorted();
 
+const ignoredTalks = new Set(["2024-06-27"]);
+
 const bases = (
   await Promise.all(
     packageFiles.map(async (file) => {
@@ -23,6 +25,7 @@ const bases = (
       if (!command) return;
       const base = command.match(/ (\S*)$/)?.[1];
       if (!base) return;
+      if (ignoredTalks.has(talkRoot)) return;
       return {
         dir: talkRoot,
         base,
