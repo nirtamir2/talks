@@ -214,8 +214,10 @@ try {
 ````
 
 <!--
+[click]
 We also need to remember that a function can throw an error,
 and TypeScript won’t tell us.
+[click]
 There’s no throws annotation, so we have to be careful when calling functions that might fail.
 -->
 
@@ -451,6 +453,7 @@ function doSomething(): DoSomethingResult {
 <div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 400, height:60 }"  />
 
 <!--
+[click]
 Composing multiple such functions gets messy, since we now have to wrap and unwrap manually all the way through.
 -->
 
@@ -618,11 +621,23 @@ layout: section
 For the happy path
 </div>
 
+<!-- 
+So TypeScript is great
+[click]
+For the happy path
+
+ -->
+
 ---
 layout: section
 ---
 
 # No **type-safety** for **errors**
+
+
+<!-- 
+But once something goes wrong, there’s no real type safety for errors.
+ -->
 
 ---
 layout: section
@@ -633,6 +648,13 @@ layout: section
 <div v-click class="text-2xl">
 is a powerful TypeScript library designed to help developers easily create complex, synchronous, and asynchronous programs.
 </div>
+
+<!-- 
+And that’s where Effect comes in.
+
+Effect is a powerful TypeScript library that helps you build complex programs — both synchronous and asynchronous — while keeping types and errors fully under control. It basically gives you the missing piece TypeScript doesn’t handle natively.
+
+  -->
 
 ---
 
