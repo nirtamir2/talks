@@ -401,9 +401,7 @@ function stepFour(a: number): Result<number, CannotDivideByZeroError> {
   return { data: a };
 }
 
-type DoSomethingResult = Result<
-  number | StepOneError | StepTwoError
->;
+type DoSomethingResult = Result<number | StepOneError | StepTwoError>;
 
 // ---cut-before---
 function doSomething(): DoSomethingResult {
@@ -483,13 +481,11 @@ function doSomething(): Result<number, "stepOne" | "stepTwo"> {
 const result = doSomething()
   .map((value) => console.log(value))
   .mapErr((error) => console.error(error));
-  
 ```
 
-<!-- 
-
+<!--
 Libraries like Neverthrow simplify this pattern by using ok and err wrappers — but we still end up unwrapping values manually
- -->
+-->
 
 ---
 hide: true
@@ -691,6 +687,54 @@ Effect is a powerful TypeScript library that helps you build complex programs �
 
 ---
 
+# The Effect type
+
+```ts twoslash
+type Success = number;
+type Requirements = never;
+// ---cut-before---
+import type { Effect } from "effect";
+
+//                                    ┌─── Represents the success type
+//                                    │
+//                                    │       ┌─── Represents the error type
+//                                    │       │
+//                                    │       │         ┌─── Represents required dependencies
+//                                    ▼       ▼         ▼
+type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
+```
+
+<!--
+At the heart of Effect is the Effect type. It represents a computation that might fail with an Error, succeed with a Success value, and possibly require some dependencies Requirements. This makes your code fully typed, including the errors.
+-->
+
+---
+
+# Creating Effects
+
+```ts twoslash
+// ---cut-before---
+import { Effect } from "effect";
+
+const value = Effect.succeed(42); // Effect.Effect<number, never, never>
+//
+//
+//
+//
+//
+const error = Effect.fail("Oops"); // Effect.Effect<never, string, never>
+```
+
+<img v-click=[1] src="/effect-number.png" v-drag="[71,160,226,89]" />
+
+<img v-click=[2] src="/effect-error.png" v-drag="[82,271,218,90]" />
+
+<!--
+We can create effects using Effect.succeed for successful values [click], or Effect.fail for errors [click]. This avoids throwing exceptions and keeps errors explicit and typed.
+-->
+
+---
+
 # Rewriting with Effect
 
 ````md magic-move
@@ -799,7 +843,8 @@ const fetchRequest = Effect.promise(() =>
 const jsonResponse = (response: Response) =>
   Effect.promise(() => response.json());
 
-// Effect<any, never>
+//
+any, never>
 const main = pipe(fetchRequest, Effect.flatMap(jsonResponse));
 
 Effect.runPromise(main);
@@ -1012,11 +1057,12 @@ type Success = number;
 type Requirements = never;
 // ---cut-before---
 import type { Effect } from "effect";
-//                                 ┌─── Represents the success type
-//                                 │        ┌─── Represents the error type
-//                                 │        │
-//                                 ▼        ▼
-type ProgramEffect = Effect.Effect<Success, Error>;
+
+//           ┌─── Represents the success type
+//           │      ┌─── Represents the error type
+//           │      │         ┌─── Represents required dependencies
+//           ▼      ▼         ▼
+type ProgramEffect = Effect<Success, Error, Requirements>;
 ```
 
 <!--
