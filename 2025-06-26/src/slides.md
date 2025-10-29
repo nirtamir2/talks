@@ -375,9 +375,6 @@ class StepThreeError extends Error {
 class StepFourError extends Error {
   _tag = "StepFourError";
 }
-class StepFiveError extends Error {
-  _tag = "StepFiveError";
-}
 
 function stepOne(a: number): Result<number, CannotDivideByZeroError> {
   if (a === 0) {
@@ -403,20 +400,9 @@ function stepFour(a: number): Result<number, CannotDivideByZeroError> {
   }
   return { data: a };
 }
-function stepFive(a: number): Result<number, CannotDivideByZeroError> {
-  if (a === 0) {
-    return { error: new StepFiveError() };
-  }
-  return { data: a };
-}
 
 type DoSomethingResult = Result<
-  | number
-  | StepOneError
-  | StepTwoError
-  | StepThreeError
-  | StepFourError
-  | StepFiveError
+  number | StepOneError | StepTwoError
 >;
 
 // ---cut-before---
@@ -431,16 +417,7 @@ function doSomething(): DoSomethingResult {
     return b;
   }
 
-  const c = stepThree(b.data);
-  if (c.error != null) {
-    return c;
-  }
-
-  const d = stepFour(c.data);
-  if (d.error != null) {
-    return c;
-  }
-  return stepFive(c.data);
+  return b.data;
 }
 ```
 
@@ -448,15 +425,74 @@ function doSomething(): DoSomethingResult {
 
 <div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 213, height:60 }"  />
 
-<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 308, height:60 }"  />
-
-<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 400, height:60 }"  />
-
 <!--
 [click]
 Composing multiple such functions gets messy, since we now have to wrap and unwrap manually all the way through.
 -->
 
+---
+# hide: true
+---
+
+# [Neverthrow](https://github.com/supermacro/neverthrow): Better Wrapped, Still Unwrapped
+
+```ts twoslash
+import { err, ok } from "neverthrow";
+import type { Err, Result } from "neverthrow";
+
+function stepOne(a: number): Result<number, "stepOne"> {
+  if (a === 0) {
+    return err("stepOne");
+  }
+  return ok(a);
+}
+function stepTwo(a: number): Result<number, "stepTwo"> {
+  if (a === 0) {
+    return err("stepTwo");
+  }
+  return ok(a);
+}
+function stepThree(a: number): Result<number, "stepThree"> {
+  if (a === 0) {
+    return err("stepThree");
+  }
+  return ok(a);
+}
+function stepFour(a: number): Result<number, "stepFour"> {
+  if (a === 0) {
+    return err("stepFour");
+  }
+  return ok(a);
+}
+
+// ---cut-before---
+function doSomething(): Result<number, "stepOne" | "stepTwo"> {
+  const a = stepOne(1);
+  if (a.isErr()) {
+    return err(a.error);
+  }
+
+  const b = stepTwo(a.value);
+  if (b.isErr()) {
+    return err(b.error);
+  }
+
+  return ok(b.value);
+}
+
+const result = doSomething()
+  .map((value) => console.log(value))
+  .mapErr((error) => console.error(error));
+  
+```
+
+<!-- 
+
+Libraries like Neverthrow simplify this pattern by using ok and err wrappers — but we still end up unwrapping values manually
+ -->
+
+---
+hide: true
 ---
 
 # Real world complexity
@@ -621,12 +657,11 @@ layout: section
 For the happy path
 </div>
 
-<!-- 
+<!--
 So TypeScript is great
 [click]
 For the happy path
-
- -->
+-->
 
 ---
 layout: section
@@ -634,10 +669,9 @@ layout: section
 
 # No **type-safety** for **errors**
 
-
-<!-- 
+<!--
 But once something goes wrong, there’s no real type safety for errors.
- -->
+-->
 
 ---
 layout: section
@@ -649,12 +683,11 @@ layout: section
 is a powerful TypeScript library designed to help developers easily create complex, synchronous, and asynchronous programs.
 </div>
 
-<!-- 
+<!--
 And that’s where Effect comes in.
 
 Effect is a powerful TypeScript library that helps you build complex programs — both synchronous and asynchronous — while keeping types and errors fully under control. It basically gives you the missing piece TypeScript doesn’t handle natively.
-
-  -->
+-->
 
 ---
 
@@ -1904,6 +1937,10 @@ Also:
 https://x.com/RhysSullivan/status/1971409275152130541
 
 https://www.youtube.com/watch?v=VcOIz7tOBoM&list=PL4mWVugy3a2il28mbeNmyjJDoHOvw4JTK&index=13
+
+# Matt Pocock
+
+[Effect: the unreadable library that captured my heart](https://youtu.be/S2GChOwivwQ)
 
 > Happy path blindness
 
