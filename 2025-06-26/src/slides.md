@@ -739,6 +739,85 @@ We can create effects using Effect.succeed for successful values [click], or Eff
 
 ````md magic-move
 ```ts
+// Traditional TypeScript code
+
+class CannotDivideByZeroError extends Error {
+  _tag = "CannotDivideByZeroError";
+}
+
+function divide(a: number, b: number) {
+  if (b === 0) {
+    throw new CannotDivideByZeroError();
+  }
+  return a / b;
+}
+
+```
+
+```ts
+import { Data, Effect } from "effect";
+
+class CannotDivideByZeroError extends Data.TaggedError(
+  "CannotDivideByZeroError",
+) {}
+
+function divide(a: number, b: number): Effect.Effect<number, Error> {
+  if (b === 0) {
+    return Effect.fail(new CannotDivideByZeroError());
+  }
+  return Effect.succeed(a / b);
+}
+
+```
+````
+
+<!-- 
+So if we take our previous divide example - we can rewrite it with effect.
+[click]
+ Instead of throwing errors we can return Effect.fail and instead of returning values we can wrap them with Effect.succeed.
+Effect also have the Data.TaggedError we can use instead of error
+ -->
+
+---
+transition: view-transition
+---
+
+# Rewriting with Effect
+
+::left::
+
+```ts twoslash
+import { Data, Effect } from "effect";
+
+class CannotDivideByZeroError extends Data.TaggedError(
+  //                                  ^^^^^^^^^^^^^^^^
+  "CannotDivideByZeroError",
+) {}
+
+function divide(a: number, b: number): Effect.Effect<number, Error> {
+  if (b === 0) {
+    return Effect.fail(new CannotDivideByZeroError());
+    //     ^^^^^^^^^^^
+  }
+  return Effect.succeed(a / b);
+  //     ^^^^^^^^^^^^^^
+}
+```
+
+::right::
+
+<img src="/divide-code.png" v-drag="[581,131,401,233]" />
+
+<!--
+So if we go back to our divide function - we can rewrite it in effect. We can wrap the return success value in Effect.succeed and error in Effect.fail, and we can also use Effect's TaggedError for creating our error
+-->
+
+---
+
+# Rewriting with Effect
+
+````md magic-move
+```ts
 class CannotDivideByZeroError extends Error {
   _tag = "CannotDivideByZeroError";
 }
@@ -1951,6 +2030,7 @@ Error handling in practice is 2 steps:
 Collecting possible errors
 Handling errors
 
+
 Before running the effect we write some code to define what happens if Effect contains UnknownException.
 
 This operation is called Recovering from an error.
@@ -1983,6 +2063,8 @@ Also:
 https://x.com/RhysSullivan/status/1971409275152130541
 
 https://www.youtube.com/watch?v=VcOIz7tOBoM&list=PL4mWVugy3a2il28mbeNmyjJDoHOvw4JTK&index=13
+
+The Simple Secret Behind Effect’s Power https://youtu.be/F5aWLtEdNjE
 
 # Matt Pocock
 
