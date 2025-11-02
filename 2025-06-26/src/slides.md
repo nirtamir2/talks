@@ -23,7 +23,7 @@ layout: center
 # TypeScript Without Surprises: Smarter Error Handling with Effect-TS
 
 <!--
-This talk will hopefully change the way you think about handling errors in TypeScript. 🟡
+This talk will hopefully change the way you think about handling errors in TypeScript.
 We’ll do that using the Effect library.
 -->
 
@@ -890,7 +890,7 @@ It's very similar to how we created our custom error
 
 [click]
 Then we create a program with Effect.gen().
-Its like a blueprint of the program or a thunk. Represents a computation.
+Its like a blueprint of the program or a thunk. It represents a computation.
 It accepts a generator function here, so we have to use function with asterisk* 
 
 [click]
@@ -901,7 +901,7 @@ Then we check if the number is above 0.9 and we return yielding the failing effe
 And else we can return the result. 
 [click]
 [click]
-See that this program returns an effect that resolved with string and fails with CustomError
+Notice that this program returns an effect that resolved with string and fails with CustomError
 -->
 
 ---
@@ -927,19 +927,20 @@ const recoveredResult = Effect.runSync(recovered); // string ✅
 
 <!--
 [click]
-We use Effect.runSync() to run our program that returns an effect of string and CustomError.
+We use Effect.runSync() to run our effect program.
 The result of it is a string but it can throw an CustomError because we didn't handled it. Just like JavaScript. 
+As you can see - we can see it in the type-system.
 
 [click]
 But we can recover from this error and handle it. We can take our program which is an effect / blueprint and pipe some code to handle the errors.
 [click]
-The useEffect.catchTag infers the effect error type and suggest the CustomError string automatically.
-We handle this error by returning a succeed effect with a string.
+The Effect.catchTag infers the effect error type and suggest the CustomError string automatically.
+We handle this error by returning an effect that succeed with a string value.
 [click]
-Now the recovered program have a type of Effect that succeed with string but errors with never. 
+Now the recovered program have a type of Effect that succeed with string but this time the error generics is never. 
 The type system tell us that no expected errors are left to handle. 
 [click]
-So if we run the recovered program effect we are not expecting to see errors and the type system infers us about it.
+So if we run the recovered program effect - we are not expecting to see errors and the type system infers us about it.
 
 [click]
 We can ignore the error like we did with program and decide to handle it later like we did with recovered program. But the type-system tracks it! And we don't need to think about it that much. 
