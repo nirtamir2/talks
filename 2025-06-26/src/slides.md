@@ -115,8 +115,6 @@ const result = divide(4, 0); // Infinity
 <img src="/result-number.png" v-drag="[92,128,67,68]" />
 
 <!--
-> <numerator/denomerator>
-
 In real-world apps, we hit edge cases the type system can’t catch.
 For example, dividing by zero returns Infinity.
 It’s a valid number, so TypeScript’s fine with it —
@@ -841,7 +839,7 @@ At the heart of Effect is the Effect type. It represents a computation that migh
 
 ---
 
-# Creating Effects
+# Effect Values
 
 ```ts twoslash
 // ---cut-before---
@@ -862,7 +860,7 @@ We can create effects using Effect.succeed for successful values, or Effect.fail
 
 ---
 
-# Example
+# Generating Effects
 
 ```ts {all|1-3|7,13|8|9-11|12|all|5-7}
 import { Effect, Random, Data } from "effect";
@@ -913,7 +911,7 @@ The type tells the whole story — no surprises.
 
 ---
 
-# Recovering from errors with effect
+# Recovering from errors
 
 ```ts {all|1-3|7,12|8-11|5-7|14|all}
 //      ┌── string               ┌─── Effect<string, CustomError, never>
@@ -1094,6 +1092,12 @@ and the type system keeps perfect track the whole time.
 -->
 
 ---
+layout: center
+---
+
+# We can use the type system to track **errors** and **context**, not only **success** values.
+
+---
 layout: section
 ---
 
@@ -1111,10 +1115,12 @@ which ones happen, which ones remain after we recover.
 
 But tracking is just the beginning.
 
+[click]
+
 Once we know what can fail, we can start composing workflows in all sorts of ways:
 retrying operations, repeating effects, scheduling tasks, and more.
 
-Let’s take a look at that next.
+Let’s take a look at that next with few examples.
 -->
 
 ---
@@ -1136,6 +1142,14 @@ const result = Effect.timeout(pizza, "1 second");
   </p>
 </SlidevVideo>
 
+<!--
+We have orderDelivery() and we don’t want to wait forever.
+Using Effect.timeout(pizza, "1 second"), the effect fails if it takes too long — the pizza gets cold.
+
+[click]
+After one second, it fails automatically with a timeout.
+-->
+
 ---
 
 # Effect.eventually
@@ -1154,6 +1168,14 @@ const result = Effect.eventually(swipeCard);
     <a href="/effect-eventually.mov">here</a>.
   </p>
 </SlidevVideo>
+
+<!--
+swipeCard() might fail temporarily.
+With Effect.eventually(swipeCard), it keeps retrying until it succeeds, ignoring errors.
+
+[click]
+Each attempt runs automatically until the card is accepted.
+-->
 
 ---
 
@@ -1178,6 +1200,14 @@ const result = Effect.retry(wakeUp, snoozeSchedule);
   </p>
 </SlidevVideo>
 
+<!--
+We try to attemptToWakeUp() on a schedule: every 2 seconds, up to 4 times.
+Using Effect.retry(wakeUp, snoozeSchedule), the effect retries according to the schedule.
+
+[click]
+It stops once it succeeds or reaches the limit.
+-->
+
 ---
 
 # Effect.retry exponential
@@ -1196,6 +1226,13 @@ const result = Effect.retry(park, Schedule.exponential("700 millis"));
     <a href="/effect-exponential-retry-only.mov">here</a>.
   </p>
 </SlidevVideo>
+
+<!--
+For attemptParallelPark(), we retry with exponential backoff: Effect.retry(park, Schedule.exponential("700 millis")).
+
+[click]
+Each retry waits longer than the last, reducing pressure and avoiding too-frequent attempts.
+-->
 
 ---
 hide: true
@@ -2096,16 +2133,12 @@ So we can write the code like the happy path and handle them seperately
 -->
 
 ---
+hide: true
+---
 
 # Erros vs Defects
 
 There are two kinds of errors-those that we can expect, program defensively against, and analyze statically-and those that are truly exceptional and outside of our control.
-
----
-layout: center
----
-
-# We can use the type system to track **errors** and **context**, not only **success** values.
 
 ---
 layout: section
@@ -2118,6 +2151,11 @@ For the happy path
 </div>
 
 <!--
+TypeScript is great
+[click]
+
+For the happy path.
+
 When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
 -->
 
@@ -2132,7 +2170,8 @@ When the happy path ends
 </div>
 
 <!--
-# Effect helps you to fix your unsafe assumption. You can write your code in the happy path just like TypeScript, and handle errors later. This way you won't have suprises about how do the function failes - and you can handle not only generic errors - but also recover from them.
+[click]
+Effect helps you to fix your unsafe assumption. You can write your code in the happy path just like TypeScript, and handle errors later. This way you won't have suprises about how do the function failes - and you can handle not only generic errors - but also recover from them.
 -->
 
 ---
@@ -2151,8 +2190,12 @@ Everything else — retries, repeats, scheduling — builds on this principle.
 -->
 
 ---
-layout: two-cols
+layout: two-cols-header-gap
 ---
+
+# More errors - fewer problems
+
+::left::
 
 ![tweet-dillon](/tweet-1898590282020450681-no-image.png)
 
@@ -2197,8 +2240,29 @@ type RenewDomainError =
 ````
 
 <!--
-At vercel they had supported audo renewals for domains and they had a lot of issues.
-But using neverthrow and similar concepts from effect they
+At Vercel, they had a feature for auto-renewing domains — and lots of mysterious issues.
+After switching to Effect and similar concepts, suddenly the error count jumped — from 3 [click] to 17. 
+But that was actually good news — it meant they weren’t hiding problems anymore.
+They could finally see what was really happening.
+
+
+It becomes much easier to find the root cause of an error instead of just seeing a generic one — and since it’s still TypeScript, it doesn’t force us into a new ecosystem.
+
+Effect might look different at first, with its generators and yield, but it fits naturally once you get used to it.
+The key idea is: you don’t have to handle errors immediately — just make sure you’re aware of them and don’t ignore them.
+-->
+
+---
+layout: section
+---
+
+# Awareness over silence
+
+<!--
+The type system in Effect keeps track of every possible error — nothing gets lost.
+It may look different from TypeScript, with its generators and effects, but it still plays perfectly within the TypeScript world.
+You can adopt it gradually — start small, get better visibility into your errors, and build from there.
+What we’ve seen today is really just the tip of the iceberg.
 -->
 
 ---
@@ -2213,6 +2277,129 @@ Thank you！
 </h1>
 
 Slides available at [nirtamir.com](https://nirtamir.com)
+
+---
+title: notes
+---
+
+# Links
+
+- [Effect website](https://www.effect.website)
+- [Effect: Beginners Complete Getting Started](https://www.typeonce.dev/course/effect-beginners-complete-getting-started)
+
+---
+
+# Videos
+
+- [The Simple Secret Behind Effect’s Power](https://youtu.be/F5aWLtEdNjE)
+- [Effect: the unreadable library that captured my heart](https://youtu.be/S2GChOwivwQ)
+
+---
+
+# Tweets
+
+![lowest-bar-of-entry.png](/lowest-bar-of-entry.png)
+
+<!--
+https://x.com/dillon_mulroy/status/1799811526020538555
+-->
+
+---
+
+# Tweets
+
+![tweet-problem-happy-path](/tweet-problem-happy-path.png)
+
+<!--
+https://x.com/dillon_mulroy/status/1803430049254633492
+-->
+
+---
+
+# Tweets
+
+![sneak-peak-verce-17-autocomplete](/sneak-peak-verce-17-autocomplete.png)
+
+<!--
+https://x.com/RhysSullivan/status/1971409275152130541
+-->
+
+
+---
+hide: true
+layout: feedback
+---
+
+> Happy path blindness
+
+What happens if Auth.check throws? Does
+it throw? Can it throw more than one kind of
+error?
+What about Db.queryDomain?
+→ Can we retry on any errors?
+→ If so, do we need to consider a backoff
+interval for retrying?
+How should we communicate errors to
+callers? Should we pass through errors? All of
+them? Should we wrap them with custom
+errors?
+
+The benefits
+→ Crystal clear guarantees of how our code will
+run at a glance. If the computation succeeds we'll
+end up with the Ok type, if it fails we'll end up with
+Err type
+→ No hidden control flow (e.g. try/catch).
+→ The result type is composable. We can chain
+computations together that may fail, with static
+guarantees that we'll gracefully handle the
+unhappy path.
+→ Typed error tracking via unions on the Err type.
+
+Treating errors as values with the Result type-whether
+with an implementation like neverthrow or a simple
+discriminated union-will make your code safer, more
+resilient, and predictable.
+
+Defects
+There are two kinds of errors-those
+that we can expect, program
+defensively against, and analyze
+statically-and those that are truly
+exceptional and outside of our contro l.
+
+Errors are typed as unknown
+
+```ts
+try
+}
+catch
+(error: unknown) {
+}
+```
+
+> typescript/javascript happy path blindness is real.
+>
+> go through a critical code path in your application and note every single place an error can be thrown. are you handling each appropriately?
+>
+> we did this with part of our domain renewal flow.
+>
+> from 3 errors to 17
+
+When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
+
+Error handling in practice is 2 steps:
+
+Collecting possible errors
+Handling errors
+
+Before running the effect we write some code to define what happens if Effect contains UnknownException.
+
+This operation is called Recovering from an error.
+
+we always know from the type what errors can happen.
+
+Separate program definition from error handling
 
 ---
 hide: true
@@ -2507,111 +2694,7 @@ const main = Effect.gen(function* () {
 ```
 
 ---
-title: notes
----
-
-When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
-
-Error handling in practice is 2 steps:
-
-Collecting possible errors
-Handling errors
-
-Before running the effect we write some code to define what happens if Effect contains UnknownException.
-
-This operation is called Recovering from an error.
-
-we always know from the type what errors can happen.
-
-Separate program definition from error handling
-
-# Links
-
-- [Effect website](https://www.effect.website)
-- [Effect: Beginners Complete Getting Started](https://www.typeonce.dev/course/effect-beginners-complete-getting-started)
-
-# The tweet about types
-
-https://x.com/dillon_mulroy/status/1898590282020450681
-
-And the part of this slide
-https://www.youtube.com/watch?v=VcOIz7tOBoM&list=PL4mWVugy3a2il28mbeNmyjJDoHOvw4JTK&index=13
-
-# TypeScript happy path
-
-https://x.com/dillon_mulroy/status/1803430049254633492
-
-Also -
-https://x.com/dillon_mulroy/status/1799811526020538555
-
-Also:
-
-https://x.com/RhysSullivan/status/1971409275152130541
-
-https://www.youtube.com/watch?v=VcOIz7tOBoM&list=PL4mWVugy3a2il28mbeNmyjJDoHOvw4JTK&index=13
-
-The Simple Secret Behind Effect’s Power https://youtu.be/F5aWLtEdNjE
-
-# Matt Pocock
-
-[Effect: the unreadable library that captured my heart](https://youtu.be/S2GChOwivwQ)
-
-> Happy path blindness
-
-What happens if Auth.check throws? Does
-it throw? Can it throw more than one kind of
-error?
-What about Db.queryDomain?
-→ Can we retry on any errors?
-→ If so, do we need to consider a backoff
-interval for retrying?
-How should we communicate errors to
-callers? Should we pass through errors? All of
-them? Should we wrap them with custom
-errors?
-
-The benefits
-→ Crystal clear guarantees of how our code will
-run at a glance. If the computation succeeds we'll
-end up with the Ok type, if it fails we'll end up with
-Err type
-→ No hidden control flow (e.g. try/catch).
-→ The result type is composable. We can chain
-computations together that may fail, with static
-guarantees that we'll gracefully handle the
-unhappy path.
-→ Typed error tracking via unions on the Err type.
-
-Treating errors as values with the Result type-whether
-with an implementation like neverthrow or a simple
-discriminated union-will make your code safer, more
-resilient, and predictable.
-
-Defects
-There are two kinds of errors-those
-that we can expect, program
-defensively against, and analyze
-statically-and those that are truly
-exceptional and outside of our contro l.
-
-Errors are typed as unknown
-
-```ts
-try
-}
-catch
-(error: unknown) {
-}
-```
-
-> typescript/javascript happy path blindness is real.
->
-> go through a critical code path in your application and note every single place an error can be thrown. are you handling each appropriately?
->
-> we did this with part of our domain renewal flow.
->
-> from 3 errors to 17
-
+hide: true
 ---
 
 # Look at this function
