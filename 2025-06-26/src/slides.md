@@ -1000,10 +1000,14 @@ If the second is low, we fail with `ValidationError`.
 Otherwise, we succeed.
 
 [click]
-And here’s the cool part:
-the type system tells us the full set of possible errors —
-`HttpError | ValidationError`.
-That’s our error *universe* for this program.
+And here’s where Effect really shines —  
+the type system *knows* about both possible failures.  
+You can see it right there:  
+`Effect<string, HttpError | ValidationError, never>`.  
+
+
+That’s our little error universe for this program.  
+Every possible failure is tracked — automatically.
 -->
 
 ---
@@ -1048,20 +1052,21 @@ const recovered = program.pipe(
 ````
 
 <!--
-Now let’s handle just one of our two errors — the `HttpError`.
+Now let’s see how we handle those errors.
 
 [click]
-We use `Effect.catchTag("HttpError", ...)`.  
-If that error happens, we recover by returning a successful effect.
+First, we’ll recover only from the `HttpError`.  
+We use `Effect.catchTag("HttpError", ...)`,  
+and if that happens, we just return a successful effect.
+
 
 [click]
-And look at the type now:  
-it’s `Effect<string, ValidationError, never>` —  
-the `HttpError` is gone.  
+Take a look at the type now —  
+it’s `Effect<string, ValidationError, never>`.  
+`HttpError` is gone.  
+We’ve handled it, and the type system knows it.  
+That’s narrowing in action.
 
-The compiler knows we already handled it.  
-That’s the power of narrowing —  
-the type automatically reflects what’s left to handle.
 
 [click]
 So as our program grows,  
@@ -1070,15 +1075,129 @@ and the type system keeps us perfectly in sync with reality.
 
 [click]
 [click]
-We can handle the second type here the same way
+Next, we do the same for `ValidationError`.  
 [click]
-And we can left with no errors
+Now the type says `Effect<string, never, never>` —  
+no more errors left to handle.  
+We’ve caught everything.
+
 [click]
 [click]
-Or we can use catchTags to handle it all at once
+And if you prefer,  
+you can handle both in one go using `catchTags`.  
+Same idea — just cleaner and more declarative.
+
+So as our program grows and more errors appear,  
+we can handle them one by one or all together,  
+and the type system keeps perfect track the whole time.
 -->
 
 ---
+layout: section
+---
+
+# From error tracking to recovery
+
+<div v-click class="text-2xl">
+We can recover, retry, and compose effects in many ways
+</div>
+
+<!--
+Up until now, we’ve been tracking errors.
+
+We saw how the type system keeps a full record of all possible failures —
+which ones happen, which ones remain after we recover.
+
+But tracking is just the beginning.
+
+Once we know what can fail, we can start composing workflows in all sorts of ways:
+retrying operations, repeating effects, scheduling tasks, and more.
+
+Let’s take a look at that next.
+-->
+
+---
+
+# Effect.timeout
+
+Add a time limit to an effect, failing with timeout if exceeded
+
+```ts
+const pizza = orderDelivery();
+const result = Effect.timeout(pizza, "1 second");
+```
+
+<SlidevVideo autoreset="click" autoplay v-click controls>
+  <source src="/effect-timeout.mov" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/effect-timeout.mov">here</a>.
+  </p>
+</SlidevVideo>
+
+---
+
+# Effect.eventually
+
+Run an effect repeatedly until it succeeds, ignoring errors
+
+```ts
+const swipeCard = swipeCard();
+const result = Effect.eventually(swipeCard);
+```
+
+<SlidevVideo autoreset="click" autoplay v-click controls>
+  <source src="/effect-eventually.mov" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/effect-eventually.mov">here</a>.
+  </p>
+</SlidevVideo>
+
+---
+
+# Effect.retry recurs
+
+Retry an effect a fixed number of times
+
+```ts
+const wakeUp = attemptToWakeUp();
+const snoozeSchedule = Schedule.intersect(
+  Schedule.spaced("2 seconds"),
+  Schedule.recurs(4),
+);
+const result = Effect.retry(wakeUp, snoozeSchedule);
+```
+
+<SlidevVideo autoreset="click" autoplay v-click controls>
+  <source src="/effect-retry-only.mov" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/effect-retry-only.mov">here</a>.
+  </p>
+</SlidevVideo>
+
+---
+
+# Effect.retry exponential
+
+Retry with exponential backoff
+
+```ts
+const park = attemptParallelPark();
+const result = Effect.retry(park, Schedule.exponential("700 millis"));
+```
+
+<SlidevVideo autoreset="click" autoplay v-click controls>
+  <source src="/effect-exponential-retry-only.mov" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/effect-exponential-retry-only.mov">here</a>.
+  </p>
+</SlidevVideo>
+
+---
+hide: true
 transition: none
 ---
 
@@ -1123,6 +1242,8 @@ We can wrap the return success value in Effect.succeed and error in Effect.fail,
 -->
 
 ---
+hide: true
+---
 
 # Rewriting with Effect
 
@@ -1150,6 +1271,8 @@ function divide(a: number, b: number): Effect.Effect<number, Error> {
 So you can see, the code barely changes — but we’ve turned runtime errors into typed, predictable ones.
 -->
 
+---
+hide: true
 ---
 
 # Running the function
@@ -1218,6 +1341,8 @@ program.pipe(
 );
 -->
 
+---
+hide: true
 ---
 
 #
@@ -1652,6 +1777,8 @@ And we run the effect using runPromise
 -->
 
 ---
+hide: true
+---
 
 # Building Pipelines
 
@@ -1675,6 +1802,8 @@ Notice how this is similar to then with Promise.then
 -->
 
 ---
+hide: true
+---
 
 # Building Pipelines
 
@@ -1696,6 +1825,8 @@ console.log(result);
 So here we start with 5, then call increment with 5 as param so we get 6 and then we double the result to 12
 -->
 
+---
+hide: true
 ---
 
 # Effect pipelines
@@ -1732,6 +1863,8 @@ Here we start with the fetchTransactionAmount which is 100, then we use Effect.m
 -->
 
 ---
+hide: true
+---
 
 # Effect pipelines
 
@@ -1763,6 +1896,8 @@ Effect.runPromise(result).then(console.log); // Output: 190
 ```
 
 ---
+hide: true
+---
 
 # Effect Cheat Sheet
 
@@ -1783,6 +1918,7 @@ Effect.all is similar to Promise.akk and takes multiple effect and transform the
 -->
 
 ---
+hide: true
 transition: view-transition
 ---
 
@@ -1898,6 +2034,8 @@ We talked about how effect handle collecting the possible errors
 -->
 
 ---
+hide: true
+---
 
 # Handling errors
 
@@ -1957,8 +2095,6 @@ So we can write the code like the happy path and handle them seperately
 -->
 
 ---
-hide: true
----
 
 # Erros vs Defects
 
@@ -1996,6 +2132,21 @@ When the happy path ends
 
 <!--
 # Effect helps you to fix your unsafe assumption. You can write your code in the happy path just like TypeScript, and handle errors later. This way you won't have suprises about how do the function failes - and you can handle not only generic errors - but also recover from them.
+-->
+
+---
+
+# No more surprises
+
+The type system tracks it all
+
+![generic error meme](./generic-error-meme.png){.h-40vmin}
+
+<!--
+And that’s the essence of Effect.
+No more surprises, no more generic exceptions.
+You always know exactly what can fail and how to handle it.
+Everything else — retries, repeats, scheduling — builds on this principle.
 -->
 
 ---
