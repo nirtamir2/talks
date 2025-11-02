@@ -957,12 +957,126 @@ No surprises.
 
 [click]
 And the beautiful part? We can decide *where* we want to handle it —  
-either right away, or later — and the type system keeps track for us.-->
+either right away, or later — and the type system keeps track for us.
+-->
 
 ---
 
-# Nice to feel safe again
+# Multiple error types
 
+```ts {all|1-4|8,14|9-10|11-12|13|6-8|all}
+import { Effect, Random, Data } from "effect";
+
+class HttpError extends Data.TaggedError("HttpError")<{}> {}
+class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
+
+//      ┌─── Effect<string, HttpError | ValidationError, never>
+//      ▼
+const program = Effect.gen(function* () {
+  const n1 = yield* Random.next;
+  const n2 = yield* Random.next;
+  if (n1 < 0.5) return yield* Effect.fail(new HttpError());
+  if (n2 < 0.5) return yield* Effect.fail(new ValidationError());
+  return "some result";
+});
+```
+
+<!--
+Alright — now our program’s getting a bit more real.
+
+[click]
+We’ve got two different errors: `HttpError` and `ValidationError`.
+One could come from a failed request, the other from invalid input.
+Already, this starts to look like something we’d write in production.
+
+[click]
+Inside the generator, 
+[click]
+we roll two random numbers.
+[click]
+If the first is low, we fail with `HttpError`.
+If the second is low, we fail with `ValidationError`.
+[click]
+Otherwise, we succeed.
+
+[click]
+And here’s the cool part:
+the type system tells us the full set of possible errors —
+`HttpError | ValidationError`.
+That’s our error *universe* for this program.
+-->
+
+---
+
+# Multiple error types
+
+````md magic-move
+```ts {all|3-7|1-2|all}
+//      ┌─── Effect<string, ValidationError, never>
+//      ▼
+const recovered = program.pipe(
+  Effect.catchTag("HttpError", () =>
+    Effect.succeed("Recovering from HttpError"),
+  ),
+);
+```
+
+```ts {all|7-9|1-2|all}
+//      ┌─── Effect<string, never, never>
+//      ▼
+const recovered = program.pipe(
+  Effect.catchTag("HttpError", () =>
+    Effect.succeed("Recovering from HttpError"),
+  ),
+  Effect.catchTag("ValidationError", () =>
+    Effect.succeed("Recovering from ValidationError"),
+  ),
+);
+```
+
+```ts
+//      ┌─── Effect<string, never, never>
+//      ▼
+const recovered = program.pipe(
+  Effect.catchTags({
+    HttpError: (_HttpError) => Effect.succeed(`Recovering from HttpError`),
+    ValidationError: (_ValidationError) =>
+      Effect.succeed(`Recovering from ValidationError`),
+  }),
+);
+```
+````
+
+<!--
+Now let’s handle just one of our two errors — the `HttpError`.
+
+[click]
+We use `Effect.catchTag("HttpError", ...)`.  
+If that error happens, we recover by returning a successful effect.
+
+[click]
+And look at the type now:  
+it’s `Effect<string, ValidationError, never>` —  
+the `HttpError` is gone.  
+
+The compiler knows we already handled it.  
+That’s the power of narrowing —  
+the type automatically reflects what’s left to handle.
+
+[click]
+So as our program grows,  
+we can keep catching one error at a time,  
+and the type system keeps us perfectly in sync with reality.
+
+[click]
+[click]
+We can handle the second type here the same way
+[click]
+And we can left with no errors
+[click]
+[click]
+Or we can use catchTags to handle it all at once
+-->
 
 ---
 transition: none
