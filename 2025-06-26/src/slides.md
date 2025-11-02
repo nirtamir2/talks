@@ -812,6 +812,7 @@ is a powerful TypeScript library designed to help developers easily create compl
 
 <!--
 And that’s where Effect comes in.
+[click]
 It basically gives you the missing piece TypeScript doesn’t handle natively.
 -->
 
