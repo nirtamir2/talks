@@ -71,7 +71,7 @@ transition: view-transition
 function divide(a: number, b: number) {
   return a / b;
 }
-
+// ---cut-before---
 const result = divide("hi", 2);
 ```
 
@@ -87,11 +87,11 @@ If a function expects a certain type and we pass something else, we get a compil
 function divide(a: number, b: number) {
   return a / b;
 }
-
+// ---cut-before---
 const result = divide(1, 2); // number
 ```
 
- <img src="/result-number.png" v-drag="[92,198,67,68]" />
+ <img src="/result-number.png" v-drag="[92,128,67,68]" />
 
 <!--
 And after we fix the error - TypeScript infers the return type automatically, which makes composition much easier.
@@ -108,10 +108,11 @@ function divide(a: number, b: number) {
   return a / b;
 }
 
+// ---cut-before---
 const result = divide(4, 0); // Infinity
 ```
 
-<img src="/result-number.png" v-drag="[92,198,67,68]" />
+<img src="/result-number.png" v-drag="[92,128,67,68]" />
 
 <!--
 > <numerator/denomerator>
@@ -133,13 +134,15 @@ function divide(a: number, b: number) {
   }
   return a / b;
 }
-
+// ---cut-before---
 try {
   const result = divide(4, 0); // throws new Error("Cannot divide by 0")
-} catch (error) {}
+} catch (error /* unknown */) {
+  // handle error
+}
 ```
 
- <img src="/error-unknown.png" v-drag="[114,293,67,68]" v-click />
+ <img src="/error-unknown.png" v-drag="[114,158,67,68]" v-click />
 
 <!--
 We can throw an error and catch it using a try-catch block.
@@ -191,22 +194,22 @@ There’s no throws annotation, so we have to be careful when calling functions 
 
 ````md magic-move
 ```ts
-import { divide } from "./divide";
+import { doSomething } from "./doSomething";
 
-const result = divide(4, 0);
+const result = doSomething();
 ```
 
 ```ts
-import { divide } from "./divide";
+import { doSomething } from "./doSomething";
 
-const result = divide(4, 0); // throws new Error("Cannot divide by 0") 🚨
+const result = doSomething(); // throws new Error("Unexpected Error") 🚨
 ```
 
 ```ts
-import { divide } from "./divide";
+import { doSomething } from "./doSomething";
 
 try {
-  const result = divide(4, 0); // throws new Error("Cannot divide by 0") 🚨
+  const result = doSomething(); // throws new Error("Unexpected Error") 🚨
 } catch (error) {
   handleError(error);
 }
@@ -235,25 +238,98 @@ So how we handle errors in TypeScript?
 
 # We need to check the error types ourselves
 
+```ts
+class CustomError extends Error {
+  _tag = "CustomError";
+}
+```
+
+<v-click>
+
+````md magic-move
+```ts
+function doSomething() {
+  if (Math.random() > 0.9) {
+    throw new CustomError();
+  }
+  return "✅";
+}
+```
+
+```ts {3}
+function doSomething() {
+  if (Math.random() > 0.9) {
+    throw new CustomError();
+  }
+  return "✅";
+}
+```
+````
+
+</v-click>
+
+<v-click>
+
+````md magic-move
+```ts
+try {
+  const result = doSomething(); // throws CustomError()
+} catch (error /* unknown */) {
+  if (error instanceof CustomError) {
+    console.error(error);
+  }
+}
+```
+
+```ts {4}
+try {
+  const result = doSomething(); // throws CustomError()
+} catch (error /* unknown */) {
+  if (error instanceof CustomError) {
+    console.error(error);
+  }
+}
+```
+````
+
+</v-click>
+
+<!--
+One option is to define a custom error that extends error.
+[click]
+[click]
+This lets us throw a specific type of error instead of a generic one.
+[click]
+That way, we can check the type inside the catch block and handle it accordingly.
+[click]
+it’s still typed as unknown, so we need a type guard like instanceof.
+This works, but it’s manual and easy to forget or get wrong.
+-->
+
+---
+hide: true
+---
+
+# We need to check the error types ourselves
+
 ```ts twoslash
-class CannotDivideByZeroError extends Error {
-  _tag = "CannotDivideByZeroError";
+class CustomError extends Error {
+  _tag = "CustomError";
 }
 
-// ---cut-before---
-function divide(a: number, b: number) {
-  if (b === 0) {
-    throw new CannotDivideByZeroError();
-    //        ^^^^^^^^^^^^^^^^^^^^^^^^^^
+function doSomething() {
+  if (Math.random() > 0.9) {
+    throw new CustomError();
+    //        ^^^^^^^^^^^^^^
   }
-  return a / b;
+  return "✅";
 }
 
 try {
-  const result = divide(4, 0);
+  const result = doSomething();
 } catch (error) {
   // Error type is unknown
-  if (error instanceof CannotDivideByZeroError) {
+  if (error instanceof CustomError) {
     console.error(error);
   }
 }
@@ -298,6 +374,8 @@ We can do something similar in TypeScript. By defining a Result type with Data a
 we can return either the data or the error — but never both
 -->
 
+---
+hide: true
 ---
 
 # Wrap the results instead of throwing
@@ -351,6 +429,59 @@ TypeScript even infers the structure for us, so we can easily pattern match or c
 [click]
 And the nice part is, it makes the function’s possible errors explicit in the type system.
 [click]
+But — and it’s a big but — it’s verbose.
+-->
+
+---
+
+# Wrap the results instead of throwing
+
+```ts
+type Result<Data, Error> =
+  | { data: Data; error: never }
+  | { data: never; error: Error };
+```
+
+<v-click>
+
+````md magic-move
+```ts
+function doSomething(): Result<string, CustomError> {
+  if (Math.random() > 0.9) {
+    return { error: new CustomError() };
+  }
+  return { data: "✅" };
+}
+```
+````
+
+</v-click>
+
+<v-click>
+
+````md magic-move
+```ts
+const result = doSomething();
+
+if (result.error == null) {
+  console.log(result.data); // string
+} else {
+  console.error(result.error); // CustomError
+}
+```
+````
+
+</v-click>
+
+<!--
+In languages like Go, there’s no concept of throwing errors — you return them instead.
+We can do something similar in TypeScript.
+[click]
+Here, the Result type makes sure we either get data or error, but not both.
+
+[click]
+TypeScript even infers the structure for us, so we can easily pattern match or check which case we’re in.
+And the nice part is, it makes the function’s possible errors explicit in the type system.
 But — and it’s a big but — it’s verbose.
 -->
 
@@ -429,7 +560,7 @@ Composing multiple such functions gets messy, since we now have to wrap and unwr
 -->
 
 ---
-# hide: true
+hide: true
 ---
 
 # [Neverthrow](https://github.com/supermacro/neverthrow): Better Wrapped, Still Unwrapped
@@ -681,8 +812,7 @@ is a powerful TypeScript library designed to help developers easily create compl
 
 <!--
 And that’s where Effect comes in.
-
-Effect is a powerful TypeScript library that helps you build complex programs — both synchronous and asynchronous — while keeping types and errors fully under control. It basically gives you the missing piece TypeScript doesn’t handle natively.
+It basically gives you the missing piece TypeScript doesn’t handle natively.
 -->
 
 ---
@@ -717,22 +847,20 @@ At the heart of Effect is the Effect type. It represents a computation that migh
 import { Effect } from "effect";
 
 const value = Effect.succeed(42); // Effect.Effect<number, never, never>
-//
-//
-//
-//
-//
+
 const error = Effect.fail("Oops"); // Effect.Effect<never, string, never>
 ```
 
-<img v-click=[1] src="/effect-number.png" v-drag="[71,160,226,89]" />
+<!-- <img v-click=[1] src="/effect-number.png" v-drag="[71,160,226,89]" /> -->
 
-<img v-click=[2] src="/effect-error.png" v-drag="[82,271,218,90]" />
+<!-- <img v-click=[2] src="/effect-error.png" v-drag="[82,271,218,90]" /> -->
 
 <!--
-We can create effects using Effect.succeed for successful values [click], or Effect.fail for errors [click]. This avoids throwing exceptions and keeps errors explicit and typed.
+We can create effects using Effect.succeed for successful values, or Effect.fail for errors. This avoids throwing exceptions and keeps errors explicit and typed.
 -->
 
+---
+transition: none
 ---
 
 # Rewriting with Effect
@@ -751,7 +879,6 @@ function divide(a: number, b: number) {
   }
   return a / b;
 }
-
 ```
 
 ```ts
@@ -767,24 +894,18 @@ function divide(a: number, b: number): Effect.Effect<number, Error> {
   }
   return Effect.succeed(a / b);
 }
-
 ```
 ````
 
-<!-- 
+<!--
 So if we take our previous divide example - we can rewrite it with effect.
 [click]
- Instead of throwing errors we can return Effect.fail and instead of returning values we can wrap them with Effect.succeed.
-Effect also have the Data.TaggedError we can use instead of error
- -->
+We can wrap the return success value in Effect.succeed and error in Effect.fail, and we can also use Effect's TaggedError for creating our error
+-->
 
----
-transition: view-transition
 ---
 
 # Rewriting with Effect
-
-::left::
 
 ```ts twoslash
 import { Data, Effect } from "effect";
@@ -804,32 +925,20 @@ function divide(a: number, b: number): Effect.Effect<number, Error> {
 }
 ```
 
-::right::
-
 <img src="/divide-code.png" v-drag="[581,131,401,233]" />
 
 <!--
-So if we go back to our divide function - we can rewrite it in effect. We can wrap the return success value in Effect.succeed and error in Effect.fail, and we can also use Effect's TaggedError for creating our error
+So you can see, the code barely changes — but we’ve turned runtime errors into typed, predictable ones.
 -->
 
 ---
 
-# Rewriting with Effect
+# Running the function
 
 ````md magic-move
 ```ts
-class CannotDivideByZeroError extends Error {
-  _tag = "CannotDivideByZeroError";
-}
-
-function divide(a: number, b: number) {
-  if (b === 0) {
-    throw new CannotDivideByZeroError();
-  }
-  return a / b;
-}
-
 try {
+  // Regular function
   const result = divide(4, 0);
 } catch (error) {
   // Error type is unknown
@@ -840,18 +949,7 @@ try {
 ```
 
 ```ts
-import { Data, Effect } from "effect";
-
-class CannotDivideByZeroError extends Data.TaggedError(
-  "CannotDivideByZeroError",
-) {}
-
-function divide(a: number, b: number): Effect.Effect<number, Error> {
-  if (b === 0) {
-    return Effect.fail(new CannotDivideByZeroError());
-  }
-  return Effect.succeed(a / b);
-}
+import { Effect } from "effect";
 
 // Effect<number, CannotDivideByZeroError>
 const program = divide(4, 0);
@@ -859,6 +957,24 @@ const program = divide(4, 0);
 const result = Effect.runSync(program);
 ```
 ````
+
+<!--
+It's not over. We need to run the program.
+In tradition
+
+ -->
+
+<!--
+עכשיו אם ננסה להריץ את הפונקציה שיצרנו היא לא תרוץ. כי effect זה כמו הblueprint של התוכנית. תחשבו על זה כמו פונקציה שמחזירה פונקציה - thunk. ככה אפשר לראות מה יכול לקרות בתוכנית ולעשות קומפוזיציה יפה של דברים ושגיאות ולקבל type safety. אז אנחנו נצטרך להריץ את הפונקציה מחזירה effect. בשביל זה נשתמש בrunSync. הנה השוואה בין הריצה של הפונקציה עם effect לפונקציה המקורית
+
+Now, if we try to run the function we just created — it won’t actually execute.
+That’s because an Effect is more like a blueprint of a program.
+You can think of it like a function that returns another function — a thunk.
+This lets us compose programs safely, understand what values or errors might occur, and get full type safety.
+So to actually run the program, we need to execute the Effect — for example, using Effect.runSync.
+Here’s a comparison between running a regular function and running one wrapped in an Effect.
+
+ -->
 
 <!--
 אני יודע שזה טיפה מסובך אבל הקטע זה שאני כבר יודע מה הסוגי שגיאות שיכולים להיות לי
@@ -2029,7 +2145,6 @@ Error handling in practice is 2 steps:
 
 Collecting possible errors
 Handling errors
-
 
 Before running the effect we write some code to define what happens if Effect contains UnknownException.
 
