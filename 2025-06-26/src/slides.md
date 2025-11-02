@@ -860,6 +860,100 @@ We can create effects using Effect.succeed for successful values, or Effect.fail
 -->
 
 ---
+
+# Example
+
+```ts {all|1-3|7,13|8|9-11|12|all|5-7}
+import { Effect, Random, Data } from "effect";
+
+class CustomError extends Data.TaggedError("CustomError")<{}> {}
+
+//      ┌─── Effect<string, CustomError, never>
+//      ▼
+const program = Effect.gen(function* () {
+  const random = yield* Random.next;
+  if (random > 0.9) {
+    return yield* Effect.fail(new CustomError());
+  }
+  return "✅";
+});
+```
+
+<!--
+Now let's dive in. 
+Here we have an example of what effect code looks like. 
+Let's go line by line and see what's going on. 
+
+[click]
+First we can import stuff from effect and we define a custom error that extends Data.TaggedError.
+It's very similar to how we created our custom error
+
+[click]
+Then we create a program with Effect.gen().
+Its like a blueprint of the program or a thunk. Represents a computation.
+It accepts a generator function here, so we have to use function with asterisk* 
+
+[click]
+We use Random.next which is like Math.random but in the effect way. And because we use effect and we want to get the value we have to use yield* asterisk just like we do in async await.
+[click]
+Then we check if the number is above 0.9 and we return yielding the failing effect of our error.
+[click]
+And else we can return the result. 
+[click]
+[click]
+See that this program returns an effect that resolved with string and fails with CustomError
+-->
+
+---
+
+# Recovering from errors with effect
+
+```ts {all|1-3|7,12|8-11|5-7|14|all}
+//      ┌── string               ┌─── Effect<string, CustomError, never>
+//      ▼                        ▼
+const result = Effect.runSync(program); // may throw CustomError 🚨
+
+//        ┌─── Effect<string, never, never>
+//        ▼
+const recovered = program.pipe(
+  // Only handle CustomError errors, type-safe
+  Effect.catchTag("CustomError", (_CustomError) =>
+    Effect.succeed("Recovering from CustomError"),
+  ),
+);
+
+const recoveredResult = Effect.runSync(recovered); // string ✅
+```
+
+<!--
+[click]
+We use Effect.runSync() to run our program that returns an effect of string and CustomError.
+The result of it is a string but it can throw an CustomError because we didn't handled it. Just like JavaScript. 
+
+[click]
+But we can recover from this error and handle it. We can take our program which is an effect / blueprint and pipe some code to handle the errors.
+[click]
+The useEffect.catchTag infers the effect error type and suggest the CustomError string automatically.
+We handle this error by returning a succeed effect with a string.
+[click]
+Now the recovered program have a type of Effect that succeed with string but errors with never. 
+The type system tell us that no expected errors are left to handle. 
+[click]
+So if we run the recovered program effect we are not expecting to see errors and the type system infers us about it.
+
+[click]
+We can ignore the error like we did with program and decide to handle it later like we did with recovered program. But the type-system tracks it! And we don't need to think about it that much. 
+
+Notice that we handled the error outside of the program. Just like TypeScript narrowing we can move the handling of the effect error to a different scope.
+-->
+
+
+---
+
+# Nice to feel safe again
+
+
+---
 transition: none
 ---
 
