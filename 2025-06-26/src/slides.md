@@ -880,28 +880,34 @@ const program = Effect.gen(function* () {
 ```
 
 <!--
-Now let's dive in. 
-Here we have an example of what effect code looks like. 
-Let's go line by line and see what's going on. 
+Let’s start simple.
 
 [click]
-First we can import stuff from effect and we define a custom error that extends Data.TaggedError.
-It's very similar to how we created our custom error
+Here we import what we need from Effect… and define a little `CustomError`.  
+Nothing special — just a typed error that our program might fail with.
 
 [click]
-Then we create a program with Effect.gen().
-Its like a blueprint of the program or a thunk. It represents a computation.
-It accepts a generator function here, so we have to use function with asterisk* 
+Now, we define a program using `Effect.gen()`.  
+You can think of this as describing *what should happen* —  
+not running it yet, just defining the blueprint.  
+It uses a generator function, so we write `function*`.
 
 [click]
-We use Random.next which is like Math.random but in the effect way. And because we use effect and we want to get the value we have to use yield* asterisk just like we do in async await.
+Inside, we use `Random.next`.  
+It’s like `Math.random()`, but in the Effect world.  
+And because it’s an effect, we use `yield*` — just like `await` — to get the value.
+
 [click]
-Then we check if the number is above 0.9 and we return yielding the failing effect of our error.
+If the random number is above 0.9, we fail with our custom error.  
+
 [click]
-And else we can return the result. 
+Otherwise, we return a success with a simple checkmark.
+
 [click]
 [click]
-Notice that this program returns an effect that resolved with string and fails with CustomError
+So this program is an Effect that might fail, or succeed with a string.  
+And that’s all written right there in the type.  
+The type tells the whole story — no surprises.
 -->
 
 ---
@@ -927,27 +933,31 @@ const recoveredResult = Effect.runSync(recovered); // string ✅
 
 <!--
 [click]
-We use Effect.runSync() to run our effect program.
-The result of it is a string but it can throw an CustomError because we didn't handled it. Just like JavaScript. 
-As you can see - we can see it in the type-system.
+Now, let’s run this program.  
+When we call `Effect.runSync()`, we actually execute it —  
+and since it might fail, it can throw our `CustomError`.
 
 [click]
-But we can recover from this error and handle it. We can take our program which is an effect / blueprint and pipe some code to handle the errors.
-[click]
-The Effect.catchTag infers the effect error type and suggest the CustomError string automatically.
-We handle this error by returning an effect that succeed with a string value.
-[click]
-Now the recovered program have a type of Effect that succeed with string but this time the error generics is never. 
-The type system tell us that no expected errors are left to handle. 
-[click]
-So if we run the recovered program effect - we are not expecting to see errors and the type system infers us about it.
+But here’s the nice part: we can *recover* from it.  
+We can take that same effect — before running it — and attach some logic to handle errors.
 
 [click]
-We can ignore the error like we did with program and decide to handle it later like we did with recovered program. But the type-system tracks it! And we don't need to think about it that much. 
+We use `Effect.catchTag()`, which is type-safe and smart.  
+It automatically knows about our `CustomError`.  
+And if it happens, we recover by returning a new effect that succeeds with a friendly message.
 
-Notice that we handled the error outside of the program. Just like TypeScript narrowing we can move the handling of the effect error to a different scope.
--->
+[click]
+Now, look at the type: it says `Effect<string, never, never>`.  
+That means — no more errors.  
+We’ve handled everything.
 
+[click]
+So when we run `recovered`, it’s guaranteed to succeed.  
+No surprises. 
+
+[click]
+And the beautiful part? We can decide *where* we want to handle it —  
+either right away, or later — and the type system keeps track for us.-->
 
 ---
 
