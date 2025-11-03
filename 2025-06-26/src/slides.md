@@ -154,39 +154,6 @@ It works, but it’s not very safe or convenient.
 -->
 
 ---
-hide: true
----
-
-# Watch for Unexpected Throws
-
-```ts twoslash
-// @filename: divide.ts
-export function divide(a: number, b: number) {
-  if (b === 0) {
-    throw new Error("Cannot divide by 0");
-  }
-  return a / b;
-}
-
-// @filename: index.ts
-
-// ---cut-before---
-import { divide } from "./divide";
-
-try {
-  const result = divide(4, 0); // throws new Error("Cannot divide by 0")
-} catch (error) {
-  //
-}
-```
-
-<!--
-We also need to remember that a function can throw an error,
-and TypeScript won’t tell us.
-There’s no throws annotation, so we have to be careful when calling functions that might fail.
--->
-
----
 
 # Watch for Unexpected Throws
 
@@ -302,132 +269,6 @@ That way, we can check the type inside the catch block and handle it accordingly
 [click]
 it’s still typed as unknown, so we need a type guard like instanceof.
 This works, but it’s manual and easy to forget or get wrong.
--->
-
----
-hide: true
----
-
-# We need to check the error types ourselves
-
-```ts twoslash
-class CustomError extends Error {
-  _tag = "CustomError";
-}
-
-function doSomething() {
-  if (Math.random() > 0.9) {
-    throw new CustomError();
-    //        ^^^^^^^^^^^^^^
-  }
-  return "✅";
-}
-
-try {
-  const result = doSomething();
-} catch (error) {
-  // Error type is unknown
-  if (error instanceof CustomError) {
-    console.error(error);
-  }
-}
-```
-
-<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 75, height:130 }" :click-3="{ y: 205, height:160 }" />
-
-<img v-click="[2]" v-drag="[380,125,482,98]" src="/error-class-definition.png" class="z-30" />
-
-<img v-click="[4]" v-drag="[96,292,108,98]" src="/error-unknown.png" class="z-30" />
-
-<img v-click="[5]" v-drag="[174,349,212,64]" src="/error-cannot-divide-by-zero.png" class="z-30" />
-
-<!--
-[click]
-One option is to define a custom error that extends error.
-[click]
-This lets us throw a specific type of error instead of a generic one.
-[click]
-That way, we can check the type inside the catch block and handle it accordingly.
-[click]
-it’s still typed as unknown, so we need a type guard like instanceof.
-[click]
-This works, but it’s manual and easy to forget or get wrong.
--->
-
----
-hide: true
----
-
-# Wrap the results instead of throwing
-
-```ts twoslash
-type Result<Data, Error> =
-  | { data: Data; error?: never }
-  | { data?: never; error: Error };
-```
-
-<!--
-In languages like Go, there’s no concept of throwing errors — you return them instead.
-We can do something similar in TypeScript. By defining a Result type with Data and Error generics,
-we can return either the data or the error — but never both
--->
-
----
-hide: true
----
-
-# Wrap the results instead of throwing
-
-```ts twoslash
-class CannotDivideByZeroError extends Error {
-  _tag = "CannotDivideByZeroError";
-}
-
-type Result<Data, Error> =
-  | { data: Data; error?: never }
-  | { data?: never; error: Error };
-
-// ---cut-before---
-function divide(a: number, b: number): Result<number, CannotDivideByZeroError> {
-  if (b === 0) {
-    return { error: new CannotDivideByZeroError() };
-    //       ^^^^^
-  }
-  return { data: a / b };
-  //       ^^^^
-}
-
-const result = divide(4, 0);
-
-if (result.error == null) {
-  console.log(result.data);
-} else {
-  console.error(result.error);
-}
-```
-
-<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 75, height:130 }" :click-3="{ y: 205, height:150 }"  />
-
-<img v-click="[2]" v-drag="[473,139,393,98]" src="/result-type.png" class="z-30" />
-
-<img v-click="[5]" v-drag="[205,346,211,60]" src="/error-cannot-divide-prop.png" class="z-30" />
-
-<img v-click="[4]" v-drag="[183,311,89,68]" src="/data-number.png" class="z-30" />
-
-<!--
-[click]
-In languages like Go, there’s no concept of throwing errors — you return them instead.
-We can do something similar in TypeScript.
-[click]
-Here, the Result type makes sure we either get data or error, but not both.
-
-[click]
-[click] 
-TypeScript even infers the structure for us, so we can easily pattern match or check which case we’re in.
-[click]
-And the nice part is, it makes the function’s possible errors explicit in the type system.
-[click]
-But — and it’s a big but — it’s verbose.
 -->
 
 ---
@@ -614,162 +455,6 @@ const result = doSomething()
 
 <!--
 Libraries like Neverthrow simplify this pattern by using ok and err wrappers — but we still end up unwrapping values manually
--->
-
----
-hide: true
----
-
-# Real world complexity
-
-````md magic-move
-```ts
-const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-const data = await response.json();
-const parsedData = mySchema.parse(data);
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  const data = await response.json();
-  const parsedData = mySchema.parse(data);
-} catch (error) {
-  console.log("Could not fetch data");
-}
-```
-
-```ts
-const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-  const data = await response.json();
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-  try {
-    const data = await response.json();
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-  try {
-    const data = await response.json();
-    const parsedData = mySchema.parse(data);
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-
-```ts
-try {
-  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
-  if (!response.ok) {
-    throw new Error(
-      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
-    );
-  }
-  try {
-    const data = await response.json();
-    try {
-      const parsedData = mySchema.parse(data);
-    } catch (_parseFailed) {
-      throw new Error("Invalid input: expected string, received number");
-    }
-  } catch (_stringifyError) {
-    throw new Error(
-      "SyntaxError: Unexpected token ... in JSON at position ...",
-    );
-  }
-} catch (_fetchError) {
-  throw new Error("TypeError: Failed to fetch");
-}
-```
-````
-
-<!--
-TypeError: Failed to fetch
-Non-OK responses (like 404, 500) response.ok
-SyntaxError: Unexpected token ... in JSON at position ...
-
- -->
-
-<!--
-מתחיל עם ה3 שורות - כולנו מכירים אותם
-אבל בטח אתם מטפלים בזה ככה
-אתם יכולים. אבל הקוד מתעלם מהרבה דברים יותר גרנולרים שקורים.
-נכון - פה ליוזר זה בטח לא הכי משנה - אבל לנו כמתכנתים כן כשאנחנו באים לדאבג את זה.
-ויש הרבה מקרים אחרים שגם בתור יוזר היינו שמחים לקבל הודעה מה נכשל בדיוק ומה אפשר לעשות את זה חוץ מאשר הודעה גנרית.
-משהו נכשל פה והמטרה של להביא את הדאטה לא הצליחה - אבל למה בדיוק ומה אפשר לעשות.
-אנחנו לא רוצים שיהיה לנו שגיאה גנרית. יותר עוזר שיהיה לנו מידע
-
-Real-world async code is tricky.
-Let's start with the happy path.
-:click
-Now split it
-A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
-Even if the response is ok, parsing JSON might throw syntax errors.
-So we end up with nested try-catch blocks and lots of error handling boilerplate.
-Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
-This complexity quickly grows and is hard to maintain.
 -->
 
 ---
@@ -1233,6 +918,343 @@ For attemptParallelPark(), we retry with exponential backoff: Effect.retry(park,
 [click]
 Each retry waits longer than the last, reducing pressure and avoiding too-frequent attempts.
 -->
+---
+hide: true
+---
+
+# Erros vs Defects
+
+There are two kinds of errors-those that we can expect, program defensively against, and analyze statically-and those that are truly exceptional and outside of our control.
+
+---
+layout: section
+---
+
+# TypeScript is great
+
+<div v-click class="text-2xl">
+For the happy path
+</div>
+
+<!--
+TypeScript is great
+[click]
+
+For the happy path.
+
+When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
+-->
+
+---
+layout: section
+---
+
+# Effect can help
+
+<div v-click class="text-2xl">
+When the happy path ends
+</div>
+
+<!--
+[click]
+Effect helps you to fix your unsafe assumption. You can write your code in the happy path just like TypeScript, and handle errors later. This way you won't have suprises about how do the function failes - and you can handle not only generic errors - but also recover from them.
+-->
+
+---
+
+# No more surprises
+
+The type system tracks it all
+
+![generic error meme](./generic-error-meme.png){.h-40vmin}
+
+<!--
+And that’s the essence of Effect.
+No more surprises, no more generic exceptions.
+You always know exactly what can fail and how to handle it.
+Everything else — retries, repeats, scheduling — builds on this principle.
+-->
+
+---
+layout: two-cols-header-gap
+---
+
+# More errors - fewer problems
+
+::left::
+
+![tweet-dillon](/tweet-1898590282020450681-no-image.png)
+
+<div class="flex gap-4 flew-wrap">
+
+[<mdi-twitter /> Source](https://x.com/dillon_mulroy/status/1898590282020450681)
+
+[<mdi-youtube /> Talk](https://www.youtube.com/watch?v=VcOIz7tOBoM)
+
+</div>
+
+::right::
+
+````md magic-move
+```ts
+type RenewDomainError =
+  | ApiError
+  | StripePaymentError
+  | StripePaymentMethodError;
+```
+
+```ts
+type RenewDomainError =
+  | CannotRenewError
+  | CustomerIdNotFoundError
+  | DomainsMutexError
+  | DraftInvoiceError
+  | ExpirationDateOutOfRangeError
+  | GetDomainInvoiceError
+  | GetDomainPriceError
+  | GetUpstreamRegistrarDomainError
+  | InvalidDomainStatusError
+  | UpstreamRegistrarDomainNotFoundError
+  | UpstreamRegistrarRenewDomainError
+  | PayInvoiceError
+  | RefundDomainInvoiceError
+  | RenewFailureError
+  | SyncDomainError
+  | TLDConfigNotFoundError
+  | UpdateVercelDomainError;
+```
+````
+
+<!--
+At Vercel, they had a feature for auto-renewing domains — and lots of mysterious issues.
+After switching to Effect and similar concepts, suddenly the error count jumped — from 3 [click] to 17. 
+But that was actually good news — it meant they weren’t hiding problems anymore.
+They could finally see what was really happening.
+
+
+It becomes much easier to find the root cause of an error instead of just seeing a generic one — and since it’s still TypeScript, it doesn’t force us into a new ecosystem.
+
+Effect might look different at first, with its generators and yield, but it fits naturally once you get used to it.
+The key idea is: you don’t have to handle errors immediately — just make sure you’re aware of them and don’t ignore them.
+-->
+
+---
+layout: section
+---
+
+# Awareness over silence
+
+<!--
+The type system in Effect keeps track of every possible error — nothing gets lost.
+It may look different from TypeScript, with its generators and effects, but it still plays perfectly within the TypeScript world.
+You can adopt it gradually — start small, get better visibility into your errors, and build from there.
+What we’ve seen today is really just the tip of the iceberg.
+-->
+
+---
+layout: intro
+class: text-center pb-5
+glowX: 50
+glowY: 120
+---
+
+<h1 text-4xl>
+Thank you！
+</h1>
+
+Slides available at [nirtamir.com](https://nirtamir.com)
+
+---
+title: notes
+---
+
+# Links
+
+- [Effect website](https://www.effect.website)
+- [Effect: Beginners Complete Getting Started](https://www.typeonce.dev/course/effect-beginners-complete-getting-started)
+
+---
+
+# Videos
+
+- [The Simple Secret Behind Effect’s Power](https://youtu.be/F5aWLtEdNjE)
+- [Effect: the unreadable library that captured my heart](https://youtu.be/S2GChOwivwQ)
+
+---
+
+# Tweets
+
+![lowest-bar-of-entry.png](/lowest-bar-of-entry.png)
+
+<!--
+https://x.com/dillon_mulroy/status/1799811526020538555
+-->
+
+---
+
+# Tweets
+
+![tweet-problem-happy-path](/tweet-problem-happy-path.png)
+
+<!--
+https://x.com/dillon_mulroy/status/1803430049254633492
+-->
+
+---
+
+# Tweets
+
+![sneak-peak-verce-17-autocomplete](/sneak-peak-verce-17-autocomplete.png)
+
+<!--
+https://x.com/RhysSullivan/status/1971409275152130541
+-->
+
+
+---
+hide: true
+layout: feedback
+---
+
+> Happy path blindness
+
+What happens if Auth.check throws? Does
+it throw? Can it throw more than one kind of
+error?
+What about Db.queryDomain?
+→ Can we retry on any errors?
+→ If so, do we need to consider a backoff
+interval for retrying?
+How should we communicate errors to
+callers? Should we pass through errors? All of
+them? Should we wrap them with custom
+errors?
+
+The benefits
+→ Crystal clear guarantees of how our code will
+run at a glance. If the computation succeeds we'll
+end up with the Ok type, if it fails we'll end up with
+Err type
+→ No hidden control flow (e.g. try/catch).
+→ The result type is composable. We can chain
+computations together that may fail, with static
+guarantees that we'll gracefully handle the
+unhappy path.
+→ Typed error tracking via unions on the Err type.
+
+Treating errors as values with the Result type-whether
+with an implementation like neverthrow or a simple
+discriminated union-will make your code safer, more
+resilient, and predictable.
+
+Defects
+There are two kinds of errors-those
+that we can expect, program
+defensively against, and analyze
+statically-and those that are truly
+exceptional and outside of our contro l.
+
+Errors are typed as unknown
+
+```ts
+try
+}
+catch
+(error: unknown) {
+}
+```
+
+> typescript/javascript happy path blindness is real.
+>
+> go through a critical code path in your application and note every single place an error can be thrown. are you handling each appropriately?
+>
+> we did this with part of our domain renewal flow.
+>
+> from 3 errors to 17
+
+When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
+
+Error handling in practice is 2 steps:
+
+Collecting possible errors
+Handling errors
+
+Before running the effect we write some code to define what happens if Effect contains UnknownException.
+
+This operation is called Recovering from an error.
+
+we always know from the type what errors can happen.
+
+Separate program definition from error handling
+
+---
+hide: true
+---
+
+```ts twoslash
+import { $ } from "execa";
+try {
+  const { message: currentBranch } = await $`git branch --show-current`;
+} catch (error) {
+  console.error(error);
+}
+```
+
+---
+hide: true
+---
+
+# We need to check the error types ourselves
+
+```ts twoslash
+class CustomError extends Error {
+  _tag = "CustomError";
+}
+
+function doSomething() {
+  if (Math.random() > 0.9) {
+    throw new CustomError();
+    //        ^^^^^^^^^^^^^^
+  }
+  return "✅";
+}
+
+try {
+  const result = doSomething();
+} catch (error) {
+  // Error type is unknown
+  if (error instanceof CustomError) {
+    console.error(error);
+  }
+}
+```
+
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 75, height:130 }" :click-3="{ y: 205, height:160 }" />
+
+<img v-click="[2]" v-drag="[380,125,482,98]" src="/error-class-definition.png" class="z-30" />
+
+<img v-click="[4]" v-drag="[96,292,108,98]" src="/error-unknown.png" class="z-30" />
+
+<img v-click="[5]" v-drag="[174,349,212,64]" src="/error-cannot-divide-by-zero.png" class="z-30" />
+
+<!--
+[click]
+One option is to define a custom error that extends error.
+[click]
+This lets us throw a specific type of error instead of a generic one.
+[click]
+That way, we can check the type inside the catch block and handle it accordingly.
+[click]
+it’s still typed as unknown, so we need a type guard like instanceof.
+[click]
+This works, but it’s manual and easy to forget or get wrong.
+-->
+
+---
+hide: true
+layout: stuff
+---
+
 
 ---
 hide: true
@@ -2132,287 +2154,240 @@ We always know from the type what errors can happen so we get auto-completion ab
 So we can write the code like the happy path and handle them seperately
 -->
 
+
 ---
 hide: true
 ---
 
-# Erros vs Defects
-
-There are two kinds of errors-those that we can expect, program defensively against, and analyze statically-and those that are truly exceptional and outside of our control.
-
----
-layout: section
----
-
-# TypeScript is great
-
-<div v-click class="text-2xl">
-For the happy path
-</div>
-
-<!--
-TypeScript is great
-[click]
-
-For the happy path.
-
-When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
--->
-
----
-layout: section
----
-
-# Effect can help
-
-<div v-click class="text-2xl">
-When the happy path ends
-</div>
-
-<!--
-[click]
-Effect helps you to fix your unsafe assumption. You can write your code in the happy path just like TypeScript, and handle errors later. This way you won't have suprises about how do the function failes - and you can handle not only generic errors - but also recover from them.
--->
-
----
-
-# No more surprises
-
-The type system tracks it all
-
-![generic error meme](./generic-error-meme.png){.h-40vmin}
-
-<!--
-And that’s the essence of Effect.
-No more surprises, no more generic exceptions.
-You always know exactly what can fail and how to handle it.
-Everything else — retries, repeats, scheduling — builds on this principle.
--->
-
----
-layout: two-cols-header-gap
----
-
-# More errors - fewer problems
-
-::left::
-
-![tweet-dillon](/tweet-1898590282020450681-no-image.png)
-
-<div class="flex gap-4 flew-wrap">
-
-[<mdi-twitter /> Source](https://x.com/dillon_mulroy/status/1898590282020450681)
-
-[<mdi-youtube /> Talk](https://www.youtube.com/watch?v=VcOIz7tOBoM)
-
-</div>
-
-::right::
+# Real world complexity
 
 ````md magic-move
 ```ts
-type RenewDomainError =
-  | ApiError
-  | StripePaymentError
-  | StripePaymentMethodError;
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+const data = await response.json();
+const parsedData = mySchema.parse(data);
 ```
 
 ```ts
-type RenewDomainError =
-  | CannotRenewError
-  | CustomerIdNotFoundError
-  | DomainsMutexError
-  | DraftInvoiceError
-  | ExpirationDateOutOfRangeError
-  | GetDomainInvoiceError
-  | GetDomainPriceError
-  | GetUpstreamRegistrarDomainError
-  | InvalidDomainStatusError
-  | UpstreamRegistrarDomainNotFoundError
-  | UpstreamRegistrarRenewDomainError
-  | PayInvoiceError
-  | RefundDomainInvoiceError
-  | RenewFailureError
-  | SyncDomainError
-  | TLDConfigNotFoundError
-  | UpdateVercelDomainError;
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  const data = await response.json();
+  const parsedData = mySchema.parse(data);
+} catch (error) {
+  console.log("Could not fetch data");
+}
+```
+
+```ts
+const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+  const data = await response.json();
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+  try {
+    const data = await response.json();
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+  try {
+    const data = await response.json();
+    const parsedData = mySchema.parse(data);
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
+```
+
+```ts
+try {
+  const response = await fetch("https://pokeapi.co/api/v2/pokemon/ditto");
+  if (!response.ok) {
+    throw new Error(
+      `HTTP error! Non-OK responses (like 404, 500) Status: ${response.status}`,
+    );
+  }
+  try {
+    const data = await response.json();
+    try {
+      const parsedData = mySchema.parse(data);
+    } catch (_parseFailed) {
+      throw new Error("Invalid input: expected string, received number");
+    }
+  } catch (_stringifyError) {
+    throw new Error(
+      "SyntaxError: Unexpected token ... in JSON at position ...",
+    );
+  }
+} catch (_fetchError) {
+  throw new Error("TypeError: Failed to fetch");
+}
 ```
 ````
 
 <!--
-At Vercel, they had a feature for auto-renewing domains — and lots of mysterious issues.
-After switching to Effect and similar concepts, suddenly the error count jumped — from 3 [click] to 17. 
-But that was actually good news — it meant they weren’t hiding problems anymore.
-They could finally see what was really happening.
+TypeError: Failed to fetch
+Non-OK responses (like 404, 500) response.ok
+SyntaxError: Unexpected token ... in JSON at position ...
 
-
-It becomes much easier to find the root cause of an error instead of just seeing a generic one — and since it’s still TypeScript, it doesn’t force us into a new ecosystem.
-
-Effect might look different at first, with its generators and yield, but it fits naturally once you get used to it.
-The key idea is: you don’t have to handle errors immediately — just make sure you’re aware of them and don’t ignore them.
--->
-
----
-layout: section
----
-
-# Awareness over silence
+ -->
 
 <!--
-The type system in Effect keeps track of every possible error — nothing gets lost.
-It may look different from TypeScript, with its generators and effects, but it still plays perfectly within the TypeScript world.
-You can adopt it gradually — start small, get better visibility into your errors, and build from there.
-What we’ve seen today is really just the tip of the iceberg.
+מתחיל עם ה3 שורות - כולנו מכירים אותם
+אבל בטח אתם מטפלים בזה ככה
+אתם יכולים. אבל הקוד מתעלם מהרבה דברים יותר גרנולרים שקורים.
+נכון - פה ליוזר זה בטח לא הכי משנה - אבל לנו כמתכנתים כן כשאנחנו באים לדאבג את זה.
+ויש הרבה מקרים אחרים שגם בתור יוזר היינו שמחים לקבל הודעה מה נכשל בדיוק ומה אפשר לעשות את זה חוץ מאשר הודעה גנרית.
+משהו נכשל פה והמטרה של להביא את הדאטה לא הצליחה - אבל למה בדיוק ומה אפשר לעשות.
+אנחנו לא רוצים שיהיה לנו שגיאה גנרית. יותר עוזר שיהיה לנו מידע
+
+Real-world async code is tricky.
+Let's start with the happy path.
+:click
+Now split it
+A simple fetch can fail due to network errors, CORS, server errors, or auth failures.
+Even if the response is ok, parsing JSON might throw syntax errors.
+So we end up with nested try-catch blocks and lots of error handling boilerplate.
+Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
+This complexity quickly grows and is hard to maintain.
 -->
 
----
-layout: intro
-class: text-center pb-5
-glowX: 50
-glowY: 120
----
-
-<h1 text-4xl>
-Thank you！
-</h1>
-
-Slides available at [nirtamir.com](https://nirtamir.com)
-
----
-title: notes
----
-
-# Links
-
-- [Effect website](https://www.effect.website)
-- [Effect: Beginners Complete Getting Started](https://www.typeonce.dev/course/effect-beginners-complete-getting-started)
-
----
-
-# Videos
-
-- [The Simple Secret Behind Effect’s Power](https://youtu.be/F5aWLtEdNjE)
-- [Effect: the unreadable library that captured my heart](https://youtu.be/S2GChOwivwQ)
-
----
-
-# Tweets
-
-![lowest-bar-of-entry.png](/lowest-bar-of-entry.png)
-
-<!--
-https://x.com/dillon_mulroy/status/1799811526020538555
--->
-
----
-
-# Tweets
-
-![tweet-problem-happy-path](/tweet-problem-happy-path.png)
-
-<!--
-https://x.com/dillon_mulroy/status/1803430049254633492
--->
-
----
-
-# Tweets
-
-![sneak-peak-verce-17-autocomplete](/sneak-peak-verce-17-autocomplete.png)
-
-<!--
-https://x.com/RhysSullivan/status/1971409275152130541
--->
 
 
 ---
 hide: true
-layout: feedback
 ---
 
-> Happy path blindness
-
-What happens if Auth.check throws? Does
-it throw? Can it throw more than one kind of
-error?
-What about Db.queryDomain?
-→ Can we retry on any errors?
-→ If so, do we need to consider a backoff
-interval for retrying?
-How should we communicate errors to
-callers? Should we pass through errors? All of
-them? Should we wrap them with custom
-errors?
-
-The benefits
-→ Crystal clear guarantees of how our code will
-run at a glance. If the computation succeeds we'll
-end up with the Ok type, if it fails we'll end up with
-Err type
-→ No hidden control flow (e.g. try/catch).
-→ The result type is composable. We can chain
-computations together that may fail, with static
-guarantees that we'll gracefully handle the
-unhappy path.
-→ Typed error tracking via unions on the Err type.
-
-Treating errors as values with the Result type-whether
-with an implementation like neverthrow or a simple
-discriminated union-will make your code safer, more
-resilient, and predictable.
-
-Defects
-There are two kinds of errors-those
-that we can expect, program
-defensively against, and analyze
-statically-and those that are truly
-exceptional and outside of our contro l.
-
-Errors are typed as unknown
-
-```ts
-try
-}
-catch
-(error: unknown) {
-}
-```
-
-> typescript/javascript happy path blindness is real.
->
-> go through a critical code path in your application and note every single place an error can be thrown. are you handling each appropriately?
->
-> we did this with part of our domain renewal flow.
->
-> from 3 errors to 17
-
-When you execute any plain typescript function you have no way of knowing what may go wrong unless you read the function implementation
-
-Error handling in practice is 2 steps:
-
-Collecting possible errors
-Handling errors
-
-Before running the effect we write some code to define what happens if Effect contains UnknownException.
-
-This operation is called Recovering from an error.
-
-we always know from the type what errors can happen.
-
-Separate program definition from error handling
-
----
-hide: true
----
+# Wrap the results instead of throwing
 
 ```ts twoslash
-import { $ } from "execa";
-try {
-  const { message: currentBranch } = await $`git branch --show-current`;
-} catch (error) {
-  console.error(error);
+type Result<Data, Error> =
+  | { data: Data; error?: never }
+  | { data?: never; error: Error };
+```
+
+<!--
+In languages like Go, there’s no concept of throwing errors — you return them instead.
+We can do something similar in TypeScript. By defining a Result type with Data and Error generics,
+we can return either the data or the error — but never both
+-->
+
+---
+hide: true
+---
+
+# Wrap the results instead of throwing
+
+```ts twoslash
+class CannotDivideByZeroError extends Error {
+  _tag = "CannotDivideByZeroError";
+}
+
+type Result<Data, Error> =
+  | { data: Data; error?: never }
+  | { data?: never; error: Error };
+
+// ---cut-before---
+function divide(a: number, b: number): Result<number, CannotDivideByZeroError> {
+  if (b === 0) {
+    return { error: new CannotDivideByZeroError() };
+    //       ^^^^^
+  }
+  return { data: a / b };
+  //       ^^^^
+}
+
+const result = divide(4, 0);
+
+if (result.error == null) {
+  console.log(result.data);
+} else {
+  console.error(result.error);
 }
 ```
+
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 75, height:130 }" :click-3="{ y: 205, height:150 }"  />
+
+<img v-click="[2]" v-drag="[473,139,393,98]" src="/result-type.png" class="z-30" />
+
+<img v-click="[5]" v-drag="[205,346,211,60]" src="/error-cannot-divide-prop.png" class="z-30" />
+
+<img v-click="[4]" v-drag="[183,311,89,68]" src="/data-number.png" class="z-30" />
+
+<!--
+[click]
+In languages like Go, there’s no concept of throwing errors — you return them instead.
+We can do something similar in TypeScript.
+[click]
+Here, the Result type makes sure we either get data or error, but not both.
+
+[click]
+[click] 
+TypeScript even infers the structure for us, so we can easily pattern match or check which case we’re in.
+[click]
+And the nice part is, it makes the function’s possible errors explicit in the type system.
+[click]
+But — and it’s a big but — it’s verbose.
+-->
 
 ---
 hide: true
@@ -2539,6 +2514,40 @@ Effect.runPromise(
   ),
 );
 ```
+
+---
+hide: true
+---
+
+# Watch for Unexpected Throws
+
+```ts twoslash
+// @filename: divide.ts
+export function divide(a: number, b: number) {
+  if (b === 0) {
+    throw new Error("Cannot divide by 0");
+  }
+  return a / b;
+}
+
+// @filename: index.ts
+
+// ---cut-before---
+import { divide } from "./divide";
+
+try {
+  const result = divide(4, 0); // throws new Error("Cannot divide by 0")
+} catch (error) {
+  //
+}
+```
+
+<!--
+We also need to remember that a function can throw an error,
+and TypeScript won’t tell us.
+There’s no throws annotation, so we have to be careful when calling functions that might fail.
+-->
+
 
 ---
 hide: true
