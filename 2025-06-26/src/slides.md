@@ -100,7 +100,7 @@ This makes composition easy and refactoring safe.
 transition: view-transition
 ---
 
-# But... edge cases
+# When the type system can't help
 
 ```ts
 const result = divide(4, 0); // Infinity
@@ -117,7 +117,7 @@ This is where the guarantees start breaking down.
 
 ---
 
-# The unknown error problem
+# Errors are typed as 'unknown'
 
 ```ts
 try {
@@ -214,7 +214,7 @@ We just hope it works and add a generic try-catch if we remember.
 layout: section
 ---
 
-# Error handling in TypeScript
+# How we handle errors today
 
 <!--
 So how we handle errors in TypeScript?
@@ -222,7 +222,7 @@ So how we handle errors in TypeScript?
 
 ---
 
-# We need to check the error types ourselves
+# Custom error classes
 
 ```ts
 class CustomError extends Error {
@@ -294,7 +294,7 @@ This works, but it’s manual and easy to forget or get wrong.
 
 ---
 
-# Errors as Values
+# Return errors as Values
 
 ```ts
 type Result<Data, Error> =
@@ -592,7 +592,7 @@ No surprises.
 
 ---
 
-# Handling Errors - The Problem
+# Error in the type
 
 ```ts
 const result = Effect.runSync(program);
@@ -608,7 +608,7 @@ The compiler is warning us.
 
 ---
 
-# Handling Errors - The Solution
+# Error handled in the type
 
 ```ts {all|1-3|3|all}
 const safeProgram = program.pipe(
@@ -670,7 +670,7 @@ The type system won't let us forget.
 
 ---
 
-# Multiple Errors
+# Real programs have many failures
 
 ```ts {all|3-4|6-8|10-15|all}
 import { Effect, Data } from "effect";
@@ -914,7 +914,7 @@ Each attempt runs automatically until the card is accepted.
 
 ---
 
-# Effect.retry recurs
+# Beyond Error Handling: Retry with schedules
 
 Retry an effect a fixed number of times
 
@@ -945,7 +945,7 @@ It stops once it succeeds or reaches the limit.
 
 ---
 
-# Effect.retry exponential
+# Beyond Error Handling: Exponential backoff
 
 Retry with exponential backoff
 
@@ -973,7 +973,7 @@ Each retry waits longer than the last, reducing pressure and avoiding too-freque
 layout: two-cols-header
 ---
 
-# More errors - fewer problems
+# More errors - better visibility
 
 ::left::
 
