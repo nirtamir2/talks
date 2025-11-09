@@ -24,7 +24,7 @@ layout: center
 
 <!--
 This talk will change the way you think about handling errors in TypeScript.
-We'll explore the Effect library - and see how it solves problems you might not even realize you have.
+We'll explore the Effect library - and see how it brings errors into the type system.
 -->
 
 ---
@@ -102,7 +102,12 @@ transition: view-transition
 
 # But... edge cases
 
-```ts
+```ts twoslash
+function divide(a: number, b: number) {
+  return a / b;
+}
+
+// ---cut-before---
 const result = divide(4, 0); // Infinity
 ```
 
@@ -119,7 +124,14 @@ This is where the guarantees start breaking down.
 
 # The unknown error problem
 
-```ts
+```ts twoslash
+function divide(a: number, b: number) {
+  if (b === 0) {
+    throw new Error("Cannot divide by 0");
+  }
+  return a / b;
+}
+// ---cut-before---
 try {
   const result = divide(4, 0);
 } catch (error /* unknown */) {
@@ -146,15 +158,17 @@ We have to manually check its shape or just hope for the best.
 
 ````md magic-move
 ```ts
-import { makeCoffee } from "./makeCoffee";
+import { doSomething } from "./doSomething";
 
-const coffee = makeCoffee();
+const result = doSomething();
+// Using the result...
 ```
 
 ```ts
-import { makeCoffee } from "./makeCoffee";
+import { doSomething } from "./doSomething";
 
-const coffee = makeCoffee(); // 💥 throws Error("MachineOutOfWaterError ☕️")
+const result = doSomething(); // 💥 throws Error("Unexpected")
+// We never see this line
 ```
 ````
 
@@ -164,11 +178,9 @@ Here's an even bigger problem.
 This function throws an error, but TypeScript doesn't tell us.
 There's no "throws" annotation in TypeScript.
 We have to read the implementation or just find out at runtime.
-In production.
+In production. With real users.
 -->
 
----
-hide: true
 ---
 
 # Real example: fetch
@@ -252,7 +264,8 @@ layout: section
 # [Effect](https://effect.website/docs/getting-started/introduction/)
 
 <div class="text-2xl">
-is a powerful TypeScript library designed to help developers easily create complex, synchronous, and asynchronous programs.</div>
+A TypeScript library that puts errors in your types
+</div>
 
 <!--
 Effect is a powerful TypeScript library that brings errors into your type system.
@@ -263,13 +276,20 @@ It makes every possible failure explicit and gives you tools to handle them eleg
 
 # The Effect type
 
-```ts
+```ts twoslash
+// ---cut-before---
 import type { Effect } from "effect";
 
-//               ✅      🚨        📦
-//
-//               ▼       ▼         ▼
-Effect.Effect<Success, Error, Requirements>;
+type Success = number;
+type Requirements = never;
+
+//                                    ┌─── ✅ Success value
+//                                    │
+//                                    │       ┌─── 🚨 Possible errors
+//                                    │       │
+//                                    │       │         ┌─── 📦 Dependencies needed
+//                                    ▼       ▼         ▼
+type ProgramEffect = Effect.Effect<Success, Error, Requirements>;
 ```
 
 <!--
@@ -284,38 +304,24 @@ No hidden behaviors, no surprises.
 
 ---
 
-# Effect Values
-
-```ts
-import { Effect } from "effect";
-
-const value = Effect.succeed(42); // Effect.Effect<number, never, never>
-
-const error = Effect.fail("Oops"); // Effect.Effect<never, string, never>
-```
-
-<!-- <img v-click=[1] src="/effect-number.png" v-drag="[71,160,226,89]" /> -->
-
-<!-- <img v-click=[2] src="/effect-error.png" v-drag="[82,271,218,90]" /> -->
-
-<!--
-We can create effects using Effect.succeed for successful values, or Effect.fail for errors. This avoids throwing exceptions and keeps errors explicit and typed.
--->
-
----
-
 # Effects are blueprints
 
-```ts
+```ts twoslash
+import { Effect } from "effect";
+
+// ---cut-before---
+
 const program = Effect.succeed(42);
 // This doesn't run anything yet!
+// It's a blueprint - a recipe - not a cooked meal
 
 const result = Effect.runSync(program);
 // NOW it runs and we get 42
 ```
 
 <!--
-An Effect is like a blueprint - it describes what to do, but doesn't do it.
+This is crucial to understand.
+An Effect is like a recipe card - it describes what to do, but doesn't do it.
 When you create an Effect, nothing happens yet.
 Only when you "run" it does it execute.
 
@@ -327,20 +333,108 @@ before anything actually runs.
 
 ---
 
+# Before Effect
+
+```ts
+async function program() {
+  const data = await fetchData(); // might throw
+  const parsed = parseData(data); // might throw
+  return saveData(parsed); // might throw
+}
+
+// What can go wrong? Nobody knows! 🤷
+```
+
+<!--
+Here's typical TypeScript.
+Three operations, each might fail, but the function signature doesn't tell us anything.
+We have to read the implementation, hope for documentation, or just cross our fingers.
+-->
+
+---
+
+# After Effect
+
+```ts {all|1|3-7|all}
+const program =  Effect.gen(function* () {
+    const data = yield* fetchData(); // Effect<Data, FetchError>
+    const parsed = yield* parseData(data); // Effect<Parsed, ParseError>
+    return yield* saveData(parsed); // Effect<Data, SaveError>
+  });
+}
+
+// The type tells us EXACTLY what can fail ✅
+```
+
+<!--
+With Effect, the function signature tells the complete story.
+[click]
+Every possible error is tracked in the type: FetchError, ParseError, SaveError.
+
+[click]
+Inside Effect.gen, we write almost like normal code.
+yield* unwraps the Effect and gives us the value
+If any step fails, the error propagates automatically
+The compiler knows about all of them
+
+[click]
+No surprises, no hidden failures.
+This is the key difference.
+
+[PAUSE - this is important]
+-->
+
+---
+
+# What does yield\* do?
+
+```ts {all|3|4|5|all}
+const program = Effect.gen(function* () {
+  // yield* unwraps Effects and gives you the value
+  const data = yield* fetchData(); // Gets the actual Data
+  const parsed = yield* parseData(data); // Gets the Parsed value
+  return yield* saveData(parsed); // Gets the final result
+
+  // If any step fails, the error bubbles up automatically
+  // The type system tracks all possible errors
+});
+```
+
+<!--
+Let me clarify what yield* does - it's important.
+
+[click]
+When you yield* an Effect, it unwraps it and gives you the success value.
+[click]
+So you can use it like a normal variable.
+[click]
+Each yield* gets the value from that Effect.
+
+[click]
+But here's the magic: if any Effect fails, the error bubbles up automatically.
+You don't write try-catch everywhere.
+The errors just accumulate in the type signature.
+
+Think of yield* like await, but it also tracks errors in types.
+-->
+
+---
+
 # A Real Example
 
-```ts {all|3|7,12|8-11|5-7|all}
-import { Effect, Data } from "effect";
+```ts {all|3|5-7|9-14|all}
+import { Data, Effect } from "effect";
 
-class PaymentFailed extends Data.TaggedError("PaymentFailed")<{}> {}
+class DivideByZeroError extends Data.TaggedError("DivideByZeroError")<{}> {}
 
-//      ┌─── Effect<string, PaymentFailed, never>
+//      ┌─── Effect<number, DivideByZeroError, never>
 //      ▼
 const program = Effect.gen(function* () {
-  if (Math.random() < 0.1) {
-    return yield* Effect.fail(new PaymentFailed());
+const random = 
+  if (b === 0) {
+    return yield* Effect.fail(new DivideByZeroError());
   }
-  return "payment-1234";
+  return a / b;
 });
 ```
 
@@ -351,26 +445,12 @@ Let's build something real with what we learned.
 First, we define a custom error type. This is a tagged error that Effect can recognize.
 
 [click]
-Now, we define a program using `Effect.gen()`.  
-It accepts a generator function, so we write `function*`.
+The return type tells us everything: we get a number on success, or DivideByZeroError on failure.
 
 [click]
-Inside our generator function we generate a random number to simulate failure
-
-If its below 0.1, we yield* Effect.fail with our typed error.
-
-The 'yield*' is like 'await' - it unwraps Effect values.
-
-When you yield* an Effect, it unwraps it and gives you the success value.
-
-So you can use it like a normal variable.
-
-But here's the magic: if any Effect fails, the error bubbles up automatically.
-You don't write try-catch everywhere.
-The errors just accumulate in the type signature.
-
+Inside Effect.gen, we check for division by zero.
+If b is zero, we yield* Effect.fail with our typed error.
 yield* here propagates the error up.
-
 Otherwise, we return the result.
 
 [click]
@@ -385,7 +465,7 @@ No surprises.
 
 ```ts
 const result = Effect.runSync(program);
-// 💥 throws PaymentFailed
+// 💥 throws DivideByZeroError
 ```
 
 <!--
@@ -399,13 +479,16 @@ The compiler is warning us.
 
 # Handling Errors - The Solution
 
-```ts {all|1-3|3|all}
+```ts {all|1-4|6-7|all}
 const safeProgram = program.pipe(
-  Effect.catchTag("PaymentFailed", () => Effect.succeed("On the house 💸")),
-); // Effect<string, never, never>
+  Effect.catchTag(
+    "DivideByZeroError",
+    () => Effect.succeed(Infinity), // Return Infinity like JavaScript does
+  ),
+); // Effect<number, never, never>
 
 const result = Effect.runSync(safeProgram);
-// string - Safe! ✅
+// Infinity - Safe! ✅
 ```
 
 <!--
@@ -413,12 +496,12 @@ Here's where Effect shines.
 
 [click]
 We use catchTag to handle specific errors by their tag.
-TypeScript autocompletes "PaymentFailed" because it's in the type.
-When it happens, we recover by returning a different string value.
+TypeScript autocompletes "DivideByZeroError" because it's in the type.
+When it happens, we recover by returning Infinity - just like JavaScript's default behavior.
 But now it's explicit and intentional.
 
 [click]
-Look at the new type: Effect<string, never, never>
+Look at the new type: Effect<number, never, never>
 The error is GONE. We handled it completely.
 Now when we run it, it's guaranteed to succeed.
 
@@ -435,26 +518,25 @@ And the type system keeps perfect track of what's handled and what's not.
 
 ````md magic-move
 ```ts
-// ❌ Before handling
-const program: Effect<string, PaymentFailed, never>;
-// Compiler says: "You have an unhandled error!"
+const program: Effect<number, DivideByZeroError, never>
+// Compiler: "Hey! You have an unhandled error!"
 ```
 
 ```ts
-// ✅ After handling  
-const recovered: Effect<string, never, never>;
-// Compiler says: "All good! Safe to run!"
+const recovered: Effect<number, never, never>
+// Compiler: "All good! No errors left!"
 ```
 ````
 
 <!--
 This is the superpower Effect gives us.
 
-Before we handle the error, the type shows it's there.
+Before we handle the error, the compiler tells us it's there.
 [click]
-After we handle it, the error becomes 'never'—meaning zero errors remain. 
+After we handle it, the type changes to "never" - meaning no errors remain.
 
-The type system won't let us forget.
+The type system is our guide.
+It won't let us forget about errors.
 -->
 
 ---
@@ -462,7 +544,7 @@ The type system won't let us forget.
 # Multiple Errors
 
 ```ts {all|3-4|6-8|10-15|all}
-import { Effect, Data } from "effect";
+import { Data, Effect } from "effect";
 
 class NetworkError extends Data.TaggedError("NetworkError")<{}> {}
 class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
@@ -534,59 +616,6 @@ The compiler won't let us.
 -->
 
 ---
-
-# Before Effect
-
-```ts
-async function program() {
-  const data = await fetchData(); // might throw
-  const parsed = parseData(data); // might throw
-  return saveData(parsed); // might throw
-}
-
-// What can go wrong? Nobody knows! 🤷
-```
-
-<!--
-Here's typical TypeScript.
-Three operations, each might fail, but the function signature doesn't tell us anything.
-We have to read the implementation, hope for documentation, or just cross our fingers.
--->
-
----
-
-# After Effect
-
-```ts {all|1|2,6|3-7|all}
-const program: Effect<Data, FetchError | ParseError | SaveError> = Effect.gen(function* () {
-    const data = yield* fetchData(); // Effect<Data, FetchError>
-    const parsed = yield* parseData(data); // Effect<Parsed, ParseError>
-    return yield* saveData(parsed); // Effect<Data, SaveError>
-  });
-
-// The type tells us EXACTLY what can fail ✅
-```
-
-<!--
-With Effect, the function signature tells the complete story.
-[click]
-Every possible error is tracked in the type: FetchError, ParseError, SaveError.
-
-[click]
-Inside Effect.gen, we write almost like normal code.
-[click]
-yield* unwraps the Effect and gives us the value
-If any step fails, the error propagates automatically
-The compiler knows about all of them
-
-[click]
-No surprises, no hidden failures.
-This is the key difference.
-
-[PAUSE - this is important]
--->
-
----
 layout: center
 ---
 
@@ -605,7 +634,7 @@ Effect extends that same power to errors.
 layout: center
 ---
 
-![generic error meme](./generic-error-meme.png){.h-80}
+![generic error meme](./generic-error-meme.png){.h-50}
 
 <!--
 This is what we're trying to avoid.
@@ -706,7 +735,7 @@ const withRetry = fetchUser(id).pipe(
 );
 ```
 
-<SlidevVideo autoreset="click" autoplay v-click >
+<SlidevVideo autoreset="click" autoplay v-click controls>
   <source src="/effect-exponential-retry-only.mov" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
@@ -734,7 +763,7 @@ This is all type-safe - Effect knows what errors can happen at each step.
 const withTimeout = fetchUser(id).pipe(Effect.timeout("5 seconds"));
 ```
 
-<SlidevVideo autoreset="click" autoplay v-click >
+<SlidevVideo autoreset="click" autoplay v-click controls>
   <source src="/effect-timeout.mov" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
