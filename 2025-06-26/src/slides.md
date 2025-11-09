@@ -7,20 +7,20 @@ mdc: true
 layout: center
 glowSeed: 4
 lang: en-US
-title: "TypeScript Without Surprises: Smarter Error Handling with Effect-TS"
+title: "TypeScript Without Surprises: Smarter Error Handling with Effect"
 ---
 
 ![](./nirtamir-animate.svg){.w-30.mt--10.mb-5}
 
 <!--
-TypeScript Without Surprises: Smarter Error Handling with Effect-TS
+TypeScript Without Surprises: Smarter Error Handling with Effect
 -->
 
 ---
 layout: center
 ---
 
-# TypeScript Without Surprises: Smarter Error Handling with Effect-TS
+# TypeScript Without Surprises: Smarter Error Handling with Effect
 
 <!--
 This talk will change the way you think about handling errors in TypeScript.
@@ -1135,4 +1135,4 @@ title: Resources
 
 **Community**
 
-- [Effect Discord](https://discord.gg/effect-ts) - Very active and helpful community
+- [Effect Discord](https://discord.gg/effect) - Very active and helpful community
