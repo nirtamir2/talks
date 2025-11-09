@@ -124,7 +124,7 @@ The **Camera** is like the eyes of the viewer — it defines what part of the 3D
 
 Then we can have **Light** - so we won't have everything dark
 
-and we have **Meshses** - which are the 3D object you actually see
+and we have **Meshes** - which are the 3D object you actually see
 -->
 
 ---
@@ -150,7 +150,7 @@ class: p-10
 
 ---
 hide: true
-title: Three.js Mesh
+title: Three.js Meshe
 layout: image
 image: /three.js mesh.png
 backgroundSize: contain
@@ -158,7 +158,7 @@ class: mix-blend-screen hue-rotate-180 contrast-180
 ---
 
 ---
-title: Three.js Mesh
+title: Three.js Meshe
 dragPos:
   foo: 459,48,83,44
 ---
@@ -441,9 +441,6 @@ export default function App() {
 </BrowserWrapper>
 
 ---
-hide: true
-title: "👍"
----
 
 @@@
 
@@ -619,8 +616,6 @@ url: https://gltf.pmnd.rs/
 
 ---
 title: "Physics"
-# hide: true
-# title: "👍"
 ---
 
 # Physics

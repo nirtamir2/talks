@@ -3,10 +3,9 @@
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "node",
-    "resolveJsonModule": true,
     "allowImportingTsExtensions": true,
     "noEmit": true,
     "allowSyntheticDefaultImports": true
   },
-  "exclude": ["**/*.md", "**/dist-stale/**", "**/dist/**"]
+  "exclude": ["**/*.md"]
 }
