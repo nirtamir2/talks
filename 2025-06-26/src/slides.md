@@ -208,8 +208,6 @@ We just hope it works and add a generic try-catch if we remember.
 [PAUSE - let this sink in]
 -->
 
-
-
 ---
 layout: section
 ---
@@ -652,7 +650,7 @@ const program: Effect<string, PaymentFailed, never>;
 ```
 
 ```ts
-// ✅ After handling  
+// ✅ After handling
 const recovered: Effect<string, never, never>;
 // Compiler says: "All good! Safe to run!"
 ```
@@ -769,11 +767,13 @@ We have to read the implementation, hope for documentation, or just cross our fi
 # After Effect
 
 ```ts {all|1|2,6|3-7|all}
-const program: Effect<Data, FetchError | ParseError | SaveError> = Effect.gen(function* () {
+const program: Effect<Data, FetchError | ParseError | SaveError> = Effect.gen(
+  function* () {
     const data = yield* fetchData(); // Effect<Data, FetchError>
     const parsed = yield* parseData(data); // Effect<Parsed, ParseError>
     return yield* saveData(parsed); // Effect<Data, SaveError>
-  });
+  },
+);
 
 // The type tells us EXACTLY what can fail ✅
 ```
@@ -796,6 +796,31 @@ This is the key difference.
 
 [PAUSE - this is important]
 -->
+
+---
+
+# The difference
+
+Let's see what changed
+
+````md magic-move
+``ts
+async function program() {
+const data = await fetchData();
+const parsed = parseData(data);
+return saveData(parsed);
+}
+
+```
+
+``ts
+const program = Effect.gen(function* () {
+    const data = yield* fetchData();
+    const parsed = yield* parseData(data);
+    return yield* saveData(parsed);
+  });
+```
+````
 
 ---
 layout: center
