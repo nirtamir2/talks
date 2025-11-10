@@ -429,7 +429,7 @@ Composing multiple such functions gets messy, since we now have to wrap and unwr
 
 ---
 
-![simpsons](/simpsons-better.png)
+![simpsons](/simpsons-better.png){.h-120 .m-auto}
 
 <!--
 You can ask any Go developers if this looks familiar…
@@ -870,7 +870,7 @@ Effect extends that same power to errors.
 layout: center
 ---
 
-![generic error meme](./generic-error-meme.png){.h-80}
+![generic error meme](/generic-error-meme.png){.h-130}
 
 <!--
 This is what we're trying to avoid.
@@ -1147,14 +1147,16 @@ glowX: 50
 glowY: 120
 ---
 
-<h1 text-4xl>
+<h1 class="text-4xl">
 Thank you!
 </h1>
 
-<div class="mt-8">
-<p>Slides: <b>nirtamir.com</b></p>
-<p>Effect: <b>effect.website</b></p>
+<div class="my-4">
+<p>Slides: <b><a href="https://nirtamir.com">nirtamir.com</a></b></p>
+<p>Effect: <b><a href="https://effect.website">effect.website</a></b></p>
 </div>
+
+<QRCode class="m-auto w-40 mix-blend-lighten" text="https://talks.nirtamir.com/2025/node-tlv/"/>
 
 <div class="mt-8 text-sm opacity-75">
 <p>Questions? Find me after or at nirtamir.com</p>

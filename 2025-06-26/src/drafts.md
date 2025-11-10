@@ -504,10 +504,11 @@ It basically gives you the missing piece TypeScript doesn’t handle natively.
 # The Effect type
 
 ```ts twoslash
-type Success = number;
-type Requirements = never;
 // ---cut-before---
 import type { Effect } from "effect";
+
+type Success = number;
+type Requirements = never;
 
 //                                    ┌─── Represents the success type
 //                                    │
@@ -548,7 +549,7 @@ We can create effects using Effect.succeed for successful values, or Effect.fail
 # Generating Effects
 
 ```ts {all|1-3|7,13|8|9-11|12|all|5-7}
-import { Effect, Random, Data } from "effect";
+import { Data, Effect, Random } from "effect";
 
 class CustomError extends Data.TaggedError("CustomError")<{}> {}
 
@@ -649,7 +650,7 @@ either right away, or later — and the type system keeps track for us.
 # Multiple error types
 
 ```ts {all|1-4|8,14|9-10|11-12|13|6-8|all}
-import { Effect, Random, Data } from "effect";
+import { Data, Effect, Random } from "effect";
 
 class HttpError extends Data.TaggedError("HttpError")<{}> {}
 class ValidationError extends Data.TaggedError("ValidationError")<{}> {}
@@ -918,6 +919,7 @@ For attemptParallelPark(), we retry with exponential backoff: Effect.retry(park,
 [click]
 Each retry waits longer than the last, reducing pressure and avoiding too-frequent attempts.
 -->
+
 ---
 hide: true
 ---
@@ -966,7 +968,7 @@ Effect helps you to fix your unsafe assumption. You can write your code in the h
 
 The type system tracks it all
 
-![generic error meme](./generic-error-meme.png){.h-40vmin}
+![generic error meme](/generic-error-meme.png){.h-40vmin}
 
 <!--
 And that’s the essence of Effect.
@@ -1110,7 +1112,6 @@ https://x.com/dillon_mulroy/status/1803430049254633492
 https://x.com/RhysSullivan/status/1971409275152130541
 -->
 
-
 ---
 hide: true
 layout: feedback
@@ -1193,6 +1194,7 @@ hide: true
 
 ```ts twoslash
 import { $ } from "execa";
+
 try {
   const { message: currentBranch } = await $`git branch --show-current`;
 } catch (error) {
@@ -1254,7 +1256,6 @@ This works, but it’s manual and easy to forget or get wrong.
 hide: true
 layout: stuff
 ---
-
 
 ---
 hide: true
@@ -1652,10 +1653,11 @@ hide: true
 # The Effect type
 
 ```ts twoslash
-type Success = number;
-type Requirements = never;
 // ---cut-before---
 import type { Effect } from "effect";
+
+type Success = number;
+type Requirements = never;
 
 //           ┌─── Represents the success type
 //           │      ┌─── Represents the error type
@@ -2154,7 +2156,6 @@ We always know from the type what errors can happen so we get auto-completion ab
 So we can write the code like the happy path and handle them seperately
 -->
 
-
 ---
 hide: true
 ---
@@ -2310,8 +2311,6 @@ So we end up with nested try-catch blocks and lots of error handling boilerplate
 Plus, every async function must be awaited and wrapped to avoid unhandled promise rejections.
 This complexity quickly grows and is hard to maintain.
 -->
-
-
 
 ---
 hide: true
@@ -2522,6 +2521,10 @@ hide: true
 # Watch for Unexpected Throws
 
 ```ts twoslash
+// @filename: index.ts
+// ---cut-before---
+import { divide } from "./divide";
+
 // @filename: divide.ts
 export function divide(a: number, b: number) {
   if (b === 0) {
@@ -2529,11 +2532,6 @@ export function divide(a: number, b: number) {
   }
   return a / b;
 }
-
-// @filename: index.ts
-
-// ---cut-before---
-import { divide } from "./divide";
 
 try {
   const result = divide(4, 0); // throws new Error("Cannot divide by 0")
@@ -2547,7 +2545,6 @@ We also need to remember that a function can throw an error,
 and TypeScript won’t tell us.
 There’s no throws annotation, so we have to be careful when calling functions that might fail.
 -->
-
 
 ---
 hide: true
@@ -2994,11 +2991,13 @@ hide: true
 ````md magic-move
 ```ts
 import { $ } from "execa";
+
 const { message: currentBranch } = await $`git branch --show-current`;
 ```
 
 ```ts
 import { $ } from "execa";
+
 try {
   const { message: currentBranch } = await $`git branch --show-current`;
 } catch (error) {
@@ -3016,6 +3015,7 @@ hide: true
 ```ts twoslash
 // ---cut-before---
 import type { Effect } from "effect";
+
 type Success = number;
 type Requirements = never;
 //                                 ┌─── Represents the success type

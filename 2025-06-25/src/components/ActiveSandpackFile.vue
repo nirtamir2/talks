@@ -28,6 +28,8 @@ const slotName = computed(() => {
   </div>
 
   <slot :name="slotName" />
-  <pre class="shiki shiki-themes vitesse-dark vitesse-light slidev-code h-full overflow-auto"><code>{{
+  <pre
+    class="shiki shiki-themes vitesse-dark vitesse-light slidev-code h-full overflow-auto"
+  ><code>{{
     sandpack.files[sandpack.activeFile].code }}</code></pre>
 </template>

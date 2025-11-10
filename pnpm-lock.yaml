@@ -100,7 +100,7 @@ catalogs:
       specifier: 66.4.0
       version: 66.4.0
     uqr:
-      specifier: ^0.1.2
+      specifier: 0.1.2
       version: 0.1.2
     vis-data:
       specifier: ^8.0.3
