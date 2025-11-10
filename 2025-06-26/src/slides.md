@@ -212,10 +212,44 @@ We just hope it works and add a generic try-catch if we remember.
 layout: section
 ---
 
-# If you don't know what the error is - how can you handle it properly?
+# How do you handle an error you can't see?
+
+<div class="text-2xl">
+We're back to the JavaScript days
+</div>
 
 <!--
-🔼
+Think about it for a moment.
+
+If a function doesn't tell you what can go wrong,
+how do you write proper error handling?
+
+Do you wrap everything in try-catch and return a generic error?
+
+This reminds me of JavaScript before TypeScript.
+Remember that world?
+
+You couldn't trust function return values.
+You had to dig into the code to see what structure the function returns.
+And be careful about undefined, or null.
+
+We had a lot of bugs because we couldn't track what can be null.
+Every function call was a gamble.
+
+TypeScript solved that problem beautifully.
+Now the compiler tells us exactly what a function returns.
+
+But here's what TypeScript DIDN'T solve:
+It doesn't tell us what errors a function can throw.
+
+And even when we know errors exist, we don't know WHAT TYPE they are.
+The catch block gives us 'unknown'.
+
+We're back to the old JavaScript problem - but for errors.
+No type safety. No compiler help. Just runtime surprises.
+
+This is the fundamental problem we're facing.
+We can't handle errors well if we don't know they exist OR what they are.
 -->
 
 ---
