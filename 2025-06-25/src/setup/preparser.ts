@@ -42,25 +42,6 @@ export default definePreparserSetup(() => {
 function transformSandpackBlock(match: string, blocksContent: string): string {
   const files = mergeByIndex(extractFilesFromBlocks(blocksContent));
   const filesJson = JSON.stringify(files).replaceAll('"', "&quot;");
-  
-  // const templates = files
-  //   .flatMap((file, index) => {
-  //     return Object.entries(file).map(([filename, data]) => {
-  //       const codeWithTags = `\`\`\`tsx\n${data.code}\n\`\`\`\n`;
-  //       return html`
-  //         <template
-  //           v-slot:index_${String(index)}_filename_${filename.replaceAll(
-  //             ".",
-  //             "_",
-  //           )}
-  //         >
-  //           ${codeWithTags}
-  //         </template>
-  //       `;
-  //     });
-  //   })
-  //   .join("\n");
-
   return html`<FilesPlayground :files="${filesJson}"> </FilesPlayground> `;
 }
 
