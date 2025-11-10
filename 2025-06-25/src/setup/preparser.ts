@@ -31,6 +31,7 @@ const CODE_BLOCK_REGEX = /```tsx sandpack(?:\s+([^\n]*))?\n([\s\S]*?)```/g;
 export default definePreparserSetup(() => {
   return [
     {
+      name: "sandpack @@@",
       async transformSlide(content) {
         return content.replaceAll(SANDPACK_BLOCK_REGEX, transformSandpackBlock);
       },
@@ -41,26 +42,26 @@ export default definePreparserSetup(() => {
 function transformSandpackBlock(match: string, blocksContent: string): string {
   const files = mergeByIndex(extractFilesFromBlocks(blocksContent));
   const filesJson = JSON.stringify(files).replaceAll('"', "&quot;");
-  const templates = files
-    .flatMap((file, index) => {
-      return Object.entries(file).map(([filename, data]) => {
-        return html`
-          <template
-            v-slot:index_${String(index)}_filename_${filename.replaceAll(
-              ".",
-              "_",
-            )}
-          >
-            \`\`\`tsx ${data.code} \`\`\`
-          </template>
-        `;
-      });
-    })
-    .join("\n");
+  
+  // const templates = files
+  //   .flatMap((file, index) => {
+  //     return Object.entries(file).map(([filename, data]) => {
+  //       const codeWithTags = `\`\`\`tsx\n${data.code}\n\`\`\`\n`;
+  //       return html`
+  //         <template
+  //           v-slot:index_${String(index)}_filename_${filename.replaceAll(
+  //             ".",
+  //             "_",
+  //           )}
+  //         >
+  //           ${codeWithTags}
+  //         </template>
+  //       `;
+  //     });
+  //   })
+  //   .join("\n");
 
-  return html`<FilesPlayground :files="${filesJson}">
-    ${templates}
-  </FilesPlayground> `;
+  return html`<FilesPlayground :files="${filesJson}"> </FilesPlayground> `;
 }
 
 function createFileObject(
