@@ -6,7 +6,7 @@ Slides &amp; code for my talks, using [Slidev](https://sli.dev).
 
 ###### 2025
 
-- `en` [TypeScript Without Surprises: Smarter Error Handling with Effect-TS](./2025-06-26) - NodeTLV
+- `en` [TypeScript Without Surprises: Smarter Error Handling with Effect](./2025-06-26) - NodeTLV
 - `en` [Effortless 3D with react-three-fiber](./2025-06-25) - ReactNext
 
 ###### 2024

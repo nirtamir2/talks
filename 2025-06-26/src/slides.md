@@ -645,6 +645,8 @@ No surprises.
 # Error in the type
 
 ```ts
+//                               ┌─── Effect<string, PaymentFailed, never>
+//                               ▼
 const result = Effect.runSync(program);
 // 💥 throws PaymentFailed
 ```
@@ -1187,7 +1189,6 @@ Thank you!
 
 <div class="my-4">
 <p>Slides: <b><a href="https://nirtamir.com">nirtamir.com</a></b></p>
-<p>Effect: <b><a href="https://effect.website">effect.website</a></b></p>
 </div>
 
 <QRCode class="m-auto w-40 mix-blend-lighten" text="https://talks.nirtamir.com/2025/node-tlv/"/>
@@ -1213,13 +1214,14 @@ title: Resources
 
 - [Effect website](https://www.effect.website) - Official docs and guides
 - [Effect: Beginners Complete Getting Started](https://www.typeonce.dev/course/effect-beginners-complete-getting-started) - Free course
+- [Visual Effect](http://effect.kitlangton.com/) - Interactive effect examples
 
 **Videos**
 
 - [The Simple Secret Behind Effect's Power](https://youtu.be/F5aWLtEdNjE)
 - [Effect: the unreadable library that captured my heart](https://youtu.be/S2GChOwivwQ)
-- [Dillon Mulroy - More errors, fewer problems](https://www.youtube.com/watch?v=VcOIz7tOBoM) - The Vercel talk
+- [Dillon Mulroy - More errors, fewer problems](https://www.youtube.com/watch?v=VcOIz7tOBoM)
 
 **Community**
 
-- [Effect Discord](https://discord.gg/effect) - Very active and helpful community
+- [Effect Discord](https://discord.gg/effect-ts) - Very active and helpful community
