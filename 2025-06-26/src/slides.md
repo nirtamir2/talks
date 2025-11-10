@@ -212,6 +212,16 @@ We just hope it works and add a generic try-catch if we remember.
 layout: section
 ---
 
+# If you don't know what the error is - how can you handle it properly?
+
+<!-- 
+🔼
+ -->
+
+---
+layout: section
+---
+
 # How we handle errors today
 
 <!--
@@ -418,6 +428,14 @@ Composing multiple such functions gets messy, since we now have to wrap and unwr
 -->
 
 ---
+
+![simpsons](/simpsons-better.png)
+
+<!-- 
+You can ask any Go developers if this looks familiar…
+ -->
+
+---
 layout: section
 ---
 
@@ -508,7 +526,7 @@ const error = Effect.fail("Oops"); // Effect.Effect<never, string, never>
 <!-- <img v-click=[2] src="/effect-error.png" v-drag="[82,271,218,90]" /> -->
 
 <!--
-We can create effects using Effect.succeed for successful values, or Effect.fail for errors. This avoids throwing exceptions and keeps errors explicit and typed.
+We can create effects using Effect.succeed for successful values, or Effect.fail for errors. This avoids throwing exceptions and keeps errors explicit and typed. It looks very similar to Promise.resolve & Promise.reject.
 -->
 
 ---
@@ -546,7 +564,7 @@ class PaymentFailed extends Data.TaggedError("PaymentFailed")<{}> {}
 //      ┌─── Effect<string, PaymentFailed, never>
 //      ▼
 const program = Effect.gen(function* () {
-  if (Math.random() < 0.1) {
+  if (isCreditExceeded()) {
     return yield* Effect.fail(new PaymentFailed());
   }
   return "payment-1234";
@@ -652,7 +670,7 @@ const program: Effect<string, PaymentFailed, never>;
 ```ts
 // ✅ After handling
 const recovered: Effect<string, never, never>;
-// Compiler says: "All good! Safe to run!"
+// Compiler says: "All errors are handled!"
 ```
 ````
 
@@ -698,6 +716,7 @@ When we compose Effects, the errors accumulate in the type.
 NetworkError OR ValidationError - both are tracked.
 
 [click]
+validateUser is a function my teammate wrote - I don't need to took at the implementation to see what it throws.  
 Each yield* might introduce a new error type.
 The compiler collects them all.
 
@@ -710,7 +729,7 @@ No hidden surprises.
 
 # Handling Multiple Errors
 
-```ts {all|1-6|8-9|all}
+```ts {all|1-6|3|4|1-6|8-9|all}
 const safeProgram = program.pipe(
   Effect.catchTags({
     NetworkError: () => Effect.succeed(cachedUser),
@@ -719,15 +738,20 @@ const safeProgram = program.pipe(
 ); // Effect<User, BadRequestError, never>
 
 const result = Effect.runSync(safeProgram);
-// NetworkError and ValidationError are gone! ✅
+// NetworkError and ValidationError are handled! ✅
 ```
 
 <!--
 We can handle multiple errors at once with catchTags.
 
 [click]
+
+[click]
 For NetworkError, we fall back to a cached user.
+[click]
 For ValidationError, we transform it into a different error type.
+
+[click]
 
 This is powerful - we can recover from some errors and transform others.
 The type system tracks everything.
@@ -804,23 +828,28 @@ This is the key difference.
 Let's see what changed
 
 ````md magic-move
-``ts
+```ts
 async function program() {
-const data = await fetchData();
-const parsed = parseData(data);
-return saveData(parsed);
+  const data = await fetchData();
+  const parsed = parseData(data);
+  return saveData(parsed);
 }
-
 ```
 
-``ts
+```ts
 const program = Effect.gen(function* () {
-    const data = yield* fetchData();
-    const parsed = yield* parseData(data);
-    return yield* saveData(parsed);
-  });
+  const data = yield* fetchData();
+  const parsed = yield* parseData(data);
+  return yield* saveData(parsed);
+});
 ```
 ````
+
+<!-- 
+Look at the difference
+[click]
+It's almost identical
+ -->
 
 ---
 layout: center
@@ -881,7 +910,7 @@ Let’s take a look at that next with few examples.
 
 ---
 
-# Beyond Error Handling: Timeouts
+# [Beyond Error Handling:](https://effect.kitlangton.com/) Timeouts
 
 Add a time limit to an effect, failing with timeout if exceeded
 
@@ -890,7 +919,7 @@ const pizza = orderDelivery();
 const result = Effect.timeout(pizza, "1 second");
 ```
 
-<SlidevVideo autoreset="click" autoplay v-click controls>
+<SlidevVideo autoreset="click" autoplay v-click>
   <source src="/effect-timeout.mov" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
@@ -912,7 +941,7 @@ After one second, it fails automatically with a timeout.
 
 ---
 
-# Beyond Error Handling: Retries
+# [Beyond Error Handling:](https://effect.kitlangton.com/) Retries
 
 Run an effect repeatedly until it succeeds, ignoring errors
 
@@ -921,7 +950,7 @@ const swipeCard = swipeCard();
 const result = Effect.eventually(swipeCard);
 ```
 
-<SlidevVideo autoreset="click" autoplay v-click controls>
+<SlidevVideo autoreset="click" autoplay v-click>
   <source src="/effect-eventually.mov" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
@@ -939,7 +968,7 @@ Each attempt runs automatically until the card is accepted.
 
 ---
 
-# Beyond Error Handling: Retry with schedules
+# [Beyond Error Handling:](https://effect.kitlangton.com/) Retry with schedules
 
 Retry an effect a fixed number of times
 
@@ -952,7 +981,7 @@ const snoozeSchedule = Schedule.intersect(
 const result = Effect.retry(wakeUp, snoozeSchedule);
 ```
 
-<SlidevVideo autoreset="click" autoplay v-click controls>
+<SlidevVideo autoreset="click" autoplay v-click>
   <source src="/effect-retry-only.mov" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
@@ -970,7 +999,7 @@ It stops once it succeeds or reaches the limit.
 
 ---
 
-# Beyond Error Handling: Exponential backoff
+# [Beyond Error Handling:](https://effect.kitlangton.com/) Exponential backoff
 
 Retry with exponential backoff
 
@@ -979,7 +1008,7 @@ const park = attemptParallelPark();
 const result = Effect.retry(park, Schedule.exponential("700 millis"));
 ```
 
-<SlidevVideo autoreset="click" autoplay v-click controls>
+<SlidevVideo autoreset="click" autoplay v-click>
   <source src="/effect-exponential-retry-only.mov" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
@@ -1046,9 +1075,9 @@ type RenewDomainError =
 
 <!--
 At Vercel, they had a feature for auto-renewing domains — and lots of mysterious issues.
-After switching to Effect and similar concepts, suddenly the error count jumped — from 3 [click] to 17. 
+After switching to Effect (and neverthrow) and similar concepts, suddenly the error count jumped — from 3 [click] to 17. 
 But that was actually good news — it meant they weren’t hiding problems anymore.
-They could finally see what was really happening.
+They could finally see what was really happening. And when you know your errors you can decide how to handle them - by recover from them with retries mechanism, transforming them, or giving the user more context about what fails. 
 
 
 It becomes much easier to find the root cause of an error instead of just seeing a generic one — and since it’s still TypeScript, it doesn’t force us into a new ecosystem.
@@ -1065,11 +1094,10 @@ layout: section
 
 <v-clicks>
 
-1. **TypeScript is great for the happy path**
-2. **But errors are invisible in normal TypeScript**
-3. **Effect puts errors in your types**
-4. **The compiler guides you to handle them**
-5. **More specific errors = fewer problems**
+- **TypeScript is great for the happy path**
+- **But errors are invisible in normal TypeScript**
+- **Effect types your errors**
+- **Specific errors = reliable code**
 
 </v-clicks>
 
@@ -1084,8 +1112,6 @@ But when things fail, we lose that safety. Errors are invisible and untyped.
 
 [click]
 Effect brings errors into the type system, making them visible and trackable.
-
-[click]
 The compiler becomes your guide - it won't let you ignore errors.
 You decide when and how to handle them, but you can't forget them.
 
