@@ -214,9 +214,9 @@ layout: section
 
 # If you don't know what the error is - how can you handle it properly?
 
-<!-- 
+<!--
 🔼
- -->
+-->
 
 ---
 layout: section
@@ -431,9 +431,9 @@ Composing multiple such functions gets messy, since we now have to wrap and unwr
 
 ![simpsons](/simpsons-better.png)
 
-<!-- 
+<!--
 You can ask any Go developers if this looks familiar…
- -->
+-->
 
 ---
 layout: section
@@ -845,11 +845,11 @@ const program = Effect.gen(function* () {
 ```
 ````
 
-<!-- 
+<!--
 Look at the difference
 [click]
 It's almost identical
- -->
+-->
 
 ---
 layout: center
