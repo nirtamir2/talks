@@ -40,6 +40,9 @@ class: pl-25
 - Senior Frontend developer
 - Loves open source and tooling
 - <mdi-web /> [nirtamir.com](https://nirtamir.com)
+<!-- - <mdi-github /> [@nirtamir2](https://github.com/nirtamir2) -->
+- <mdi-twitter /> [@NirTamir](https://twitter.com/NirTamir)
+<!-- - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
 
 <!--
 My name is Nir Tamir.
@@ -826,14 +829,12 @@ We have to read the implementation, hope for documentation, or just cross our fi
 
 # After Effect
 
-```ts {all|1|2,6|3-7|all}
-const program: Effect<Data, FetchError | ParseError | SaveError> = Effect.gen(
-  function* () {
-    const data = yield* fetchData(); // Effect<Data, FetchError>
-    const parsed = yield* parseData(data); // Effect<Parsed, ParseError>
-    return yield* saveData(parsed); // Effect<Data, SaveError>
-  },
-);
+```ts {all|1,5|2-4|all}
+const program = Effect.gen(function* () {
+  const data = yield* fetchData(); // Effect<Data, FetchError>
+  const parsed = yield* parseData(data); // Effect<Parsed, ParseError>
+  return yield* saveData(parsed); // Effect<Data, SaveError>
+}); // Effect<Data, FetchError | ParseError | SaveError>
 
 // The type tells us EXACTLY what can fail ✅
 ```
@@ -845,7 +846,6 @@ Every possible error is tracked in the type: FetchError, ParseError, SaveError.
 
 [click]
 Inside Effect.gen, we write almost like normal code.
-[click]
 yield* unwraps the Effect and gives us the value
 If any step fails, the error propagates automatically
 The compiler knows about all of them
