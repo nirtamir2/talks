@@ -8,4 +8,13 @@
   overflow: auto;
   max-height: 200px;
 }
+
+code {
+  --prism-font-size: 16px;
+}
+
+.slidev-code {
+  --slidev-code-font-size: 16px;
+  --slidev-code-line-height: 22px
+}
 </style>
