@@ -190,6 +190,45 @@ There’s no throws annotation, so we have to be careful when calling functions 
 -->
 
 ---
+
+# Real example: fetch
+
+```ts
+async function getUser(id: string) {
+  const response = await fetch(`/api/users/${id}`);
+  return response.json();
+}
+
+// What can fail here?
+```
+
+<v-click>
+
+```ts
+// Network error? Server down? Rate limit?
+// Auth failure? Timeout? Invalid JSON?
+// 404? 500?
+// We have no idea! 🤷
+```
+
+</v-click>
+
+<!--
+Let's look at something we write every day.
+A simple fetch request.
+What can go wrong here?
+
+[click]
+
+Network errors, server errors, rate limits, auth failures, timeouts, invalid JSON...
+At least 6-7 different failure modes.
+But the type signature tells us nothing.
+We just hope it works and add a generic try-catch if we remember.
+
+[PAUSE - let this sink in]
+-->
+
+---
 layout: section
 ---
 

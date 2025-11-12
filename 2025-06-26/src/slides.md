@@ -58,7 +58,6 @@ layout: section
 
 <!--
 TypeScript is great - It helps us catch errors before they happen.
-Let's see how.
 -->
 
 ---
@@ -77,7 +76,6 @@ const result = divide("hi", 2);
 
 <!--
 If a function expects a number and we pass a string, TypeScript catches it immediately.
-Compile-time safety. Beautiful.
 -->
 
 ---
@@ -115,7 +113,6 @@ const result = divide(4, 0); // Infinity
 In real apps, we hit edge cases the type system can't catch.
 Dividing by zero returns Infinity - a valid number.
 TypeScript accepts it, but it's probably not what we want.
-This is where the guarantees start breaking down.
 -->
 
 ---
@@ -168,47 +165,6 @@ This function throws an error, but TypeScript doesn't tell us.
 There's no "throws" annotation in TypeScript.
 We have to read the implementation or just find out at runtime.
 In production.
--->
-
----
-hide: true
----
-
-# Real example: fetch
-
-```ts
-async function getUser(id: string) {
-  const response = await fetch(`/api/users/${id}`);
-  return response.json();
-}
-
-// What can fail here?
-```
-
-<v-click>
-
-```ts
-// Network error? Server down? Rate limit?
-// Auth failure? Timeout? Invalid JSON?
-// 404? 500?
-// We have no idea! 🤷
-```
-
-</v-click>
-
-<!--
-Let's look at something we write every day.
-A simple fetch request.
-What can go wrong here?
-
-[click]
-
-Network errors, server errors, rate limits, auth failures, timeouts, invalid JSON...
-At least 6-7 different failure modes.
-But the type signature tells us nothing.
-We just hope it works and add a generic try-catch if we remember.
-
-[PAUSE - let this sink in]
 -->
 
 ---
@@ -485,7 +441,7 @@ For the happy path
 <!--
 So TypeScript is great - for the happy path.
 When everything goes right, the types guide us perfectly.
-But when things go wrong? We're flying blind.
+But when things go wrong? We're alone.
 
 [PAUSE]
 -->
@@ -621,7 +577,7 @@ It accepts a generator function, so we write `function*`.
 [click]
 Inside our generator function we generate a random number to simulate failure
 
-If its below 0.1, we yield* Effect.fail with our typed error.
+If isCreditExceeded, we yield* Effect.fail with our typed error.
 
 The 'yield*' is like 'await' - it unwraps Effect values.
 
