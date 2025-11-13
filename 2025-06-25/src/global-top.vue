@@ -8,4 +8,9 @@
   overflow: auto;
   max-height: 200px;
 }
+
+.sp-code-editor {
+  --sp-font-size: 16px;
+  --sp-font-lineHeight: 20px;
+}
 </style>
