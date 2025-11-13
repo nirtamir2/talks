@@ -75,7 +75,7 @@ const result = divide("hi", 2);
 ```
 
 <!--
-If a function expects a number and we pass a string, TypeScript catches it immediately.
+If a function expects a number and we pass a string, we get compile time error.
 -->
 
 ---
@@ -111,8 +111,8 @@ const result = divide(4, 0); // Infinity
 
 <!--
 In real apps, we hit edge cases the type system can't catch.
-Dividing by zero returns Infinity - a valid number.
-TypeScript accepts it, but it's probably not what we want.
+Dividing by zero, for example, returns Infinity.
+Its a valid number - so TypeScript accepts it - but it's probably not what we want.
 -->
 
 ---
@@ -137,7 +137,7 @@ try {
 We can throw an error and catch it.
 But notice - the error is typed as unknown.
 TypeScript has no idea what this error looks like.
-We have to manually check its shape or just hope for the best.
+We have to manually check its shape.
 -->
 
 ---
@@ -160,7 +160,11 @@ const coffee = makeCoffee(); // 💥 throws Error("MachineOutOfWaterError ☕️
 
 <!--
 Here's an even bigger problem.
+❓ Look at this function.  TypeScript tells us what parameters this function needs and how to call it.
 [click]
+❓But this function throws an error - and TypeScript doesn't tell us
+❓ TODO: Type of the function image?
+
 This function throws an error, but TypeScript doesn't tell us.
 There's no "throws" annotation in TypeScript.
 We have to read the implementation or just find out at runtime.
@@ -188,27 +192,26 @@ Do you wrap everything in try-catch and return a generic error?
 This reminds me of JavaScript before TypeScript.
 Remember that world?
 
-You couldn't trust function return values.
-You had to dig into the code to see what structure the function returns.
-And be careful about undefined, or null.
+You couldn’t trust function parameters or return values.
+You had to dig into the code just to see what it returned.
+And always watch out for undefined and null.
 
-We had a lot of bugs because we couldn't track what can be null.
-Every function call was a gamble.
+We had so many bugs — just because we didn’t know what could be null.
 
 TypeScript solved that problem beautifully.
-Now the compiler tells us exactly what a function returns.
+Now the compiler tells us exactly what a function expects — and what it returns.
 
-But here's what TypeScript DIDN'T solve:
-It doesn't tell us what errors a function can throw.
+But… TypeScript doesn’t tell us what errors a function can throw.
 
-And even when we know errors exist, we don't know WHAT TYPE they are.
-The catch block gives us 'unknown'.
+Even when we know something might fail, the catch block gives us only unknown.
 
-We're back to the old JavaScript problem - but for errors.
-No type safety. No compiler help. Just runtime surprises.
+So we’re back to the old JavaScript problem — but this time, with errors.
 
-This is the fundamental problem we're facing.
-We can't handle errors well if we don't know they exist OR what they are.
+No type safety.
+No compiler help.
+Just runtime surprises.
+
+We can’t handle errors well if we don’t know they exist — or what they are.
 -->
 
 ---
@@ -343,7 +346,7 @@ Here, the Result type makes sure we either get data or error, but not both.
 [click]
 TypeScript even infers the structure for us, so we can easily pattern match or check which case we’re in.
 And the nice part is, it makes the function’s possible errors explicit in the type system.
-But — and it’s a big but — it’s verbose.
+But it has a lot of repetitive code.
 -->
 
 ---
@@ -417,7 +420,7 @@ function doSomething(): DoSomethingResult {
 
 <!--
 [click]
-Composing multiple such functions gets messy, since we now have to wrap and unwrap manually all the way through.
+Composing multiple such functions gets messy, since we now have to wrap and unwrap manually.
 -->
 
 ---
@@ -499,7 +502,6 @@ Error - what can go wrong
 Requirements - what dependencies we need
 
 This makes every possible outcome explicit.
-No hidden behaviors, no surprises.
 -->
 
 ---
@@ -520,6 +522,13 @@ const error = Effect.fail("Oops"); // Effect.Effect<never, string, never>
 
 <!--
 We can create effects using Effect.succeed for successful values, or Effect.fail for errors. This avoids throwing exceptions and keeps errors explicit and typed. It looks very similar to Promise.resolve & Promise.reject.
+
+Effect.succeed creates an effect that resolves with the number 42.
+So its type is: Effect<number, never, never> —
+meaning it produces a number, and it never fails or depends on anything.
+
+On the other hand, Effect.fail creates an effect that fails with the string "oops".
+So its type is: Effect<never, string, never>.
 -->
 
 ---
@@ -575,23 +584,19 @@ Now, we define a program using `Effect.gen()`.
 It accepts a generator function, so we write `function*`.
 
 [click]
-Inside our generator function we generate a random number to simulate failure
-
 If isCreditExceeded, we yield* Effect.fail with our typed error.
 
-The 'yield*' is like 'await' - it unwraps Effect values.
-
-When you yield* an Effect, it unwraps it and gives you the success value.
-
-So you can use it like a normal variable.
+The yield* works just like await.
+It unwraps the Effect and gives you the success value —
+so you can use it like a normal variable.
 
 But here's the magic: if any Effect fails, the error bubbles up automatically.
 You don't write try-catch everywhere.
 The errors just accumulate in the type signature.
 
-yield* here propagates the error up.
+yield* here is what propagates the error up.
 
-Otherwise, we return the result.
+Otherwise, we just return the result.
 
 [click]
 Now the function signature is honest.
