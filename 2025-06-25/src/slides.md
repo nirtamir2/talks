@@ -14,6 +14,10 @@ addons:
 
 ![](./nirtamir-animate.svg){.w-30.mt--10.mb-5}
 
+<!--
+Effortless 3D with react-three-fiber
+-->
+
 ---
 layout: center
 ---
@@ -21,9 +25,11 @@ layout: center
 # Effortless 3D with react-three-fiber
 
 ---
-title: About me
-layout: image-right
-image: ./nirtamir.png
+title: "About me"
+layout: intro
+glowSeed: 15
+glowOpacity: 0.3
+class: pl-25
 ---
 
 # Nir Tamir
@@ -31,9 +37,14 @@ image: ./nirtamir.png
 - Senior Frontend developer
 - Loves open source and tooling
 - <mdi-web /> [nirtamir.com](https://nirtamir.com)
+<!-- - <mdi-github /> [@nirtamir2](https://github.com/nirtamir2) -->
+- <mdi-twitter /> [@NirTamir](https://twitter.com/NirTamir)
+<!-- - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
 
 <!--
-Before we dive in, let me introduce myself. I'm Nir Tamir, and I'm doing frontend development for the last decade.
+My name is Nir. Nir Tamir.
+I've been doing frontend for over a decade.
+You can find more about me at nirtamir.com.
 -->
 
 ---
@@ -41,6 +52,8 @@ layout: section
 ---
 
 # The WOW effect
+
+<div v-click class="text-2xl">Worth it every time</div>
 
 <!--
 The wow effect.
@@ -50,11 +63,11 @@ It’s not because of a huge feature or complex logic—it’s usually something
 A smooth transition. A tiny 3D touch. A shadow that reacts to the mouse.
 
 It doesn’t take much.
+[click]
 But it feels like magic.
 Because those little moments show that someone cared.
-And that’s what makes people remember, engage, and fall in love with your product -->
-
-<div v-click class="text-2xl">Worth it every time</div>
+And that’s what makes people remember, engage, and fall in love with your product
+-->
 
 ---
 layout: section
@@ -97,14 +110,6 @@ A JavaScript library for creating 3D graphics in the browser.
 <!--
 We are going to use Three.js - which is a JavaScript library for creating 3D graphics in the browser. It's not a low-level WebGL or WebGPU
 -->
-
----
-layout: image
-image: /three-js-main.png
-backgroundSize: contain
-title: Three.js structure original
-hide: true
----
 
 ---
 layout: image
@@ -159,30 +164,7 @@ class: mix-blend-screen hue-rotate-180 contrast-180
 
 ---
 title: Three.js Meshe
-dragPos:
-  foo: 459,48,83,44
 ---
-
-<!--
-Mesh is made of:
-
-➕ Geometry (the shape) -
-It defines the vertices (points in space), faces (triangles built from those points) and the overal shape (cube, sphere, model...)
-
-
-🎨 Material (the look)
-
-This is the “skin” that wraps the geometry.
-
-It controls:
-    •	Color
-    •	Shininess
-    •	Transparency
-    •	Texture maps
-    •	How it reacts to light
-
-
-  -->
 
 <Transform v-drag="[469,239,349,326]" pos="" >
  <img src="/material-normal.png" />
@@ -208,6 +190,24 @@ Material
 
 <v-drag-arrow pos="550,100,70,120"/>
 
+<!--
+Mesh is made of:
+
+➕ Geometry (the shape) -
+It defines the vertices (points in space), faces (triangles built from those points) and the overal shape (cube, sphere, model...)
+
+🎨 Material (the look)
+
+This is the “skin” that wraps the geometry.
+
+It controls:
+    •	Color
+    •	Shininess
+    •	Transparency
+    •	Texture maps
+    •	How it reacts to light
+-->
+
 ---
 title: Three.js Geometries
 layout: image
@@ -220,7 +220,7 @@ backgroundSize: contain
 <!-- TODO: wireframe true -->
 
 <!--
-Here are sone geometries with the same normal material. 
+Here are some geometries with the same normal material. 
 Cube Sphere Cyliner Torus Plane - Notice that they all ends with Geometry
 -->
 
@@ -338,6 +338,10 @@ monacoRunAdditionalDeps:
 ```ts {monaco-run}
 import * as THREE from "three";
 
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.append(renderer.domElement);
+
 const scene = new THREE.Scene();
 
 const camera = new THREE.PerspectiveCamera(
@@ -347,30 +351,22 @@ const camera = new THREE.PerspectiveCamera(
   1000,
 );
 
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-document.body.append(renderer.domElement);
-
 const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial({ color: "#433F81" });
 const cube = new THREE.Mesh(geometry, material);
 
 scene.add(cube);
 
-function render() {
-  requestAnimationFrame(render);
-  cube.rotation.y += 0.01;
-  renderer.render(scene, camera);
-}
-
-render();
+renderer.render(scene, camera);
 ```
 
 <!--
-So let's see how Three.js code looks like.
-We create a WebGLRenderer, which set a canvas and we append it to the dom.
-Then we create a scene with a camera and then we create a mesh with Box geometry and normal material
+So let's see what vanilla Three.js code looks like.
+First, we create a WebGLRenderer - this creates a canvas element and handles all the low-level WebGL rendering.
+Then we create a Scene - think of it as a container for everything in our 3D world.
+We add a PerspectiveCamera to define our viewpoint.
+Finally, we create a mesh by combining a BoxGeometry with a MeshBasicMaterial.
+Notice how verbose this is - we'll see how R3F simplifies this in a moment.
 -->
 
 ---
@@ -383,6 +379,14 @@ layout: section
 ![Three.js logo](/three.js%20logo.svg){.w-30.absolute}
 
 React-three-fiber is a React renderer for three.js.
+
+<!--
+So we've seen Three.js - it's powerful but verbose.
+This is where react-three-fiber comes in.
+R3F is a React renderer for Three.js - which means it uses React's reconciliation to manage your 3D scene.
+Instead of imperatively creating objects and adding them to the scene, you declare what you want using JSX.
+It handles all the setup boilerplate and gives you React's component model for free.
+-->
 
 ---
 hide: true
@@ -444,7 +448,7 @@ export default function App() {
 
 @@@
 
-```tsx sandpack index=0 {1}
+```tsx sandpack index=0
 import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
@@ -553,6 +557,42 @@ export function Box(props: ThreeElements["mesh"]) {
 
 @@@
 
+<!--
+Now let's understand 3D space better.
+I've added an axesHelper - the red line is X, green is Y, blue is Z.
+Notice the mesh has position, scale, and rotation properties.
+Position moves it in 3D space - [x, y, z].
+Scale changes its size - [1, 1, 1] is normal size.
+Rotation turns it - measured in radians, not degrees.
+Play with these values to get a feel for 3D coordinates.
+
+[click]
+
+Now let's understand 3D space better.
+I've added an axesHelper - the red line is X, green is Y, blue is Z.
+Notice the mesh has position, scale, and rotation properties.
+Position moves it in 3D space - [x, y, z].
+Scale changes its size - [1, 1, 1] is normal size.
+Rotation turns it - measured in radians, not degrees.
+Play with these values to get a feel for 3D coordinates.
+
+[click]
+Now we're seeing React's real power.
+I've extracted the box into its own component.
+This lets us reuse it - see how we render two boxes at different positions?
+The Box component also has state - it tracks hover and active states.
+Click a box to scale it up. Hover to change its color.
+This is the magic of R3F - 3D objects behave like React components with props, state, and events.
+
+[click]
+Let's add animation.
+useFrame is R3F's animation hook - it runs every frame, about 60 times per second.
+We get delta, which is the time since the last frame.
+By rotating the box by delta each frame, we get smooth, frame-rate-independent animation.
+The ref gives us access to the actual Three.js mesh object.
+This is how you create any animation in R3F - update values in useFrame.
+-->
+
 ---
 title: "Import models"
 hide: true
@@ -613,6 +653,15 @@ url: https://gltf.pmnd.rs/
 <BrowserWrapper title="gltf.pmnd.rs">
   <DemoIframe url="https://gltf.pmnd.rs/"></DemoIframe>
 </BrowserWrapper>
+
+<!--
+Of course, you don't have to model everything from primitives.
+You can import models created in Blender, Maya, or other 3D software.
+The standard format is GLTF - think of it as the JPEG of 3D.
+The gltfjsx tool converts GLTF files into React components automatically.
+It parses the model and generates code with all the meshes, materials, and hierarchies.
+Visit gltf.pmnd.rs to try it yourself - drag any GLTF file and get React code instantly.
+-->
 
 ---
 title: "Physics"
@@ -715,6 +764,17 @@ export default function App() {
 
 @@@
 
+<!--
+Now for something really cool - physics.
+React-three/rapier brings realistic physics to your 3D scenes.
+Wrap objects in RigidBody components and they become physical objects.
+They'll fall, collide, bounce - all automatically.
+The colliders property tells Rapier the shape for collision detection.
+'cuboid' for boxes, 'ball' for spheres, 'trimesh' for complex meshes.
+The debug mode shows the collision shapes - turn it off for production.
+Watch what happens when these objects fall and hit the ground.
+-->
+
 ---
 title: "Demo wow"
 ---
@@ -722,14 +782,38 @@ title: "Demo wow"
 # Demo
 
 <BrowserWrapper>
-  <DemoIframe url="/demo/wow"></DemoIframe>
+  <DemoIframe url="https://play.nirtamir.com"></DemoIframe>
 </BrowserWrapper>
+
+<!--
+Here's a more complete example of what you can build.
+This uses everything we've covered - models, materials, physics, interactivity.
+The key insight is that each of these effects is just a few lines of code.
+You don't need to be a graphics programmer or a 3D artist.
+You just need to understand the building blocks we've covered today.
+-->
 
 ---
 layout: section
 ---
 
 # Go build stuff
+
+<!--
+So that's it! You now know:
+- The core Three.js concepts: scene, camera, mesh, geometry, material
+- How R3F makes it declarative with React components
+- How to add interactivity with events and state
+- How to animate with useFrame
+- How to add physics with Rapier
+- How to import 3D models
+
+The best way to learn is by doing.
+Start small - make a rotating cube.
+Add some interaction.
+Import a model.
+Before you know it, you'll be creating those wow moments.
+-->
 
 ---
 layout: center

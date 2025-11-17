@@ -46,7 +46,7 @@ class: pl-25
 - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
 
 <!--
-My name is Nir Tamir.
+My name is Nir. Nir Tamir.
 I’ve been doing frontend for over a decade.
 You can find more about me at nirtamir.com.
 -->
