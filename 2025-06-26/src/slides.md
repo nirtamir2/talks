@@ -45,7 +45,7 @@ class: pl-25
 <!-- - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
 
 <!--
-My name is Nir Tamir.
+My name is Nir. Tamir.
 I've been doing frontend for over a decade.
 You can find more about me at nirtamir.com.
 -->
@@ -141,6 +141,8 @@ We have to manually check its shape.
 -->
 
 ---
+clicks: 2
+---
 
 # The invisible throw problem
 
@@ -154,16 +156,25 @@ const coffee = makeCoffee();
 ```ts
 import { makeCoffee } from "./makeCoffee";
 
+const coffee = makeCoffee(); // returns Coffee accepts no parameters
+```
+
+```ts
+import { makeCoffee } from "./makeCoffee";
+
 const coffee = makeCoffee(); // 💥 throws Error("MachineOutOfWaterError ☕️")
 ```
 ````
 
+ <img src="/make-coffee-type.png" v-click="[1,3]" v-drag="[186,178,160,99]" />
+
 <!--
 Here's an even bigger problem.
-❓ Look at this function.  TypeScript tells us what parameters this function needs and how to call it.
+Look at this function.
+[click] 
+TypeScript tells us what parameters this function needs and how to call it.
 [click]
-❓But this function throws an error - and TypeScript doesn't tell us
-❓ TODO: Type of the function image?
+But this function throws an error - and TypeScript doesn't tell us
 
 This function throws an error, but TypeScript doesn't tell us.
 There's no "throws" annotation in TypeScript.
@@ -285,7 +296,7 @@ try {
 </v-click>
 
 <!--
-One option is to define a custom error that extends error.
+One option is to define a custom error that extends error, with a custom tag.
 [click]
 [click]
 This lets us throw a specific type of error instead of a generic one.
@@ -478,7 +489,7 @@ layout: section
 is a powerful TypeScript library designed to help developers easily create complex, synchronous, and asynchronous programs.</div>
 
 <!--
-Effect is a powerful TypeScript library that brings errors into your type system.
+Effect is a powerful TypeScript library that brings errors into the type system.
 It makes every possible failure explicit and gives you tools to handle them elegantly.
 -->
 
@@ -516,10 +527,6 @@ const value = Effect.succeed(42); // Effect.Effect<number, never, never>
 const error = Effect.fail("Oops"); // Effect.Effect<never, string, never>
 ```
 
-<!-- <img v-click=[1] src="/effect-number.png" v-drag="[71,160,226,89]" /> -->
-
-<!-- <img v-click=[2] src="/effect-error.png" v-drag="[82,271,218,90]" /> -->
-
 <!--
 We can create effects using Effect.succeed for successful values, or Effect.fail for errors. This avoids throwing exceptions and keeps errors explicit and typed. It looks very similar to Promise.resolve & Promise.reject.
 
@@ -546,7 +553,7 @@ const result = Effect.runSync(program);
 <!--
 An Effect is like a blueprint - it describes what to do, but doesn't do it.
 When you create an Effect, nothing happens yet.
-Only when you "run" it does it execute.
+We have to call `runSync` or `runPromise` to run the effect. 
 
 This separation lets us compose, transform, and handle errors
 before anything actually runs.
@@ -675,8 +682,6 @@ const recovered: Effect<string, never, never>;
 ````
 
 <!--
-This is the superpower Effect gives us.
-
 Before we handle the error, the type shows it's there.
 [click]
 After we handle it, the error becomes 'never'—meaning zero errors remain. 
