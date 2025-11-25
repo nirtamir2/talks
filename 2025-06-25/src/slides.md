@@ -25,29 +25,6 @@ layout: center
 # Effortless 3D with react-three-fiber
 
 ---
-title: "About me"
-layout: intro
-glowSeed: 15
-glowOpacity: 0.3
-class: pl-25
----
-
-# Nir Tamir
-
-- Senior Frontend developer
-- Loves open source and tooling
-- <mdi-web /> [nirtamir.com](https://nirtamir.com)
-<!-- - <mdi-github /> [@nirtamir2](https://github.com/nirtamir2) -->
-- <mdi-twitter /> [@NirTamir](https://twitter.com/NirTamir)
-<!-- - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
-
-<!--
-My name is Nir. Nir Tamir.
-I've been doing frontend for over a decade.
-You can find more about me at nirtamir.com.
--->
-
----
 layout: section
 ---
 
@@ -95,6 +72,29 @@ layout: section
 There is myth that you need to be a special 3D low-level shaders master or 3D model editor in order to create 3D on the web. 
 
 But 3D isn’t just for experts — it’s a creative tool anyone can use. In this talk, I’ll convince you that building immersive web experiences is within your reach.
+-->
+
+---
+title: "About me"
+layout: intro
+glowSeed: 15
+glowOpacity: 0.3
+class: pl-25
+---
+
+# Nir Tamir
+
+- Senior Frontend developer
+- Loves open source and tooling
+- <mdi-web /> [nirtamir.com](https://nirtamir.com)
+<!-- - <mdi-github /> [@nirtamir2](https://github.com/nirtamir2) -->
+- <mdi-twitter /> [@NirTamir](https://twitter.com/NirTamir)
+<!-- - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
+
+<!--
+My name is Nir. Nir Tamir.
+I've been doing frontend for over a decade.
+You can find more about me at nirtamir.com.
 -->
 
 ---
@@ -221,7 +221,7 @@ backgroundSize: contain
 
 <!--
 Here are some geometries with the same normal material. 
-Cube Sphere Cyliner Torus Plane - Notice that they all ends with Geometry
+Cube Sphere Cylinder Torus Plane - Notice that they all ends with Geometry
 -->
 
 ---
@@ -279,13 +279,6 @@ backgroundSize: contain
 
 This is the “skin” that wraps the geometry.
 
-It controls:
-    •	Color
-    •	Shininess
-    •	Transparency
-    •	Texture maps
-    •	How it reacts to light
-
   Here on the left we have some materials that does not react to light and on the right it do affected by light. I colored the materials in green color.
 -->
 
@@ -335,7 +328,7 @@ monacoRunAdditionalDeps:
 
 # Three.js code
 
-```ts {monaco-run}
+```ts {1|3-5|7|9-14|16-18|20|22|all}
 import * as THREE from "three";
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -362,10 +355,19 @@ renderer.render(scene, camera);
 
 <!--
 So let's see what vanilla Three.js code looks like.
+[click]
 First, we create a WebGLRenderer - this creates a canvas element and handles all the low-level WebGL rendering.
+[click]
 Then we create a Scene - think of it as a container for everything in our 3D world.
+[click]
 We add a PerspectiveCamera to define our viewpoint.
+[click]
 Finally, we create a mesh by combining a BoxGeometry with a MeshBasicMaterial.
+[click]
+Then we need to add the mesh to the scene
+[click]
+and render it with our camera
+[click]
 Notice how verbose this is - we'll see how R3F simplifies this in a moment.
 -->
 
@@ -558,7 +560,16 @@ export function Box(props: ThreeElements["mesh"]) {
 @@@
 
 <!--
-Now let's understand 3D space better.
+Here’s the same example, but written with React Three Fiber.
+
+<Canvas> replaces all the setup code — the renderer, the scene, the render loop — it’s all handled for us.
+
+Inside it, we add <OrbitControls /> so the user can rotate and zoom with the mouse.
+
+Then we create a <mesh> with a box geometry and a Matcap material, just like in Three.js, but here we write it as JSX.
+
+[move]
+
 I've added an axesHelper - the red line is X, green is Y, blue is Z.
 Notice the mesh has position, scale, and rotation properties.
 Position moves it in 3D space - [x, y, z].
@@ -648,7 +659,19 @@ layout: full
 url: https://gltf.pmnd.rs/
 ---
 
-# Import models
+# What if I want something cooler than a box?
+
+- נעל / מקבוק מודל תלת מימדי
+
+---
+
+# GLTF!
+
+- iframe לsketchfab
+
+---
+
+# So how do I use gltf in React?
 
 <BrowserWrapper title="gltf.pmnd.rs">
   <DemoIframe url="https://gltf.pmnd.rs/"></DemoIframe>
@@ -661,6 +684,8 @@ The standard format is GLTF - think of it as the JPEG of 3D.
 The gltfjsx tool converts GLTF files into React components automatically.
 It parses the model and generates code with all the meshes, materials, and hierarchies.
 Visit gltf.pmnd.rs to try it yourself - drag any GLTF file and get React code instantly.
+
+להציג מודל נעל
 -->
 
 ---
@@ -769,10 +794,16 @@ Now for something really cool - physics.
 React-three/rapier brings realistic physics to your 3D scenes.
 Wrap objects in RigidBody components and they become physical objects.
 They'll fall, collide, bounce - all automatically.
+
+[click]
+
 The colliders property tells Rapier the shape for collision detection.
 'cuboid' for boxes, 'ball' for spheres, 'trimesh' for complex meshes.
 The debug mode shows the collision shapes - turn it off for production.
 Watch what happens when these objects fall and hit the ground.
+
+[click]
+Now if we change the Sphere collider to from ball to cuboid the physics engine will treat it like a cube. (DEMO)
 -->
 
 ---
@@ -786,6 +817,8 @@ title: "Demo wow"
 </BrowserWrapper>
 
 <!--
+This is a model of myself that I built, using the same principles
+
 Here's a more complete example of what you can build.
 This uses everything we've covered - models, materials, physics, interactivity.
 The key insight is that each of these effects is just a few lines of code.
@@ -794,13 +827,9 @@ You just need to understand the building blocks we've covered today.
 -->
 
 ---
-layout: section
----
 
-# Go build stuff
-
-<!--
 So that's it! You now know:
+
 - The core Three.js concepts: scene, camera, mesh, geometry, material
 - How R3F makes it declarative with React components
 - How to add interactivity with events and state
@@ -808,12 +837,20 @@ So that's it! You now know:
 - How to add physics with Rapier
 - How to import 3D models
 
-The best way to learn is by doing.
-Start small - make a rotating cube.
-Add some interaction.
-Import a model.
-Before you know it, you'll be creating those wow moments.
+---
+layout: section
+---
+
+# The best way to learn is by doing.
+
+<!--
+
+Start small - make a rotating cube. [TODO: slide of just a box]
+Add some interaction. [TODO: slide of just a box rotating]
+Import a model and before you know it, you'll be creating those wow moments. [TODO: slide of just a rubik cube rotating]
 -->
+
+# Go build stuff
 
 ---
 layout: center
