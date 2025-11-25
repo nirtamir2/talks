@@ -30,7 +30,7 @@ layout: section
 
 # The WOW effect
 
-<div v-click class="text-2xl">Worth it every time</div>
+<div class="text-2xl">Worth it every time</div>
 
 <!--
 The wow effect.
@@ -52,7 +52,7 @@ layout: section
 
 # 3D
 
-<div v-click class="text-2xl">3D is one of the fastest ways to create that wow effect</div>
+<div class="text-2xl">3D is one of the fastest ways to create that wow effect</div>
 
 <!--
 3D is one of the fastest ways to create that wow effect.
@@ -66,7 +66,7 @@ layout: section
 
 # 3D is for everyone
 
-<div v-click class="text-2xl">Yes, even you — let’s make something that wows.</div>
+<div class="text-2xl">Yes, even you — let’s make something that wows.</div>
 
 <!--
 There is myth that you need to be a special 3D low-level shaders master or 3D model editor in order to create 3D on the web. 
@@ -853,10 +853,32 @@ Import a model and before you know it, you'll be creating those wow moments. [TO
 # Go build stuff
 
 ---
-layout: center
+layout: intro
+class: text-center pb-5
+glowX: 50
+glowY: 120
 ---
 
-# [nirtamir.com](https://www.nirtamir.com)
+<h1 class="text-4xl">
+Thank you!
+</h1>
+
+<div class="my-4">
+<p>Slides: <b><a href="https://nirtamir.com">nirtamir.com</a></b></p>
+</div>
+
+<QRCode class="m-auto w-40 mix-blend-lighten" text="https://talks.nirtamir.com/2025/react-next/"/>
+
+<div class="mt-8 text-sm opacity-75">
+<p>Questions? Find me after or at nirtamir.com</p>
+</div>
+
+<!--
+Thank you for your time!
+The slides are available at nirtamir.com
+And I highly recommend checking out effect.website - the docs are excellent.
+I'm happy to answer questions after the talk or you can reach me through my website.
+-->
 
 ---
 layout: end
