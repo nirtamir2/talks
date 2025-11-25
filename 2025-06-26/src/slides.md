@@ -23,7 +23,7 @@ layout: center
 # TypeScript Without Surprises: Smarter Error Handling with Effect
 
 <!--
-This talk will change the way you think about handling errors in TypeScript.
+This talk will hopefully change the way you think about handling errors in TypeScript.
 We'll explore the Effect library - and see how it solves problems you might not even realize you have.
 -->
 
@@ -176,7 +176,6 @@ TypeScript tells us what parameters this function needs and how to call it.
 [click]
 But this function throws an error - and TypeScript doesn't tell us
 
-This function throws an error, but TypeScript doesn't tell us.
 There's no "throws" annotation in TypeScript.
 We have to read the implementation or just find out at runtime.
 In production.
@@ -200,7 +199,7 @@ how do you write proper error handling?
 
 Do you wrap everything in try-catch and return a generic error?
 
-This reminds me of JavaScript before TypeScript.
+This reminds me of the days of JavaScript before TypeScript.
 Remember that world?
 
 You couldn’t trust function parameters or return values.
@@ -216,7 +215,7 @@ But… TypeScript doesn’t tell us what errors a function can throw.
 
 Even when we know something might fail, the catch block gives us only unknown.
 
-So we’re back to the old JavaScript problem — but this time, with errors.
+So we’re back to the old JavaScript problems — but this time, with errors.
 
 No type safety.
 No compiler help.
@@ -511,8 +510,6 @@ The Effect type has three parts:
 Success - what value we get when things work
 Error - what can go wrong
 Requirements - what dependencies we need
-
-This makes every possible outcome explicit.
 -->
 
 ---
@@ -534,7 +531,7 @@ Effect.succeed creates an effect that resolves with the number 42.
 So its type is: Effect<number, never, never> —
 meaning it produces a number, and it never fails or depends on anything.
 
-On the other hand, Effect.fail creates an effect that fails with the string "oops".
+Effect.fail creates an effect that fails with the string "oops".
 So its type is: Effect<never, string, never>.
 -->
 
@@ -552,11 +549,11 @@ const result = Effect.runSync(program);
 
 <!--
 An Effect is like a blueprint - it describes what to do, but doesn't do it.
-When you create an Effect, nothing happens yet.
 We have to call `runSync` or `runPromise` to run the effect. 
 
 This separation lets us compose, transform, and handle errors
 before anything actually runs.
+
 
 [PAUSE]
 -->
@@ -598,7 +595,6 @@ It unwraps the Effect and gives you the success value —
 so you can use it like a normal variable.
 
 But here's the magic: if any Effect fails, the error bubbles up automatically.
-You don't write try-catch everywhere.
 The errors just accumulate in the type signature.
 
 yield* here is what propagates the error up.
@@ -626,7 +622,6 @@ const result = Effect.runSync(program);
 If we run this Effect directly, it can throw.
 We're back to the same problem - an unhandled error at runtime.
 But now we KNOW it's there because the type told us.
-The compiler is warning us.
 -->
 
 ---
@@ -653,8 +648,7 @@ But now it's explicit and intentional.
 
 [click]
 Look at the new type: Effect<string, never, never>
-The error is GONE. We handled it completely.
-Now when we run it, it's guaranteed to succeed.
+The error is GONE.
 
 [click]
 This is the key insight: we decide WHEN and WHERE to handle errors.
@@ -685,8 +679,6 @@ const recovered: Effect<string, never, never>;
 Before we handle the error, the type shows it's there.
 [click]
 After we handle it, the error becomes 'never'—meaning zero errors remain. 
-
-The type system won't let us forget.
 -->
 
 ---
@@ -722,12 +714,10 @@ NetworkError OR ValidationError - both are tracked.
 
 [click]
 validateUser is a function my teammate wrote - I don't need to took at the implementation to see what it throws.  
-Each yield* might introduce a new error type.
-The compiler collects them all.
+Each yield may introduce a new type of error, which the compiler then collects.
 
 [click]
-Every possible failure is visible.
-No hidden surprises.
+Notice that the code focuses on the happy path, but every possible failure is visible.
 -->
 
 ---
@@ -764,11 +754,9 @@ The type system tracks everything.
 [click]
 After handling, NetworkError and ValidationError are gone from the type.
 We're left with only BadRequestError.
-The type guides us to handle what's left.
 
 [click]
 We can't forget or ignore errors - they're right there in the signature.
-The compiler won't let us.
 -->
 
 ---
@@ -817,7 +805,7 @@ If any step fails, the error propagates automatically
 The compiler knows about all of them
 
 [click]
-No surprises, no hidden failures.
+Happy path code - with No surprises and no hidden failures.
 This is the key difference.
 
 [PAUSE - this is important]
@@ -1098,7 +1086,7 @@ layout: section
 
 - **TypeScript is great for the happy path**
 - **But errors are invisible in normal TypeScript**
-- **Effect types your errors**
+- **Effect makes your errors visible**
 - **Specific errors = reliable code**
 
 </v-clicks>
@@ -1114,7 +1102,7 @@ But when things fail, we lose that safety. Errors are invisible and untyped.
 
 [click]
 Effect brings errors into the type system, making them visible and trackable.
-The compiler becomes your guide - it won't let you ignore errors.
+You can focus on the happy path and the compiler won't let you ignore errors.
 You decide when and how to handle them, but you can't forget them.
 
 [click]
