@@ -131,10 +131,10 @@ importers:
         version: 1.2.3
       '@react-three/fiber':
         specifier: ^9.1.2
-        version: 9.1.2(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.176.0)
+        version: 9.1.2(@types/react@19.1.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(three@0.176.0)
       '@react-three/rapier':
         specifier: ^2.1.0
-        version: 2.1.0(@react-three/fiber@9.1.2(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.176.0))(react@19.1.0)(three@0.176.0)
+        version: 2.1.0(@react-three/fiber@9.1.2(@types/react@19.1.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(three@0.176.0))(react@19.2.1)(three@0.176.0)
       code-tag:
         specifier: ^1.2.0
         version: 1.2.0
@@ -147,15 +147,24 @@ importers:
       neverthrow:
         specifier: ^8.2.0
         version: 8.2.0
+      react:
+        specifier: ^19.2.1
+        version: 19.2.1
+      react-dom:
+        specifier: ^19.2.1
+        version: 19.2.1(react@19.2.1)
       sandpack-vue3:
         specifier: ^3.1.12
         version: 3.1.12(vue@3.5.22(typescript@5.9.3))
       shiki:
         specifier: ^3.15.0
         version: 3.15.0
+      slidev-addon-react:
+        specifier: ^1.1.2
+        version: 1.1.2(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       slidev-component-zoom:
         specifier: ^1.1.0
-        version: 1.1.0(@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16))(vue@3.5.22(typescript@5.9.3))
+        version: 1.1.0(@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16))(vue@3.5.22(typescript@5.9.3))
       three:
         specifier: ^0.176.0
         version: 0.176.0
@@ -183,10 +192,10 @@ importers:
         version: 0.1.18(0dc70733353fae2173b84331c1679c1e)
       '@slidev/cli':
         specifier: 52.1.0
-        version: 52.1.0(@babel/parser@7.28.4)(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@types/markdown-it@14.1.2)(@types/node@24.9.1)(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(playwright-chromium@1.56.1)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(terser@5.39.0)(tsx@4.20.6)(vue-template-compiler@2.7.16)
+        version: 52.1.0(@babel/parser@7.28.4)(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@types/markdown-it@14.1.2)(@types/node@24.9.1)(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(playwright-chromium@1.56.1)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(terser@5.39.0)(tsx@4.20.6)(vue-template-compiler@2.7.16)
       '@slidev/client':
         specifier: 52.1.0
-        version: 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
+        version: 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
       '@slidev/theme-default':
         specifier: 'catalog:'
         version: 0.25.0
@@ -264,7 +273,7 @@ importers:
         version: 3.0.5
       slidev-addon-graph:
         specifier: 'catalog:'
-        version: 1.0.0(@egjs/hammerjs@2.0.17)(@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16))(component-emitter@1.3.1)(keycharm@0.4.0)(uuid@11.1.0)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3))
+        version: 1.0.0(@egjs/hammerjs@2.0.17)(@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16))(component-emitter@1.3.1)(keycharm@0.4.0)(uuid@11.1.0)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3))
       taze:
         specifier: 'catalog:'
         version: 19.8.1
@@ -7704,6 +7713,11 @@ packages:
     peerDependencies:
       react: ^19.1.0
 
+  react-dom@19.2.1:
+    resolution: {integrity: sha512-ibrK8llX2a4eOskq1mXKu/TGZj9qzomO+sNfO98M6d9zIPOEhlBkMkBUBLd1vgS0gQsLDBzA+8jJBVXDnfHmJg==}
+    peerDependencies:
+      react: ^19.2.1
+
   react-reconciler@0.31.0:
     resolution: {integrity: sha512-7Ob7Z+URmesIsIVRjnLoDGwBEG/tVitidU0nMsqX/eeJaLY89RISO/10ERe0MqmzuKUUB1rmY+h1itMbUHg9BQ==}
     engines: {node: '>=0.10.0'}
@@ -7725,6 +7739,10 @@ packages:
 
   react@19.1.0:
     resolution: {integrity: sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==}
+    engines: {node: '>=0.10.0'}
+
+  react@19.2.1:
+    resolution: {integrity: sha512-DGrYcCWK7tvYMnWh79yrPHt+vdx9tY+1gPZa7nJQtO/p8bLTDaHp4dzwEhQB7pZ4Xe3ok4XKuEPrVuc+wlpkmw==}
     engines: {node: '>=0.10.0'}
 
   read-cache@1.0.0:
@@ -7958,6 +7976,9 @@ packages:
   scheduler@0.26.0:
     resolution: {integrity: sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==}
 
+  scheduler@0.27.0:
+    resolution: {integrity: sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==}
+
   scslre@0.3.0:
     resolution: {integrity: sha512-3A6sD0WYP7+QrjbfNA2FN3FsOaGGFoekCVgTyypy53gPxhbkCIjtO6YWgdrfM+n/8sI8JeXZOIxsHjMTNxQ4nQ==}
     engines: {node: ^14.0.0 || >=16.0.0}
@@ -8128,6 +8149,13 @@ packages:
       '@slidev/client': 52.1.0
       vite: '>=5.0'
       vue: ^3.0.0
+
+  slidev-addon-react@1.1.2:
+    resolution: {integrity: sha512-d4fjP3uuj6p4O867UtGkqH899AXbJWO6zd9iVZKdR+aJK81DnOASfl4m2k5uFnq5xHjjYwm/Hhhn1u9zq5FB1Q==}
+    engines: {slidev: '>=0.40.0'}
+    peerDependencies:
+      react: '>=18.0.0'
+      react-dom: '>=18.0.0'
 
   slidev-component-zoom@1.1.0:
     resolution: {integrity: sha512-wUuMEjVuiv6x1m47oti+X+HQq4hMICg/qcCu0o+qHTEVuwkYrVGCeWBEhDItPkIlT1iSLWyRXP8g9YsU5jJL5Q==}
@@ -11354,12 +11382,34 @@ snapshots:
       - '@types/react'
       - immer
 
-  '@react-three/rapier@2.1.0(@react-three/fiber@9.1.2(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.176.0))(react@19.1.0)(three@0.176.0)':
+  '@react-three/fiber@9.1.2(@types/react@19.1.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(three@0.176.0)':
+    dependencies:
+      '@babel/runtime': 7.27.0
+      '@types/react-reconciler': 0.28.9(@types/react@19.1.2)
+      '@types/webxr': 0.5.22
+      base64-js: 1.5.1
+      buffer: 6.0.3
+      its-fine: 2.0.0(@types/react@19.1.2)(react@19.2.1)
+      react: 19.2.1
+      react-reconciler: 0.31.0(react@19.2.1)
+      react-use-measure: 2.1.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      scheduler: 0.25.0
+      suspend-react: 0.1.3(react@19.2.1)
+      three: 0.176.0
+      use-sync-external-store: 1.5.0(react@19.2.1)
+      zustand: 5.0.3(@types/react@19.1.2)(react@19.2.1)(use-sync-external-store@1.5.0(react@19.2.1))
+    optionalDependencies:
+      react-dom: 19.2.1(react@19.2.1)
+    transitivePeerDependencies:
+      - '@types/react'
+      - immer
+
+  '@react-three/rapier@2.1.0(@react-three/fiber@9.1.2(@types/react@19.1.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(three@0.176.0))(react@19.2.1)(three@0.176.0)':
     dependencies:
       '@dimforge/rapier3d-compat': 0.15.0
-      '@react-three/fiber': 9.1.2(@types/react@19.1.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(three@0.176.0)
-      react: 19.1.0
-      suspend-react: 0.1.3(react@19.1.0)
+      '@react-three/fiber': 9.1.2(@types/react@19.1.2)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(three@0.176.0)
+      react: 19.2.1
+      suspend-react: 0.1.3(react@19.2.1)
       three: 0.176.0
       three-stdlib: 2.35.16(three@0.176.0)
 
@@ -11685,7 +11735,7 @@ snapshots:
 
   '@sindresorhus/merge-streams@4.0.0': {}
 
-  '@slidev/cli@52.1.0(@babel/parser@7.28.4)(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@types/markdown-it@14.1.2)(@types/node@24.9.1)(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(playwright-chromium@1.56.1)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(terser@5.39.0)(tsx@4.20.6)(vue-template-compiler@2.7.16)':
+  '@slidev/cli@52.1.0(@babel/parser@7.28.4)(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@types/markdown-it@14.1.2)(@types/node@24.9.1)(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(playwright-chromium@1.56.1)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(terser@5.39.0)(tsx@4.20.6)(vue-template-compiler@2.7.16)':
     dependencies:
       '@antfu/ni': 25.0.0
       '@antfu/utils': 9.2.0
@@ -11696,7 +11746,7 @@ snapshots:
       '@shikijs/markdown-it': 3.13.0(markdown-it-async@2.2.0)
       '@shikijs/twoslash': 3.13.0(typescript@5.9.3)
       '@shikijs/vitepress-twoslash': 3.13.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(typescript@5.9.3)
-      '@slidev/client': 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
+      '@slidev/client': 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
       '@slidev/parser': 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(markdown-it-async@2.2.0)(postcss@8.5.6)(svelte@5.28.2)(typescript@5.9.3)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
       '@slidev/types': 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(markdown-it-async@2.2.0)(postcss@8.5.6)(svelte@5.28.2)(typescript@5.9.3)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
       '@unocss/extractor-mdc': 66.5.4
@@ -11737,7 +11787,7 @@ snapshots:
       resolve-global: 2.0.0
       semver: 7.7.2
       shiki: 3.15.0
-      shiki-magic-move: 1.1.0(react@19.1.0)(shiki@3.15.0)(solid-js@1.9.5)(svelte@5.28.2)(vue@3.5.22(typescript@5.9.3))
+      shiki-magic-move: 1.1.0(react@19.2.1)(shiki@3.15.0)(solid-js@1.9.5)(svelte@5.28.2)(vue@3.5.22(typescript@5.9.3))
       sirv: 3.0.1
       source-map-js: 1.2.1
       typescript: 5.9.3
@@ -11787,7 +11837,7 @@ snapshots:
       - vue-template-compiler
       - vue-template-es2015-compiler
 
-  '@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)':
+  '@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)':
     dependencies:
       '@antfu/utils': 9.2.0
       '@iconify-json/carbon': 1.2.14
@@ -11818,7 +11868,7 @@ snapshots:
       prettier: 3.6.2
       recordrtc: 5.6.2
       shiki: 3.15.0
-      shiki-magic-move: 1.1.0(react@19.1.0)(shiki@3.15.0)(solid-js@1.9.5)(svelte@5.28.2)(vue@3.5.22(typescript@5.9.3))
+      shiki-magic-move: 1.1.0(react@19.2.1)(shiki@3.15.0)(solid-js@1.9.5)(svelte@5.28.2)(vue@3.5.22(typescript@5.9.3))
       typescript: 5.9.3
       unocss: 66.4.0(postcss@8.5.6)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))
       vue: 3.5.22(typescript@5.9.3)
@@ -16593,6 +16643,13 @@ snapshots:
     transitivePeerDependencies:
       - '@types/react'
 
+  its-fine@2.0.0(@types/react@19.1.2)(react@19.2.1):
+    dependencies:
+      '@types/react-reconciler': 0.28.9(@types/react@19.1.2)
+      react: 19.2.1
+    transitivePeerDependencies:
+      - '@types/react'
+
   jackspeak@3.4.3:
     dependencies:
       '@isaacs/cliui': 8.0.2
@@ -17469,7 +17526,7 @@ snapshots:
       defu: 6.1.4
       destr: 2.0.5
       dot-prop: 9.0.0
-      esbuild: 0.25.3
+      esbuild: 0.25.11
       escape-string-regexp: 5.0.0
       etag: 1.8.1
       exsolve: 1.0.5
@@ -18141,9 +18198,19 @@ snapshots:
       react: 19.1.0
       scheduler: 0.26.0
 
+  react-dom@19.2.1(react@19.2.1):
+    dependencies:
+      react: 19.2.1
+      scheduler: 0.27.0
+
   react-reconciler@0.31.0(react@19.1.0):
     dependencies:
       react: 19.1.0
+      scheduler: 0.25.0
+
+  react-reconciler@0.31.0(react@19.2.1):
+    dependencies:
+      react: 19.2.1
       scheduler: 0.25.0
 
   react-refresh@0.17.0: {}
@@ -18154,7 +18221,15 @@ snapshots:
     optionalDependencies:
       react-dom: 19.1.0(react@19.1.0)
 
+  react-use-measure@2.1.7(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
+    dependencies:
+      react: 19.2.1
+    optionalDependencies:
+      react-dom: 19.2.1(react@19.2.1)
+
   react@19.1.0: {}
+
+  react@19.2.1: {}
 
   read-cache@1.0.0:
     dependencies:
@@ -18454,6 +18529,8 @@ snapshots:
 
   scheduler@0.26.0: {}
 
+  scheduler@0.27.0: {}
+
   scslre@0.3.0:
     dependencies:
       '@eslint-community/regexpp': 4.12.1
@@ -18577,12 +18654,12 @@ snapshots:
 
   shebang-regex@3.0.0: {}
 
-  shiki-magic-move@1.1.0(react@19.1.0)(shiki@3.15.0)(solid-js@1.9.5)(svelte@5.28.2)(vue@3.5.22(typescript@5.9.3)):
+  shiki-magic-move@1.1.0(react@19.2.1)(shiki@3.15.0)(solid-js@1.9.5)(svelte@5.28.2)(vue@3.5.22(typescript@5.9.3)):
     dependencies:
       diff-match-patch-es: 1.0.1
       ohash: 2.0.11
     optionalDependencies:
-      react: 19.1.0
+      react: 19.2.1
       shiki: 3.15.0
       solid-js: 1.9.5
       svelte: 5.28.2
@@ -18661,9 +18738,9 @@ snapshots:
 
   slash@5.1.0: {}
 
-  slidev-addon-graph@1.0.0(@egjs/hammerjs@2.0.17)(@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16))(component-emitter@1.3.1)(keycharm@0.4.0)(uuid@11.1.0)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3)):
+  slidev-addon-graph@1.0.0(@egjs/hammerjs@2.0.17)(@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16))(component-emitter@1.3.1)(keycharm@0.4.0)(uuid@11.1.0)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue@3.5.22(typescript@5.9.3)):
     dependencies:
-      '@slidev/client': 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
+      '@slidev/client': 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
       '@vueuse/core': 13.9.0(vue@3.5.22(typescript@5.9.3))
       chroma-js: 3.1.2
       vis-data: 8.0.3(uuid@11.1.0)(vis-util@6.0.0(@egjs/hammerjs@2.0.17)(component-emitter@1.3.1))
@@ -18677,9 +18754,15 @@ snapshots:
       - keycharm
       - uuid
 
-  slidev-component-zoom@1.1.0(@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16))(vue@3.5.22(typescript@5.9.3)):
+  slidev-addon-react@1.1.2(react-dom@19.2.1(react@19.2.1))(react@19.2.1):
     dependencies:
-      '@slidev/client': 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.1.0)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
+      esbuild: 0.24.2
+      react: 19.2.1
+      react-dom: 19.2.1(react@19.2.1)
+
+  slidev-component-zoom@1.1.0(@slidev/client@52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16))(vue@3.5.22(typescript@5.9.3)):
+    dependencies:
+      '@slidev/client': 52.1.0(@nuxt/kit@3.14.1592(magicast@0.3.5)(rollup@4.52.5))(@vue/compiler-sfc@3.5.22)(magicast@0.3.5)(markdown-it-async@2.2.0)(postcss@8.5.6)(react@19.2.1)(rollup@4.52.5)(solid-js@1.9.5)(svelte@5.28.2)(vite@7.1.11(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1))(vue-template-compiler@2.7.16)
       vue: 3.5.22(typescript@5.9.3)
 
   smob@1.5.0: {}
@@ -18905,6 +18988,10 @@ snapshots:
   suspend-react@0.1.3(react@19.1.0):
     dependencies:
       react: 19.1.0
+
+  suspend-react@0.1.3(react@19.2.1):
+    dependencies:
+      react: 19.2.1
 
   svelte@5.28.2:
     dependencies:
@@ -19631,6 +19718,10 @@ snapshots:
     dependencies:
       react: 19.1.0
 
+  use-sync-external-store@1.5.0(react@19.2.1):
+    dependencies:
+      react: 19.2.1
+
   util-deprecate@1.0.2: {}
 
   utility-types@3.11.0: {}
@@ -19855,7 +19946,7 @@ snapshots:
 
   vite@6.3.3(@types/node@22.13.4)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1):
     dependencies:
-      esbuild: 0.25.3
+      esbuild: 0.25.11
       fdir: 6.4.4(picomatch@4.0.2)
       picomatch: 4.0.2
       postcss: 8.5.6
@@ -19871,7 +19962,7 @@ snapshots:
 
   vite@6.3.3(@types/node@24.9.1)(jiti@2.6.1)(terser@5.39.0)(tsx@4.20.6)(yaml@2.8.1):
     dependencies:
-      esbuild: 0.25.3
+      esbuild: 0.25.11
       fdir: 6.4.4(picomatch@4.0.2)
       picomatch: 4.0.2
       postcss: 8.5.6
@@ -20254,5 +20345,11 @@ snapshots:
       '@types/react': 19.1.2
       react: 19.1.0
       use-sync-external-store: 1.5.0(react@19.1.0)
+
+  zustand@5.0.3(@types/react@19.1.2)(react@19.2.1)(use-sync-external-store@1.5.0(react@19.2.1)):
+    optionalDependencies:
+      '@types/react': 19.1.2
+      react: 19.2.1
+      use-sync-external-store: 1.5.0(react@19.2.1)
 
   zwitch@2.0.4: {}
