@@ -17,6 +17,7 @@ import { Route as DemoWowImport } from './routes/demo/wow'
 import { Route as DemoMaterialImport } from './routes/demo/material'
 import { Route as DemoGeometryImport } from './routes/demo/geometry'
 import { Route as DemoEmptyImport } from './routes/demo/empty'
+import { Route as DemoCubeImport } from './routes/demo/cube'
 import { Route as DemoBasicImport } from './routes/demo/basic'
 
 // Create/Update Routes
@@ -57,6 +58,12 @@ const DemoEmptyRoute = DemoEmptyImport.update({
   getParentRoute: () => DemoRouteRoute,
 } as any)
 
+const DemoCubeRoute = DemoCubeImport.update({
+  id: '/cube',
+  path: '/cube',
+  getParentRoute: () => DemoRouteRoute,
+} as any)
+
 const DemoBasicRoute = DemoBasicImport.update({
   id: '/basic',
   path: '/basic',
@@ -79,6 +86,13 @@ declare module '@tanstack/react-router' {
       path: '/basic'
       fullPath: '/demo/basic'
       preLoaderRoute: typeof DemoBasicImport
+      parentRoute: typeof DemoRouteImport
+    }
+    '/demo/cube': {
+      id: '/demo/cube'
+      path: '/cube'
+      fullPath: '/demo/cube'
+      preLoaderRoute: typeof DemoCubeImport
       parentRoute: typeof DemoRouteImport
     }
     '/demo/empty': {
@@ -123,6 +137,7 @@ declare module '@tanstack/react-router' {
 
 interface DemoRouteRouteChildren {
   DemoBasicRoute: typeof DemoBasicRoute
+  DemoCubeRoute: typeof DemoCubeRoute
   DemoEmptyRoute: typeof DemoEmptyRoute
   DemoGeometryRoute: typeof DemoGeometryRoute
   DemoMaterialRoute: typeof DemoMaterialRoute
@@ -132,6 +147,7 @@ interface DemoRouteRouteChildren {
 
 const DemoRouteRouteChildren: DemoRouteRouteChildren = {
   DemoBasicRoute: DemoBasicRoute,
+  DemoCubeRoute: DemoCubeRoute,
   DemoEmptyRoute: DemoEmptyRoute,
   DemoGeometryRoute: DemoGeometryRoute,
   DemoMaterialRoute: DemoMaterialRoute,
@@ -146,6 +162,7 @@ const DemoRouteRouteWithChildren = DemoRouteRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/basic': typeof DemoBasicRoute
+  '/demo/cube': typeof DemoCubeRoute
   '/demo/empty': typeof DemoEmptyRoute
   '/demo/geometry': typeof DemoGeometryRoute
   '/demo/material': typeof DemoMaterialRoute
@@ -155,6 +172,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/demo/basic': typeof DemoBasicRoute
+  '/demo/cube': typeof DemoCubeRoute
   '/demo/empty': typeof DemoEmptyRoute
   '/demo/geometry': typeof DemoGeometryRoute
   '/demo/material': typeof DemoMaterialRoute
@@ -166,6 +184,7 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/demo': typeof DemoRouteRouteWithChildren
   '/demo/basic': typeof DemoBasicRoute
+  '/demo/cube': typeof DemoCubeRoute
   '/demo/empty': typeof DemoEmptyRoute
   '/demo/geometry': typeof DemoGeometryRoute
   '/demo/material': typeof DemoMaterialRoute
@@ -178,6 +197,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/demo'
     | '/demo/basic'
+    | '/demo/cube'
     | '/demo/empty'
     | '/demo/geometry'
     | '/demo/material'
@@ -186,6 +206,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/demo/basic'
+    | '/demo/cube'
     | '/demo/empty'
     | '/demo/geometry'
     | '/demo/material'
@@ -195,6 +216,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/demo'
     | '/demo/basic'
+    | '/demo/cube'
     | '/demo/empty'
     | '/demo/geometry'
     | '/demo/material'
@@ -228,6 +250,7 @@ export const routeTree = rootRoute
       "filePath": "demo/route.tsx",
       "children": [
         "/demo/basic",
+        "/demo/cube",
         "/demo/empty",
         "/demo/geometry",
         "/demo/material",
@@ -237,6 +260,10 @@ export const routeTree = rootRoute
     },
     "/demo/basic": {
       "filePath": "demo/basic.tsx",
+      "parent": "/demo"
+    },
+    "/demo/cube": {
+      "filePath": "demo/cube.tsx",
       "parent": "/demo"
     },
     "/demo/empty": {

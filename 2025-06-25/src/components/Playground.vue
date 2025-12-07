@@ -1,23 +1,22 @@
 <script setup lang="ts">
+import type { SandpackProps } from "sandpack-vue3";
 import {
-  SandpackCodeEditor,
   SandpackPreview,
   SandpackProvider,
+  defaultDark
 } from "sandpack-vue3";
 import { computed, ref } from "vue";
-import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 
 const props = defineProps<{
-  code: string | Array<string>;
+  files: Array<SandpackProps["files"]>;
 }>();
 
 const index = ref(0);
-const currentCode = computed(() =>
-  Array.isArray(props.code) ? props.code[index.value] : props.code,
-);
-const files = ref({
-  "/App.tsx": currentCode,
 
+const currentFiles = computed(() => props.files[index.value]);
+
+const files = computed(() => ({
+  ...currentFiles.value,
   "/index.tsx": {
     code: `import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
@@ -57,6 +56,7 @@ root.render(
         react: "^19.0.0",
         "@react-three/drei": "^10.0.7",
         "@react-three/fiber": "^9.1.2",
+        "@react-three/rapier": "^2.1.0",
         three: "^0.176.0",
       },
       devDependencies: {
@@ -68,53 +68,21 @@ root.render(
       main: "/index.tsx",
     }),
   },
-});
+}));
 
-function handleGoNext() {
-  index.value = (index.value + 1) % props.code.length;
-}
-
-function handleGoBack() {
-  index.value = Math.max((index.value - 1) % props.code.length, 0);
-}
 </script>
 
 <template>
-  <div
-    v-if="Array.isArray(props.code) && props.code.length > 1"
-    class="mb-4 flex items-center justify-center gap-2"
-  >
-    <button
-      class="flex size-5 items-center justify-center rounded-full border"
-      @click="handleGoBack"
-    >
-      -
-    </button>
-    {{ index + 1 }} / {{ props.code.length }}
-    <button
-      class="flex size-5 items-center justify-center rounded-full border"
-      @click="handleGoNext"
-    >
-      +
-    </button>
-  </div>
-  <div class="" @keydown.stop @keyup.stop>
-    <SandpackProvider template="react-ts" :files="files">
-      <PanelGroup direction="horizontal">
-        <Panel :default-size="20">
-          <SandpackCodeEditor />
-        </Panel>
-        <PanelResizeHandle />
-        <Panel :default-size="20">
-          <SandpackPreview :show-open-in-code-sandbox="false" />
-        </Panel>
-      </PanelGroup>
+  <div class="flex size-full" @keydown.stop @keyup.stop>
+    <SandpackProvider :theme="defaultDark" template="react-ts" :files="files">
+      <SandpackPreview :show-open-in-code-sandbox="false" class="h-full">
+      </SandpackPreview>
     </SandpackProvider>
-    <!--    <SandpackProvider :files="files" theme="dark" template="react-ts" :options="{}"> -->
-    <!--      <SandpackLayout style="height: 500px" > -->
-    <!--        <SandpackCodeEditor  /> -->
-    <!--        <SandpackPreview :show-open-in-code-sandbox="false" /> -->
-    <!--      </SandpackLayout> -->
-    <!--    </SandpackProvider> -->
   </div>
 </template>
+
+<style global>
+.sp-wrapper {
+  width: 100%;
+}
+</style>

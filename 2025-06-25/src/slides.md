@@ -40,7 +40,6 @@ It’s not because of a huge feature or complex logic—it’s usually something
 A smooth transition. A tiny 3D touch. A shadow that reacts to the mouse.
 
 It doesn’t take much.
-[click]
 But it feels like magic.
 Because those little moments show that someone cared.
 And that’s what makes people remember, engage, and fall in love with your product
@@ -564,7 +563,7 @@ Here’s the same example, but written with React Three Fiber.
 
 <Canvas> replaces all the setup code — the renderer, the scene, the render loop — it’s all handled for us.
 
-Inside it, we add <OrbitControls /> so the user can rotate and zoom with the mouse.
+Inside it, we add `<OrbitControls />` so the user can rotate and zoom with the mouse.
 
 Then we create a <mesh> with a box geometry and a Matcap material, just like in Three.js, but here we write it as JSX.
 
@@ -667,7 +666,9 @@ url: https://gltf.pmnd.rs/
 
 # GLTF!
 
-- iframe לsketchfab
+<BrowserWrapper title="sketchfab.com">
+  <DemoIframe url="https://sketchfab.com/"></DemoIframe>
+</BrowserWrapper>
 
 ---
 
@@ -876,7 +877,6 @@ Thank you!
 <!--
 Thank you for your time!
 The slides are available at nirtamir.com
-And I highly recommend checking out effect.website - the docs are excellent.
 I'm happy to answer questions after the talk or you can reach me through my website.
 -->
 

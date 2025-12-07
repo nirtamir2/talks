@@ -13,30 +13,30 @@ function RouteComponent() {
         <PerspectiveCamera />
         <OrbitControls />
         <ambientLight />
-        <mesh position={[-6, 0, 0]}>
+        {/* <mesh position={[-6, 0, 0]}>
           <sphereGeometry />
-          <meshNormalMaterial />
+          <meshNormalMaterial wireframe/>
         </mesh>
         <mesh position={[-3, 0, 0]}>
           <boxGeometry />
-          <meshNormalMaterial />
-        </mesh>
+          <meshNormalMaterial wireframe/>
+        </mesh> */}
         <mesh position={[0, 0, 0]}>
           <coneGeometry />
-          <meshNormalMaterial />
+          <meshNormalMaterial wireframe/>
         </mesh>
-        <mesh position={[3, 0, 0]}>
+        {/* <mesh position={[3, 0, 0]}>
           <cylinderGeometry />
-          <meshNormalMaterial />
+          <meshNormalMaterial wireframe/>
         </mesh>
         <mesh position={[6, 0, 0]}>
           <torusGeometry />
-          <meshNormalMaterial />
+          <meshNormalMaterial wireframe/>
         </mesh>
         <mesh position={[6, 0, 0]}>
           <planeGeometry />
-          <meshNormalMaterial />
-        </mesh>
+          <meshNormalMaterial wireframe/>
+        </mesh> */}
       </Canvas>
     </div>
   );
