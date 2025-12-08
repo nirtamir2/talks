@@ -350,7 +350,8 @@ renderer.render(scene, camera);
 ```
 
 <Transform v-drag="[610,136,305,286]">
-  <React draggable is="ThreeBasicDemoPreview" />
+  <img src="/basic-threejs-cube.png" alt="basic-threejs-cube" class="size-full">
+  <!-- <React draggable is="ThreeBasicDemoPreview" /> -->
 </Transform>
 
 <!--
@@ -451,15 +452,20 @@ export default function App() {
 @@@
 
 ```tsx sandpack index=0
-import { OrbitControls } from "@react-three/drei";
+import { PerspectiveCamera } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
   return (
     <Canvas>
-      <OrbitControls />
+      <ambientLight />
+      <PerspectiveCamera
+        makeDefault
+        position={[0, 0, 2]}
+        args={[75, document.innerWidth / document.innerHeight, 0.1, 1000]}
+      />
       <mesh>
         <boxGeometry args={[1, 1, 1]} />
-        <meshMatcapMaterial color={"#0066CC"} />
+        <meshStandardMaterial color={"#0066CC"} />
       </mesh>
     </Canvas>
   );
@@ -467,6 +473,26 @@ export default function App() {
 ```
 
 ```tsx sandpack index=1
+import { OrbitControls } from "@react-three/drei";
+import { Canvas } from "@react-three/fiber";
+export default function App() {
+  return (
+    <Canvas>
+      <OrbitControls />
+      <ambientLight />
+      <mesh>
+        <boxGeometry />
+        <meshBasicMaterial color={"#0066CC"} />
+      </mesh>
+    </Canvas>
+  );
+}
+
+// boxGeometry, sphereGeometry, torusGeometry, planeGeometry
+// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial, meshStandardMaterial
+```
+
+```tsx sandpack index=2
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
@@ -483,7 +509,7 @@ export default function App() {
 }
 ```
 
-```tsx sandpack index=2 file="App.tsx"
+```tsx sandpack index=3 file="App.tsx"
 import { OrbitControls } from "@react-three/drei";
 import { Box } from "./Box";
 import { Canvas } from "@react-three/fiber";
@@ -498,7 +524,7 @@ export default function App() {
 }
 ```
 
-```tsx sandpack index=2 file="Box.tsx"
+```tsx sandpack index=3 file="Box.tsx"
 import type { ThreeElements } from "@react-three/fiber";
 import { useState } from "react";
 
@@ -521,7 +547,7 @@ export function Box(props: ThreeElements["mesh"]) {
 }
 ```
 
-```tsx sandpack index=3 file="App.tsx"
+```tsx sandpack index=4 file="App.tsx"
 import { OrbitControls } from "@react-three/drei";
 import { Box } from "./Box";
 import { Canvas } from "@react-three/fiber";
@@ -536,7 +562,7 @@ export default function App() {
 }
 ```
 
-```tsx sandpack index=3 active file="Box.tsx"
+```tsx sandpack index=4 active file="Box.tsx"
 import type { ThreeElements } from "@react-three/fiber";
 import { useFrame } from "@react-three/fiber";
 import { useRef, useState } from "react";
@@ -659,16 +685,21 @@ layout: full
 url: https://gltf.pmnd.rs/
 ---
 
-# What if I want something cooler than a box?
+---
+layout: section
+---
 
-- נעל / מקבוק מודל תלת מימדי
+# What if I want something cooler than a box?
 
 ---
 
 # GLTF!
 
 <BrowserWrapper title="sketchfab.com">
-  <DemoIframe url="https://sketchfab.com/3d-models/rubiks-cube-4cc7c1bf585f4b929ddd32f6cab3ba58"></DemoIframe>
+  <!-- <DemoIframe url="https://sketchfab.com"></DemoIframe> -->
+  <a href="https://www.sketchfab.com">
+  <img src="/sketchfab-macbook.png" class="size-full">
+  </a>
 </BrowserWrapper>
 
 ---
@@ -827,6 +858,14 @@ The key insight is that each of these effects is just a few lines of code.
 You don't need to be a graphics programmer or a 3D artist.
 You just need to understand the building blocks we've covered today.
 -->
+
+---
+
+# Examples
+
+<BrowserWrapper title="https://r3f.docs.pmnd.rs/getting-started/examples">
+  <DemoIframe url="https://r3f.docs.pmnd.rs/getting-started/examples"></DemoIframe>
+</BrowserWrapper>
 
 ---
 
