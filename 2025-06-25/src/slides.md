@@ -452,20 +452,15 @@ export default function App() {
 @@@
 
 ```tsx sandpack index=0
-import { PerspectiveCamera } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
   return (
     <Canvas>
-      <ambientLight />
-      <PerspectiveCamera
-        makeDefault
-        position={[0, 0, 2]}
-        args={[75, document.innerWidth / document.innerHeight, 0.1, 1000]}
-      />
+      <OrbitControls />
       <mesh>
-        <boxGeometry args={[1, 1, 1]} />
-        <meshStandardMaterial color={"#0066CC"} />
+        <boxGeometry />
+        <meshMatcapMaterial color={"#0066CC"} />
       </mesh>
     </Canvas>
   );
@@ -482,7 +477,7 @@ export default function App() {
       <ambientLight />
       <mesh>
         <boxGeometry />
-        <meshBasicMaterial color={"#0066CC"} />
+        <meshMatcapMaterial color={"#0066CC"} />
       </mesh>
     </Canvas>
   );
