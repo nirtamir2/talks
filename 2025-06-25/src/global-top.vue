@@ -13,4 +13,10 @@
   --sp-font-size: 16px;
   --sp-font-lineHeight: 20px;
 }
+
+.slidev-react-container {
+  width: 100%;
+  height: 100%;
+}
+
 </style>

@@ -349,8 +349,8 @@ scene.add(cube);
 renderer.render(scene, camera);
 ```
 
-<Transform v-drag="[659,136,144,144]">
-  <React draggable is="ThreeBasicDemo" />
+<Transform v-drag="[610,136,305,286]">
+  <React draggable is="ThreeBasicDemoPreview" />
 </Transform>
 
 <!--
@@ -451,7 +451,7 @@ export default function App() {
 @@@
 
 ```tsx sandpack index=0
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
   return (
@@ -467,7 +467,7 @@ export default function App() {
 ```
 
 ```tsx sandpack index=1
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
   return (
@@ -484,7 +484,7 @@ export default function App() {
 ```
 
 ```tsx sandpack index=2 file="App.tsx"
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Box } from "./Box";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
@@ -522,7 +522,7 @@ export function Box(props: ThreeElements["mesh"]) {
 ```
 
 ```tsx sandpack index=3 file="App.tsx"
-import { OrbitControls, PerspectiveCamera } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Box } from "./Box";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
@@ -668,7 +668,7 @@ url: https://gltf.pmnd.rs/
 # GLTF!
 
 <BrowserWrapper title="sketchfab.com">
-  <DemoIframe url="https://sketchfab.com/"></DemoIframe>
+  <DemoIframe url="https://sketchfab.com/3d-models/rubiks-cube-4cc7c1bf585f4b929ddd32f6cab3ba58"></DemoIframe>
 </BrowserWrapper>
 
 ---

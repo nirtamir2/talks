@@ -42,7 +42,10 @@ export default definePreparserSetup(() => {
 function transformSandpackBlock(match: string, blocksContent: string): string {
   const files = mergeByIndex(extractFilesFromBlocks(blocksContent));
   const filesJson = JSON.stringify(files).replaceAll('"', "&quot;");
-  return html`<FilesPlayground :files="${filesJson}"> </FilesPlayground> `;
+  // In case we want the Vue implementation:
+  // return html`<FilesPlayground :files="${filesJson}"> </FilesPlayground> `;
+  return html`<React is="FilesPlayground" :files="${filesJson}"></React> `;
+
 }
 
 function createFileObject(
