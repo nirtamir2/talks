@@ -31,19 +31,28 @@ layout: section
 
 # The WOW effect
 
-<div class="text-2xl">Worth it every time</div>
+<div v-click class="text-2xl">Worth it every time</div>
 
 <!--
 The wow effect.
 
-It’s that moment when someone sees your product and goes, ‘Whoa, that’s cool.’
-It’s not because of a huge feature or complex logic—it’s usually something subtle.
-A smooth transition. A tiny 3D touch. A shadow that reacts to the mouse.
+[PAUSE]
 
-It doesn’t take much.
-But it feels like magic.
-Because those little moments show that someone cared.
-And that’s what makes people remember, engage, and fall in love with your product
+This is the moment the user says: 'This is great!'
+It is never about your biggest feature.
+It's about UI polish.
+
+It comes from small things:
+- A micro-interaction
+- A smooth transition
+- The surprises that aren't necessary, but add joy like illustrations
+
+[click]
+
+These small details create magic.
+
+Why? Because polish proves to the user that we care about their experience.
+That caring builds trust.
 -->
 
 ---
@@ -57,7 +66,7 @@ layout: section
 <!--
 3D is one of the fastest ways to create that wow effect.
 It’s visual, it’s interactive, and it immediately grabs attention.
-Even something super simple—a rotating object, a subtle depth—can make your product stand out
+Even a simple 3D touch can make your product stand out
 -->
 
 ---
@@ -66,9 +75,11 @@ layout: section
 
 # 3D is for everyone
 
-<div class="text-2xl">Yes, even you — let’s make something that wows.</div>
+<div class="text-2xl">Let’s make something that wows</div>
 
 <!--
+If you know React, you can do this. You don't need to be a graphics programmer or know shaders. Just the same patterns you already use. Components, props, hooks. By the end of this talk, you'll have everything you need to add 3D to your projects.
+
 There is myth that you need to be a special 3D low-level shaders master or 3D model editor in order to create 3D on the web. 
 
 But 3D isn’t just for experts — it’s a creative tool anyone can use. In this talk, I’ll convince you that building immersive web experiences is within your reach.
@@ -675,12 +686,6 @@ hide: true
 ---
 
 ---
-title: Suzanne Iframe
-layout: full
-url: https://gltf.pmnd.rs/
----
-
----
 layout: section
 ---
 
@@ -734,9 +739,9 @@ export default function App() {
     <Canvas>
       <OrbitControls />
       <Physics debug>
-        <RigidBody colliders="cuboid" rotation={[Math.PI / 4, Math.PI / 4, 0]}>
+        <RigidBody colliders="cuboid">
           <mesh>
-            <boxGeometry args={[1, 1, 1]} />
+            <boxGeometry rotation={[Math.PI / 4, Math.PI / 4, 0]} />
             <meshMatcapMaterial color={"#0066CC"} />
           </mesh>
         </RigidBody>
@@ -754,7 +759,7 @@ export function MyBox(props: RigidBodyProps) {
   return (
     <RigidBody {...props} colliders="cuboid">
       <mesh>
-        <boxGeometry args={[1, 1, 1]} />
+        <boxGeometry />
         <meshMatcapMaterial color={"#0066CC"} />
       </mesh>
     </RigidBody>
