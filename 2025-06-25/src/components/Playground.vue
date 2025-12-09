@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import type { SandpackProps } from "sandpack-vue3";
-import {
-  SandpackPreview,
-  SandpackProvider,
-  defaultDark
-} from "sandpack-vue3";
+import { SandpackPreview, SandpackProvider, defaultDark } from "sandpack-vue3";
 import { computed, ref } from "vue";
 
 const props = defineProps<{
@@ -69,7 +65,6 @@ root.render(
     }),
   },
 }));
-
 </script>
 
 <template>

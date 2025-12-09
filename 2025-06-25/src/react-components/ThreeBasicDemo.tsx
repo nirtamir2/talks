@@ -15,7 +15,7 @@ export default function ThreeBasicDemo() {
     element.append(renderer.domElement);
 
     const scene = new THREE.Scene();
-    
+
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
     camera.position.z = 2;
 

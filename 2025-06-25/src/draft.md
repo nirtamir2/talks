@@ -572,7 +572,7 @@ import React from "react";
 import { useGLTF } from "@react-three/drei";
 
 export function Model(props) {
-  const { nodes, materials } = useGLTF("/suzanne.gltf");
+  const { nodes } = useGLTF("/suzanne.gltf");
   return (
     <group {...props} dispose={null}>
       <mesh
@@ -626,7 +626,7 @@ title: "Physics"
 @@@
 
 ```tsx sandpack index=0
-import { OrbitControls, Sphere, Torus } from "@react-three/drei";
+import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier";
 

@@ -19,8 +19,10 @@ const slotName = computed(() => {
   <div class="flex w-full appearance-none flex-wrap gap-2 pb-4">
     <template v-for="visibleFile in sandpack.visibleFiles" :key="visibleFile">
       <button
-class="appearance-none p-2" :class="[visibleFile === sandpack.activeFile && 'border-b']"
-        @click="sandpack.setActiveFile(visibleFile)">
+        class="appearance-none p-2"
+        :class="[visibleFile === sandpack.activeFile && 'border-b']"
+        @click="sandpack.setActiveFile(visibleFile)"
+      >
         {{ visibleFile.replace("/", "") }}
       </button>
     </template>
@@ -28,6 +30,8 @@ class="appearance-none p-2" :class="[visibleFile === sandpack.activeFile && 'bor
 
   <slot :name="slotName" />
   <Suspense>
-    <SyntaxHighlight :code="sandpack.files[sandpack.activeFile].code"></SyntaxHighlight>
+    <SyntaxHighlight
+      :code="sandpack.files[sandpack.activeFile].code"
+    ></SyntaxHighlight>
   </Suspense>
 </template>

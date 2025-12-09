@@ -1,4 +1,3 @@
-
 Effortless 3D with react-three-fiber
 
 My name is Nir. Nir Tamir. I've been doing frontend for over a decade. You can find more about me at

@@ -1,12 +1,10 @@
-import { useState } from "react";
 import type { SandpackProps } from "@codesandbox/sandpack-react";
 import { SandpackPreview, SandpackProvider } from "@codesandbox/sandpack-react";
 
 export default function Preview(props: {
   files: Array<SandpackProps["files"]>;
 }) {
-  const [index, setIndex] = useState(0);
-  const currentFiles = props.files[index];
+  const currentFiles = props.files[0];
 
   const files = {
     ...currentFiles,
@@ -64,6 +62,7 @@ root.render(
   };
 
   return (
+    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     <div
       className="flex size-full"
       onKeyDown={(e) => {

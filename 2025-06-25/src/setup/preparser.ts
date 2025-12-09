@@ -45,7 +45,6 @@ function transformSandpackBlock(match: string, blocksContent: string): string {
   // In case we want the Vue implementation:
   // return html`<FilesPlayground :files="${filesJson}"> </FilesPlayground> `;
   return html`<React is="FilesPlayground" :files="${filesJson}"></React> `;
-
 }
 
 function createFileObject(

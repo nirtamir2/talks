@@ -15,6 +15,6 @@ code {
 
 .slidev-code {
   --slidev-code-font-size: 16px;
-  --slidev-code-line-height: 22px
+  --slidev-code-line-height: 22px;
 }
 </style>

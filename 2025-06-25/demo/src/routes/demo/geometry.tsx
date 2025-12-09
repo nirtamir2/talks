@@ -23,7 +23,7 @@ function RouteComponent() {
         </mesh> */}
         <mesh position={[0, 0, 0]}>
           <coneGeometry />
-          <meshNormalMaterial wireframe/>
+          <meshNormalMaterial wireframe />
         </mesh>
         {/* <mesh position={[3, 0, 0]}>
           <cylinderGeometry />

@@ -1,7 +1,7 @@
-import ThreeBasicDemo from "./ThreeBasicDemo";
 import FilesPlayground from "./FilesPlayground";
-import Preview from "./Preview";
 import FilesPlaygroundJS from "./FilesPlaygroundJS";
+import Preview from "./Preview";
+import ThreeBasicDemo from "./ThreeBasicDemo";
 import ThreeBasicDemoPreview from "./ThreeBasicDemoPreview";
 
 export default {

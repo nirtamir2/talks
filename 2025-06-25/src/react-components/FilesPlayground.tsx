@@ -112,6 +112,7 @@ root.render(
         </div>
       ) : null}
 
+      {/*  eslint-disable-next-line jsx-a11y/no-static-element-interactions */}
       <div
         className="flex size-full"
         onKeyDown={(e) => {
@@ -134,7 +135,7 @@ root.render(
               {isEditMode ? (
                 <SandpackCodeEditor className="h-full" />
               ) : (
-                <ActiveSandpackFile index={index}>
+                <ActiveSandpackFile>
                   {/* <template v-for="(_, name) in $slots" :key="name" #[name]>
               <slot :name="name" />
             </template> */}
@@ -155,14 +156,8 @@ root.render(
   );
 }
 
-function ActiveSandpackFile(props: { index: number }) {
+function ActiveSandpackFile() {
   const { sandpack } = useSandpack();
-  // Same like in setup preparser.ts
-  const activeFileName = sandpack.activeFile
-    .replaceAll(".", "_")
-    .replace("/", "");
-
-  const slotName = `index_${props.index}_filename_${activeFileName}`;
 
   return (
     <div className="flex h-full w-full appearance-none flex-wrap gap-2 pb-4">
@@ -198,5 +193,7 @@ async function SyntaxHighlight(props: { code: string }) {
     theme: "vitesse-dark",
   });
 
-  return <div className="size-full" dangerouslySetInnerHTML={{ __html: code }} />;
+  return (
+    <div className="size-full" dangerouslySetInnerHTML={{ __html: code }} />
+  );
 }

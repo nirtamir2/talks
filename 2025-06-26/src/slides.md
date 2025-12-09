@@ -678,7 +678,7 @@ const recovered: Effect<string, never, never>;
 <!--
 Before we handle the error, the type shows it's there.
 [click]
-After we handle it, the error becomes 'never'—meaning zero errors remain. 
+After we handle it, the error becomes 'never'—meaning zero errors remain.
 -->
 
 ---
