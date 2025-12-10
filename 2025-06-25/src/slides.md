@@ -740,8 +740,8 @@ export default function App() {
       <OrbitControls />
       <Physics debug>
         <RigidBody colliders="cuboid">
-          <mesh>
-            <boxGeometry rotation={[Math.PI / 4, Math.PI / 4, 0]} />
+          <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>
+            <boxGeometry />
             <meshMatcapMaterial color={"#0066CC"} />
           </mesh>
         </RigidBody>
