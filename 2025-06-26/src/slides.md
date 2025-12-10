@@ -1159,6 +1159,10 @@ I'm happy to answer questions after the talk or you can reach me through my webs
 -->
 
 ---
+layout: end
+---
+
+---
 title: Resources
 ---
 

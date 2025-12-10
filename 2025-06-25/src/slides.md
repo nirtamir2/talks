@@ -78,7 +78,6 @@ layout: section
 <div class="text-2xl">Let’s make something that wows</div>
 
 <!--
-There is myth that you need to be a special 3D low-level shaders master or 3D model editor in order to create 3D on the web. 
 
 But 3D isn’t just for experts — it’s a creative tool anyone can use. In this talk, I’ll convince you that building immersive web experiences is within your reach.
 -->
@@ -117,7 +116,7 @@ layout: section
 A JavaScript library for creating 3D graphics in the browser.
 
 <!--
-We are going to use Three.js - which is a JavaScript library for creating 3D graphics in the browser. It's not a low-level WebGL or WebGPU
+We are going to use Three.js - which is a JavaScript library for creating 3D graphics in the browser.
 -->
 
 ---
@@ -130,7 +129,7 @@ title: Three.js structure
 <!--
 Most Three.js apps have the same core elements.
 
-First we need have a Renderer that handles rendering your 3D scene in the browser using WebGL (a low-level graphics API built into browsers). (or WebGPU).
+First we need have a **Renderer** that handles rendering your 3D scene in the browser using WebGL (a low-level graphics API built into browsers). (or WebGPU).
 
 Then inside the render we have a **Scene** - which is like the stage to play -  it’s the space where all your 3D objects, lights, and cameras live.
 
@@ -202,7 +201,7 @@ Material
 <!--
 Mesh is made of:
 
-➕ Geometry (the shape) -
+➕ **Geometry** (the shape) -
 It defines the vertices (points in space), faces (triangles built from those points) and the overall shape (cube, sphere, model...)
 
 🎨 Material (the look)
@@ -225,8 +224,6 @@ backgroundSize: contain
 ---
 
 # Geometries
-
-<!-- TODO: wireframe true -->
 
 <!--
 Here are some geometries with the same normal material. 
@@ -284,9 +281,6 @@ backgroundSize: contain
 # Materials
 
 <!--
-🎨 Material (the look)
-
-This is the “skin” that wraps the geometry.
 
   Here on the left we have some materials that does not react to light and on the right it do affected by light. I colored the materials in green color.
 -->
@@ -500,7 +494,7 @@ export default function App() {
   );
 }
 
-// boxGeometry, sphereGeometry, torusGeometry, planeGeometry
+// boxGeometry, sphereGeometry, planeGeometry, torusGeometry
 // meshMatcapMaterial, meshToonMaterial, meshNormalMaterial, meshStandardMaterial
 ```
 
@@ -710,9 +704,9 @@ layout: section
 
 ---
 
-# So how do I use gltf in React?
+# So how do I use GLTF in React?
 
-<BrowserWrapper title="gltf.pmnd.rs">
+<BrowserWrapper title="gltfJSX - 🎮 Turns GLTFs into JSX components">
   <DemoIframe url="https://gltf.pmnd.rs/"></DemoIframe>
 </BrowserWrapper>
 
@@ -901,6 +895,10 @@ You just need to understand the building blocks we've covered today.
 <BrowserWrapper title="https://r3f.docs.pmnd.rs/getting-started/examples">
   <DemoIframe url="https://r3f.docs.pmnd.rs/getting-started/examples"></DemoIframe>
 </BrowserWrapper>
+
+<!-- 
+You can also look at the official react-three-fiber docs - they have a lot of impressive examples you can grab and look at their code implementation
+ -->
 
 ---
 layout: section
