@@ -45,7 +45,7 @@ It's about UI polish.
 It comes from small things:
 - A micro-interaction
 - A smooth transition
-- The surprises that aren't necessary, but add joy like illustrations
+- Some illustrations
 
 [click]
 
@@ -78,8 +78,6 @@ layout: section
 <div class="text-2xl">Let’s make something that wows</div>
 
 <!--
-If you know React, you can do this. You don't need to be a graphics programmer or know shaders. Just the same patterns you already use. Components, props, hooks. By the end of this talk, you'll have everything you need to add 3D to your projects.
-
 There is myth that you need to be a special 3D low-level shaders master or 3D model editor in order to create 3D on the web. 
 
 But 3D isn’t just for experts — it’s a creative tool anyone can use. In this talk, I’ll convince you that building immersive web experiences is within your reach.
@@ -205,7 +203,7 @@ Material
 Mesh is made of:
 
 ➕ Geometry (the shape) -
-It defines the vertices (points in space), faces (triangles built from those points) and the overal shape (cube, sphere, model...)
+It defines the vertices (points in space), faces (triangles built from those points) and the overall shape (cube, sphere, model...)
 
 🎨 Material (the look)
 
@@ -294,6 +292,7 @@ This is the “skin” that wraps the geometry.
 -->
 
 ---
+hide: true
 title: UV Map
 layout: image
 image: /uv-map.png
@@ -313,6 +312,13 @@ For materials we can have the concept of UV Map sometimes.
 A UV map is how a 2D image (like a texture) gets wrapped onto a 3D model — it’s like saying:
 🧊 “Which part of the image should go on which part of the 3D object?”
 -->
+
+---
+title: Three.js Textures
+layout: image
+image: /material-geometry.png
+backgroundSize: contain
+---
 
 ---
 hide: true
@@ -840,6 +846,35 @@ Now if we change the Sphere collider to from ball to cuboid the physics engine w
 -->
 
 ---
+layout: section
+---
+
+# Key Takeaways
+
+<v-clicks>
+
+- The core Three.js concepts
+- How R3F makes it declarative with React components
+- How to add interactivity with events and state
+- How to animate with `useFrame`
+- How to import 3D models
+- How to add physics with Rapier
+
+</v-clicks>
+
+---
+layout: section
+---
+
+# The best way to <br> learn is by doing
+
+<!--
+Start small - make a rotating cube. [TODO: slide of just a box]
+Add some interaction. [TODO: slide of just a box rotating]
+Import a model and before you know it, you'll be creating those wow moments. [TODO: slide of just a rubik cube rotating]
+-->
+
+---
 title: "Demo wow"
 ---
 
@@ -868,28 +903,8 @@ You just need to understand the building blocks we've covered today.
 </BrowserWrapper>
 
 ---
-
-So that's it! You now know:
-
-- The core Three.js concepts: scene, camera, mesh, geometry, material
-- How R3F makes it declarative with React components
-- How to add interactivity with events and state
-- How to animate with useFrame
-- How to add physics with Rapier
-- How to import 3D models
-
----
 layout: section
 ---
-
-# The best way to learn is by doing.
-
-<!--
-
-Start small - make a rotating cube. [TODO: slide of just a box]
-Add some interaction. [TODO: slide of just a box rotating]
-Import a model and before you know it, you'll be creating those wow moments. [TODO: slide of just a rubik cube rotating]
--->
 
 # Go build stuff
 
