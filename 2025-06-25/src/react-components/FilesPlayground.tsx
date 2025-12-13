@@ -126,6 +126,10 @@ root.render(
           {`
         .sp-wrapper {
   width: 100%;
+  
+  --sp-font-size: 15px;
+  --sp-font-lineHeight: 20px;
+
 }
 `}
         </style>

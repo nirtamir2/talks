@@ -9,9 +9,13 @@
   max-height: 200px;
 }
 
-.sp-code-editor {
-  --sp-font-size: 16px;
-  --sp-font-lineHeight: 20px;
+code {
+  --prism-font-size: 16px;
+}
+
+.slidev-code {
+  --slidev-code-font-size: 16px;
+  --slidev-code-line-height: 20px;
 }
 
 .slidev-react-container {

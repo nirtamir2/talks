@@ -1,7 +1,7 @@
 import type { SandpackProps } from "@codesandbox/sandpack-react";
 import { SandpackPreview, SandpackProvider } from "@codesandbox/sandpack-react";
 
-export default function FilesPreviewJS(props: {
+export default function FilesPlaygroundOnlyJS(props: {
   files: Array<SandpackProps["files"]>;
 }) {
   const currentFiles = props.files[0];
@@ -47,6 +47,18 @@ export default function FilesPreviewJS(props: {
         e.stopPropagation();
       }}
     >
+      <style>
+        {`
+        .sp-wrapper {
+  width: 100%;
+}
+
+.sp-code-editor {
+  --sp-font-size: 18px;
+  --sp-font-lineHeight: 20px;
+}
+`}
+      </style>
       <SandpackProvider theme="dark" template="vanilla-ts" files={files}>
         <SandpackPreview showOpenInCodeSandbox={false} className="h-full" />
       </SandpackProvider>

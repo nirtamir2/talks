@@ -1,9 +1,9 @@
 import { any as ts } from "code-tag";
-import FilesPlaygroundJS from "./FilesPlaygroundJS";
+import FilesPlaygroundOnlyJS from "./FilesPlaygroundOnlyJS";
 
 export default function ThreeBasicDemoPreview() {
   return (
-    <FilesPlaygroundJS
+    <FilesPlaygroundOnlyJS
       files={[
         {
           "/index.ts": {
