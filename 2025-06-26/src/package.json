@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "slidev",
     "build": "tsx ../../scripts/build.ts /2025/node-tlv/",
+    "export-pptx": "slidev export --format pptx",
     "export-notes": "slidev export-notes",
     "export": "slidev export --per-slide --output ../2025-06-26-09-effect-ts.pdf"
   }

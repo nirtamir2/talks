@@ -39,8 +39,7 @@ The wow effect.
 [PAUSE]
 
 This is the moment the user says: 'This is great!'
-It is never about your biggest feature.
-It's about UI polish.
+It is not because of a big feature - it's about UI polish.
 
 It comes from small things:
 - A micro-interaction
@@ -49,10 +48,10 @@ It comes from small things:
 
 [click]
 
-These small details create magic.
+Those small details create magic.
 
-Why? Because polish proves to the user that we care about their experience.
-That caring builds trust.
+It proves that we care about user experience.
+And it builds trust.
 -->
 
 ---
@@ -65,7 +64,9 @@ layout: section
 
 <!--
 3D is one of the fastest ways to create that wow effect.
+
 It’s visual, it’s interactive, and it immediately grabs attention.
+
 Even a simple 3D touch can make your product stand out
 -->
 
@@ -78,8 +79,10 @@ layout: section
 <div class="text-2xl">Let’s make something that wows</div>
 
 <!--
+But 3D isn’t just for experts — it’s a creative tool anyone can use.
 
-But 3D isn’t just for experts — it’s a creative tool anyone can use. In this talk, I’ll convince you that building immersive web experiences is within your reach.
+In this talk, we’ll build 3D web experiences step by step, even if you’ve never touched 3D before.
+
 -->
 
 ---
@@ -113,7 +116,7 @@ layout: section
 
 ![Three.js logo](/three.js%20logo.svg){.w-30.absolute}
 
-A JavaScript library for creating 3D graphics in the browser.
+A JavaScript library for creating 3D graphics in the browser
 
 <!--
 We are going to use Three.js - which is a JavaScript library for creating 3D graphics in the browser.
@@ -281,8 +284,7 @@ backgroundSize: contain
 # Materials
 
 <!--
-
-  Here on the left we have some materials that does not react to light and on the right it do affected by light. I colored the materials in green color.
+Here on the left we have some materials that does not react to light and on the right it do affected by light. I colored the materials in green color.
 -->
 
 ---
@@ -388,15 +390,13 @@ title: React-three-fiber
 layout: section
 ---
 
-# React-three-fiber (r3f)
+# React Three Fiber (R3F)
 
 ![Three.js logo](/three.js%20logo.svg){.w-30.absolute}
 
-React-three-fiber is a React renderer for three.js.
+React Three Fiber is a React renderer for three.js
 
 <!--
-So we've seen Three.js - it's powerful but verbose.
-This is where react-three-fiber comes in.
 R3F is a React renderer for Three.js - which means it uses React's reconciliation to manage your 3D scene.
 Instead of imperatively creating objects and adding them to the scene, you declare what you want using JSX.
 It handles all the setup boilerplate and gives you React's component model for free.
@@ -610,16 +610,6 @@ Rotation turns it - measured in radians, not degrees.
 Play with these values to get a feel for 3D coordinates.
 
 [click]
-
-Now let's understand 3D space better.
-I've added an axesHelper - the red line is X, green is Y, blue is Z.
-Notice the mesh has position, scale, and rotation properties.
-Position moves it in 3D space - [x, y, z].
-Scale changes its size - [1, 1, 1] is normal size.
-Rotation turns it - measured in radians, not degrees.
-Play with these values to get a feel for 3D coordinates.
-
-[click]
 Now we're seeing React's real power.
 I've extracted the box into its own component.
 This lets us reuse it - see how we render two boxes at different positions?
@@ -702,6 +692,13 @@ layout: section
   </a>
 </BrowserWrapper>
 
+<!--
+Of course, you don't have to model everything from primitives.
+You can import models created in Blender, Maya, or other 3D software.
+The standard format is GLTF - think of it as the JPEG of 3D.
+We can download models from the internet from websites like sketchfab for free (notice that some require some attribution).
+-->
+
 ---
 
 # So how do I use GLTF in React?
@@ -711,14 +708,9 @@ layout: section
 </BrowserWrapper>
 
 <!--
-Of course, you don't have to model everything from primitives.
-You can import models created in Blender, Maya, or other 3D software.
-The standard format is GLTF - think of it as the JPEG of 3D.
-The gltfjsx tool converts GLTF files into React components automatically.
+After we download the models we can use the gltfjsx tool converts GLTF files into React components automatically.
 It parses the model and generates code with all the meshes, materials, and hierarchies.
-Visit gltf.pmnd.rs to try it yourself - drag any GLTF file and get React code instantly.
-
-להציג מודל נעל
+We can copy the code and create react components for out models.
 -->
 
 ---
@@ -753,12 +745,22 @@ export default function App() {
 ```
 
 ```tsx sandpack index=1 file="MyBox.tsx"
-import { RigidBody, RigidBodyProps } from "@react-three/rapier";
+import {
+  RapierRigidBody,
+  RigidBody,
+  RigidBodyProps,
+} from "@react-three/rapier";
+import { useRef } from "react";
 
 export function MyBox(props: RigidBodyProps) {
+  const ref = useRef<RapierRigidBody>(null!);
   return (
-    <RigidBody {...props} colliders="cuboid">
-      <mesh>
+    <RigidBody {...props} ref={ref} colliders="cuboid">
+      <mesh
+        onClick={() => {
+          ref.current.applyImpulse({ x: 0, y: 8, z: 0 }, true);
+        }}
+      >
         <boxGeometry />
         <meshMatcapMaterial color={"#0066CC"} />
       </mesh>
@@ -782,10 +784,10 @@ export function MySphere(props: RigidBodyProps) {
 }
 ```
 
-```tsx sandpack index=1 file="MyThorus.tsx"
+```tsx sandpack index=1 file="MyTorus.tsx"
 import { RigidBody, RigidBodyProps } from "@react-three/rapier";
 
-export function MyThorus(props: RigidBodyProps) {
+export function MyTorus(props: RigidBodyProps) {
   return (
     <RigidBody {...props} colliders="trimesh">
       <mesh>
@@ -800,10 +802,10 @@ export function MyThorus(props: RigidBodyProps) {
 ```tsx sandpack index=1 file="App.tsx"
 import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
-import { CuboidCollider, Physics } from "@react-three/rapier";
+import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier";
 import { MyBox } from "./MyBox";
 import { MySphere } from "./MySphere";
-import { MyThorus } from "./MyThorus";
+import { MyTorus } from "./MyTorus";
 
 export default function App() {
   return (
@@ -812,7 +814,7 @@ export default function App() {
       <Physics debug>
         <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />
         <MySphere position={[0, 10, 0]} />
-        <MyThorus position={[2, 0, 0]} />
+        <MyTorus position={[2, 0, 0]} />
         <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />
       </Physics>
     </Canvas>
@@ -896,9 +898,9 @@ You just need to understand the building blocks we've covered today.
   <DemoIframe url="https://r3f.docs.pmnd.rs/getting-started/examples"></DemoIframe>
 </BrowserWrapper>
 
-<!-- 
+<!--
 You can also look at the official react-three-fiber docs - they have a lot of impressive examples you can grab and look at their code implementation
- -->
+-->
 
 ---
 layout: section
