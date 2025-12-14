@@ -31,8 +31,7 @@ layout: section
 
 # The WOW effect
 
-<div v-click class="text-2xl">We feel that someone cares about us</div>
-<div v-click class="text-xl pt-4 opacity-75">Worth it every time</div>
+<div v-click class="text-3xl">Small details create magic</div>
 
 <!--
 The wow effect.
@@ -50,10 +49,8 @@ It comes from small things:
 
 Those small details create magic.
 
-Worth it every time
-
 We feel that someone cares about our user experience.
-So we trust the project.
+And it build trust. 
 -->
 
 ---
@@ -62,9 +59,9 @@ layout: section
 
 # 3D
 
-<div class="text-2xl">3D is one of the fastest ways to create that wow effect</div>
-<div v-click class="text-xl pt-4 opacity-75">It’s visual, it’s interactive, and it immediately grabs attention
-</div>
+<div class="text-3xl">3D is one of the fastest ways to create that wow effect</div>
+<!-- <div v-click class="text-xl pt-4 opacity-75">It’s visual, it’s interactive, and it immediately grabs attention </div> -->
+
 
 <!--
 3D is one of the fastest ways to create that wow effect.
@@ -76,7 +73,7 @@ Even a simple 3D touch can make your product stand out
 
 ---
 
-# Wow effect examples
+# WOW effect examples
 
 <div class="block -z-10">
 <div class="flex items-center justify-center ">
@@ -91,6 +88,15 @@ Even a simple 3D touch can make your product stand out
 </SlidevVideo>
 </template>
 <template #2>
+<SlidevVideo loop autoplay>
+  <source src="/conf 2024 website.mp4" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/conf 2024 website.mp4">here</a>.
+  </p>
+</SlidevVideo>
+</template>
+<template #3>
 <SlidevVideo loop autoplay class="size-96">
   <source src="/iphone.mp4" type="video/mp4" />
   <p>
@@ -99,15 +105,6 @@ Even a simple 3D touch can make your product stand out
   </p>
 </SlidevVideo>
 
-</template>
-<template #3>
-<SlidevVideo loop autoplay>
-  <source src="/conf 2024 website.mp4" type="video/mp4" />
-  <p>
-    Your browser does not support videos. You may download it
-    <a href="/conf 2024 website.mp4">here</a>.
-  </p>
-</SlidevVideo>
 </template>
 <template #4>
 <SlidevVideo loop autoplay class="size-96">
@@ -122,15 +119,29 @@ Even a simple 3D touch can make your product stand out
 </div>
 </div>
 
+<!-- 
+We have a lot of examples:
+[click]
+From Next.js conf website
+[click]
+To Apple iPhone website
+[click]
+And even Resend in their marketing website
+ -->
+
 ---
 layout: section
 ---
 
-# 3D is for everyone
+<v-click>
 
-<div class="text-2xl">Let’s make something that wows</div>
+# 3D is for everyone
+</v-click>
+
+<div v-click class="text-3xl">Let’s make something that wows</div>
 
 <!--
+A lot of think that 3D specialist in order to create 3D experiences in the web. 
 But 3D isn’t just for experts — it’s a creative tool anyone can use.
 
 In this talk, we’ll build 3D web together experiences step by step, even if you’ve never touched 3D before.
@@ -152,11 +163,10 @@ class: pl-25
 <!-- - <mdi-github /> [@nirtamir2](https://github.com/nirtamir2) -->
 - <mdi-twitter /> [@NirTamir](https://twitter.com/NirTamir)
 <!-- - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
-
 <!--
 My name is Nir. Nir Tamir.
 I've been doing frontend for over a decade.
-You can find more about me at nirtamir.com.
+You can find more about me at nirtamir.com or follow me on Twitter. 
 -->
 
 ---
@@ -167,7 +177,7 @@ layout: section
 
 ![Three.js logo](/three.js%20logo.svg){.w-30.absolute}
 
-A JavaScript library for creating 3D graphics in the browser
+### A JavaScript library for creating 3D graphics in the browser
 
 <!--
 We are going to use Three.js - which is a JavaScript library for creating 3D graphics in the browser.
@@ -175,25 +185,29 @@ We are going to use Three.js - which is a JavaScript library for creating 3D gra
 
 ---
 
-<div v-drag="[166,69,679,458]" class="border-2 border-white rounded relative">
-<div class="absolute -top-8 left-0"> 
-<span class="text-2xl font-semibold">  
+<div v-drag="[89,69,794,458]" class="border-2 border-white rounded relative">
+<div class="absolute -top-10 left-0"> 
+<span class="text-3xl font-semibold">  
 Renderer (WebGLRenderer)
 </span>  
 </div>
 </div>
 
-<span v-drag="[488,47,351,20]" class="text-sm opacity-75 pl-2" v-click>rendering your 3D scene in the browser using WebGL</span>
+<!-- <span v-drag="[494,46,351,20]" class="text-sm opacity-75 pl-2" v-click>rendering your 3D scene in the browser using WebGL</span> -->
 
-<div class="border-2 border-white rounded relative" v-drag="[209,129,594,355]"  v-click >
-<div class="absolute -top-8 left-0"> 
-<span class="text-2xl font-semibold">  
+<div class="border-2 border-white rounded relative" v-drag="[157,137,665,347]"  v-click >
+<div class="absolute -top-10 left-0"> 
+<span class="text-3xl font-semibold">  
 Scene
 </span>
  </div>
  </div>
 
-<span v-drag="[290,106,144,40]" v-click class="text-sm opacity-75">the stage to play</span>
+<!-- <span v-drag="[268,112,144,40]" v-click class="text-sm opacity-75">the stage to play</span> -->
+
+<svg v-click width="27" height="45" viewBox="0 0 27 45" fill="none" xmlns="http://www.w3.org/2000/svg" title="camera" v-drag="[478,372,40,63]">
+<path d="M3.12099 0.777008C2.99599 1.01101 2.93599 1.27501 2.94899 1.54001C2.96099 1.80601 3.04599 2.063 3.19299 2.284L7.53699 8.81201H2.93799C2.15899 8.81201 1.41199 9.122 0.860992 9.673C0.309992 10.224 0 10.971 0 11.75V41.125C0 41.904 0.309992 42.651 0.860992 43.202C1.41199 43.753 2.15899 44.062 2.93799 44.062H23.5C24.279 44.062 25.026 43.753 25.577 43.202C26.128 42.651 26.438 41.904 26.438 41.125V11.75C26.438 10.971 26.128 10.224 25.577 9.673C25.026 9.122 24.279 8.81201 23.5 8.81201H18.91L23.263 2.284C23.421 2.041 23.503 1.75799 23.5 1.46899C23.5 1.07899 23.346 0.705993 23.07 0.429993C22.795 0.154993 22.421 0 22.031 0H4.40599C4.14199 0.002 3.883 0.0750056 3.657 0.212006C3.431 0.348006 3.24599 0.544008 3.12099 0.777008ZM23.5 11.75V41.125H2.93799V11.75H23.5ZM19.287 2.93701L15.371 8.81201H11.067L7.15999 2.93701H19.287Z" fill="white"/>
+</svg>
 
  <svg v-click title="light" v-drag="[478,172,40,50]" width="31" height="46" viewBox="0 0 31 46" fill="none" xmlns="http://www.w3.org/2000/svg">
 <path d="M0 30.121C0 38.694 6.72999 45.644 15.031 45.644C23.332 45.644 30.062 38.694 30.062 30.121C30.062 26.244 28.685 22.699 26.41 19.978L23.122 14.019C22.264 12.429 21.945 11.402 20.506 11.402H9.786C8.347 11.402 7.92299 12.483 7.16899 14.019L3.65199 19.978C1.37699 22.699 0 26.244 0 30.121Z" fill="#FFE46A"/>
@@ -204,9 +218,6 @@ Scene
 <path d="M8.468 8.756H21.649C22.294 8.756 22.821 9.283 22.821 9.928V10.607C22.821 11.251 22.294 11.779 21.649 11.779H8.468C7.823 11.779 7.29599 11.251 7.29599 10.607V9.928C7.29599 9.283 7.823 8.756 8.468 8.756ZM9.15199 3.881V4.561C9.15199 5.205 9.67899 5.732 10.324 5.732H19.793C20.438 5.732 20.965 5.205 20.965 4.561V3.881C20.965 3.237 20.438 2.709 19.793 2.709H10.324C9.67899 2.709 9.15199 3.237 9.15199 3.881Z" fill="#ABBDDB"/>
 </svg>
 
-<svg v-click width="27" height="45" viewBox="0 0 27 45" fill="none" xmlns="http://www.w3.org/2000/svg" title="camera" v-drag="[478,372,40,63]">
-<path d="M3.12099 0.777008C2.99599 1.01101 2.93599 1.27501 2.94899 1.54001C2.96099 1.80601 3.04599 2.063 3.19299 2.284L7.53699 8.81201H2.93799C2.15899 8.81201 1.41199 9.122 0.860992 9.673C0.309992 10.224 0 10.971 0 11.75V41.125C0 41.904 0.309992 42.651 0.860992 43.202C1.41199 43.753 2.15899 44.062 2.93799 44.062H23.5C24.279 44.062 25.026 43.753 25.577 43.202C26.128 42.651 26.438 41.904 26.438 41.125V11.75C26.438 10.971 26.128 10.224 25.577 9.673C25.026 9.122 24.279 8.81201 23.5 8.81201H18.91L23.263 2.284C23.421 2.041 23.503 1.75799 23.5 1.46899C23.5 1.07899 23.346 0.705993 23.07 0.429993C22.795 0.154993 22.421 0 22.031 0H4.40599C4.14199 0.002 3.883 0.0750056 3.657 0.212006C3.431 0.348006 3.24599 0.544008 3.12099 0.777008ZM23.5 11.75V41.125H2.93799V11.75H23.5ZM19.287 2.93701L15.371 8.81201H11.067L7.15999 2.93701H19.287Z" fill="white"/>
-</svg>
 
 <div  v-click v-drag="[418,267,146,53]" class="flex gap-10" >
  <svg title="mesh"   width="53" height="53" viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -225,11 +236,19 @@ Most Three.js apps have the same core elements.
 
 First we need have a Renderer that handles rendering your 3D scene in the browser using WebGL (a low-level graphics API built into browsers). (or WebGPU).
 
+[click]
+
 Then inside the render we have a **Scene** - which is like the stage to play -  it’s the space where all your 3D objects, lights, and cameras live.
+
+[click]
 
 The **Camera** is like the eyes of the viewer — it defines what part of the 3D scene is visible and how it’s projected onto the 2D screen.
 
+[click]
+
 Then we can have **Light** - so we won't have everything dark
+
+[click]
 
 and we have **Meshes** - which are the 3D object you actually see
 -->
@@ -238,46 +257,32 @@ and we have **Meshes** - which are the 3D object you actually see
 title: Three.js Mesh
 ---
 
-<Transform v-drag="[469,239,349,326]" pos="" >
+<Transform v-drag="[501,214,349,326]" >
  <img src="/material-normal.png" />
 </Transform>
 
-<Transform v-drag="[247,239,292,317]" pos="" >
+<Transform v-drag="[199,220,292,317]" >
  <img src="/material-normal-wireframe.png"/>
 </Transform>
 
-<v-drag text-6xl pos="444,19,83,44">
+<v-drag class="text-6xl" pos="444,19,83,44">
 Mesh
 </v-drag>
 
-<v-drag text-2xl pos="329,248,118,40">
+<v-drag class="text-4xl" pos="287,222,118,40">
 Geometry
 </v-drag>
 
-<v-drag text-2xl pos="589,251,97,40">
+<v-drag class="text-4xl" pos="599,220,97,40">
 Material
 </v-drag>
 
-<v-drag-arrow pos="470,100,-80,120"/>
+<v-drag-arrow pos="470,100,-80,97"/>
 
-<v-drag-arrow pos="550,100,70,120"/>
+<v-drag-arrow pos="560,100,78,91"/>
 
 <!--
-Mesh is made of:
-
-➕ **Geometry** (the shape) -
-It defines the vertices (points in space), faces (triangles built from those points) and the overall shape (cube, sphere, model...)
-
-🎨 Material (the look)
-
-This is the “skin” that wraps the geometry.
-
-It controls:
-    •	Color
-    •	Shininess
-    •	Transparency
-    •	Texture maps
-    •	How it reacts to light
+Mesh is made of 2 parts: Geometry and Mesh
 -->
 
 ---
@@ -287,13 +292,18 @@ backgroundSize: contain
 
 # Geometry (shape)
 
-- Vertices
-- Faces
-- Shape
+<div class="flex flex-col gap-4 pt-4">
+<div class="text-3xl">Vertices</div>
+<div class="text-3xl">Faces</div>
+<div class="text-3xl">Shape</div>
+</div>
 
 <img v-drag="[472,26,504,518]" src="/geometries-demo.png"/>
 
 <!--
+
+Geometry is the shape - it defines
+
 - Vertices (points in space)
 - Faces (triangles built from those points)
 - Shape (cube, sphere, model...)
@@ -303,16 +313,27 @@ backgroundSize: contain
 
 # Material (skin)
 
-- Color
-- Shininess
-- Transparency
-- Texture maps
-- How it reacts to light
+<div class="flex flex-col gap-4 pt-4">
+<div class="text-3xl">Color</div>
+<div class="text-3xl">Shininess</div>
+<div class="text-3xl">Transparency</div>
+<div class="text-3xl">Texture maps</div>
+<div class="text-3xl">How it reacts to light</div>
+</div>
+
 
 <img v-drag="[466,33,517,531]" src="/materials-demo.png"/>
 
 <!--
-Here on the left we have some materials that does not react to light and on the right it do affected by light. I colored the materials in green color.
+
+Material is the “skin” that wraps the geometry.
+
+It controls:
+    •	Color
+    •	Shininess
+    •	Transparency
+    •	Texture maps
+    •	How it reacts to light
 -->
 
 ---
@@ -347,20 +368,25 @@ renderer.render(scene, camera);
 
 <!--
 So let's see what vanilla Three.js code looks like.
+First we import all as THREE from three.js
 [click]
 First, we create a WebGLRenderer - this creates a canvas element and handles all the low-level WebGL rendering.
+We set its size and append it to the DOM.
 [click]
-Then we create a Scene - think of it as a container for everything in our 3D world.
+Then we create a Scene.
 [click]
-We add a PerspectiveCamera to define our viewpoint.
+We add a PerspectiveCamera to define our viewpoint and set its position. 
 [click]
-Finally, we create a mesh by combining a BoxGeometry with a MeshBasicMaterial.
+We create a BoxGeometry with height, width and depth of 1, and MeshBasicMaterial with a blue color and we combine them to a mesh for our cube.
 [click]
 Then we need to add the mesh to the scene
 [click]
-and render it with our camera
+and render it with our camera. We need to run this in a loop using requestAnimationFrame
 [click]
-Notice how verbose this is - we'll see how R3F simplifies this in a moment.
+Notice how verbose this is
+[click]
+And the result is just a blue cube
+
 -->
 
 ---
@@ -368,6 +394,8 @@ layout: section
 ---
 
 # All that for a simple cube?
+
+<!-- We will see how R3F simplifies this in a moment. -->
 
 ---
 title: React-three-fiber
@@ -378,12 +406,12 @@ layout: section
 
 ![Three.js logo](/three.js%20logo.svg){.w-30.absolute}
 
-React Three Fiber is a React renderer for three.js
+### React Three Fiber is a React renderer for three.js
 
 <!--
 R3F is a React renderer for Three.js - which means it uses React's reconciliation to manage your 3D scene.
 Instead of imperatively creating objects and adding them to the scene, you declare what you want using JSX.
-It handles all the setup boilerplate and gives you React's component model for free.
+It handles all the setup boilerplate and gives you React's component model for free. So we get props, state, hooks and JSX just like react but inside Three.js world. Let's see it in action. 
 -->
 
 ---
@@ -572,7 +600,7 @@ layout: section
 
 # What if I want something cooler than a box?
 
-<div v-click class="text-2xl">Custom Models</div>
+<div v-click class="text-3xl">Custom Models</div>
 
 ---
 
@@ -615,8 +643,8 @@ layout: section
 
 # Physics
 
-<div v-click class="text-2xl">
-Three.js draws things — a physics library makes them act like the real world.
+<div v-click class="text-3xl">
+Makes objects act like the real world
 </div>
 
 ---
@@ -625,8 +653,8 @@ title: "Physics"
 
 # Split into Physics World and View World
 
-- **Physics World:** The Engine calculating collisions and forces
-- **View World:** The Display rendering the visual output.
+- ## **Physics World:** The Engine calculating collisions and forces
+- ## **View World:** The Display rendering the visual output.
 
 <img v-drag="[76,240,453,283]" src="/physics-world.png" alt="physics world" />
 
@@ -841,7 +869,7 @@ layout: section
 
 # Go build stuff
 
-<div v-click class="text-2xl">Create that wow effect</div>
+<div v-click class="text-3xl">Create that wow effect</div>
 <div v-click class="text-xl pt-4 opacity-75">Or at least something fun</div>
 
 ---
