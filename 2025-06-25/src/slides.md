@@ -38,8 +38,7 @@ The wow effect.
 
 [PAUSE]
 
-This is the moment the user says: 'This is great!'
-It is not because of a big feature - it's about UI polish.
+This is the moment we are using a website and say: 'This is great!'
 
 It comes from small things:
 - A micro-interaction
@@ -50,8 +49,8 @@ It comes from small things:
 
 Those small details create magic.
 
-It proves that we care about user experience.
-And it builds trust.
+We feel that someone care about our user experience.
+So we trust the project.
 -->
 
 ---
@@ -69,6 +68,45 @@ It’s visual, it’s interactive, and it immediately grabs attention.
 
 Even a simple 3D touch can make your product stand out
 -->
+
+---
+
+# Wow effect examples
+
+<div class="block -z-10">
+<div class="flex items-center size-full justify-center ">
+<v-switch>
+<template #1>
+<SlidevVideo loop autoplay>
+  <source src="/vercel-ship-lanyard-drop-video.mp4" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/vercel-ship-lanyard-drop-video.mp4">here</a>.
+  </p>
+</SlidevVideo>
+</template>
+<template #2>
+<SlidevVideo loop autoplay>
+  <source src="/iphone.mp4" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/iphone.mp4">here</a>.
+  </p>
+</SlidevVideo>
+
+</template>
+<template #3>
+<SlidevVideo loop autoplay>
+  <source src="/resend.mp4" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/resend.mp4">here</a>.
+  </p>
+</SlidevVideo>
+</template>
+</v-switch>
+</div>
+</div>
 
 ---
 layout: section
@@ -122,28 +160,6 @@ We are going to use Three.js - which is a JavaScript library for creating 3D gra
 -->
 
 ---
-layout: image
-image: /three-js-main-figma.svg
-hide: true
-backgroundSize: calc(100%-5rem) calc(100%-5rem)
-title: Three.js structure
----
-
-<!--
-Most Three.js apps have the same core elements.
-
-First we need have a **Renderer** that handles rendering your 3D scene in the browser using WebGL (a low-level graphics API built into browsers). (or WebGPU).
-
-Then inside the render we have a **Scene** - which is like the stage to play -  it’s the space where all your 3D objects, lights, and cameras live.
-
-The **Camera** is like the eyes of the viewer — it defines what part of the 3D scene is visible and how it’s projected onto the 2D screen.
-
-Then we can have **Light** - so we won't have everything dark
-
-and we have **Meshes** - which are the 3D object you actually see
--->
-
----
 
 <div v-drag="[166,69,679,458]" class="border-2 border-white rounded relative">
 <div class="absolute -top-8 left-0"> 
@@ -190,38 +206,22 @@ Scene
 </svg>
 </div>
 
----
-hide: true
-title: Three.js structure animate from docs
----
+<!--
+Most Three.js apps have the same core elements.
 
-<v-switch>
-  <template #0> <img src="/structure/1.svg"/> </template>
-  <template #1> <img src="/structure/2.svg"/> </template>
-  <template #2> <img src="/structure/3.svg"/> </template>
-  <template #3> <img src="/structure/4.svg"/> </template>
-</v-switch>
+First we need have a Renderer that handles rendering your 3D scene in the browser using WebGL (a low-level graphics API built into browsers). (or WebGPU).
 
----
-hide: true
-title: Three.js structure
-layout: image
-image: /threejs-structure.svg
-backgroundSize: contain
-class: p-10
----
+Then inside the render we have a **Scene** - which is like the stage to play -  it’s the space where all your 3D objects, lights, and cameras live.
+
+The **Camera** is like the eyes of the viewer — it defines what part of the 3D scene is visible and how it’s projected onto the 2D screen.
+
+Then we can have **Light** - so we won't have everything dark
+
+and we have **Meshes** - which are the 3D object you actually see
+-->
 
 ---
-hide: true
-title: Three.js Meshe
-layout: image
-image: /three.js mesh.png
-backgroundSize: contain
-class: mix-blend-screen hue-rotate-180 contrast-180
----
-
----
-title: Three.js Meshe
+title: Three.js Mesh
 ---
 
 <Transform v-drag="[469,239,349,326]" pos="" >
@@ -271,63 +271,23 @@ title: Three.js Geometries
 backgroundSize: contain
 ---
 
-# Geometries (shape)
+# Geometry (shape)
 
-- Vertices (points in space)
-- Faces (triangles built from those points)
-- Overall shape (cube, sphere, model...)
+- Vertices
+- Faces
+- Shape
 
 <img v-drag="[472,26,504,518]" src="/geometries-demo.png"/>
 
 <!--
-Here are some geometries with the same normal material. 
-Cube Sphere Cylinder Torus Plane - Notice that they all ends with Geometry
+- Vertices (points in space)
+- Faces (triangles built from those points)
+- Shape (cube, sphere, model...)
 -->
 
 ---
-hide: true
-title: Three.js Geometries
----
 
-<!-- <img src="/geometry-normal-material.png"/>  -->
-
- <!-- <img src="/geometry-wireframe.png"/>  -->
-
-<Transform v-drag pos="" >
- <img src="/geometries-normal.png" />
-</Transform>
-
-<v-drag text-6xl pos="444,19,83,44">
-Mesh
-</v-drag>
-
-<v-drag text-xl pos="329,248,118,40">
-Geometry
-</v-drag>
-
-<v-drag text-xl pos="589,251,97,40">
-Material
-</v-drag>
-
-<v-drag text-xl pos="589,251,97,40">
-Sphere
-</v-drag>
-
----
-hide: true
-title: Three.js Geometries vs Material
-layout: image
-image: /material-geometry.png
-backgroundSize: contain
----
-
-<v-drag text-6xl pos="444,200,150,250">
-Geometry
-</v-drag>
-
----
-
-# Materials (skin)
+# Material (skin)
 
 - Color
 - Shininess
@@ -340,54 +300,6 @@ Geometry
 <!--
 Here on the left we have some materials that does not react to light and on the right it do affected by light. I colored the materials in green color.
 -->
-
----
-hide: true
-title: UV Map
-layout: image
-image: /uv-map.png
-backgroundSize: contain
----
-
-<v-drag text-6xl pos="336,163,368,250">
-UV Map
-</v-drag>
-
-<div class="text-black text-[8px] absolute bottom-10 right-10">
-"UV Mapping Example" by Tschmits, licensed under CC BY-SA 3.0 / GFDL.
-</div>
-
-<!--
-For materials we can have the concept of UV Map sometimes.
-A UV map is how a 2D image (like a texture) gets wrapped onto a 3D model — it’s like saying:
-🧊 “Which part of the image should go on which part of the 3D object?”
--->
-
----
-title: Three.js Textures
-hide: true
-layout: image
-image: /material-geometry.png
-backgroundSize: contain
----
-
----
-hide: true
-title: Three.js Geometries
-layout: image
-image: /three.js geometries.png
-backgroundSize: contain
-class: mix-blend-screen hue-rotate-180 contrast-180
----
-
----
-hide: true
-title: Three.js Materials
-layout: image
-image: /three.js materials.png
-backgroundSize: contain
-# class: mix-blend-screen hue-rotate-180 contrast-180
----
 
 ---
 
@@ -414,7 +326,7 @@ scene.add(cube);
 renderer.render(scene, camera);
 ```
 
-<Transform v-drag="[750,104,167,160]">
+<Transform v-drag="[750,104,167,160]" v-click>
   <img src="/three-js-cube-demo.png" alt="basic-threejs-cube" class="size-full">
   <!-- <React draggable is="ThreeBasicDemoPreview" /> -->
 </Transform>
@@ -455,62 +367,6 @@ It handles all the setup boilerplate and gives you React's component model for f
 -->
 
 ---
-hide: true
-title: React Reconciler & Renderer
-layout: image
-image: /reconciler-renderer.png
-backgroundSize: contain
-class: mix-blend-screen invert hue-rotate-180 contrast-150
----
-
-<!--
-https://www.youtube.com/watch?v=ZCuYPiUIONs
--->
-
----
-hide: true
-title: React
-layout: image
-image: /fiber-in-react.png
-backgroundSize: contain
-class: mix-blend-screen invert hue-rotate-180 contrast-150
-# hide: true
----
-
-<!--
-https://www.youtube.com/watch?v=ZCuYPiUIONs
--->
-
----
-layout: two-cols-header-gap
-hide: true
----
-
-# Basic example
-
-::left::
-
-```tsx
-export default function App() {
-  return (
-    <Canvas>
-      <ambientLight />
-      <mesh>
-        <boxGeometry />
-        <meshStandardMaterial />
-      </mesh>
-    </Canvas>
-  );
-}
-```
-
-::right::
-
-<BrowserWrapper>
-  <DemoIframe url="/demo/basic" />
-</BrowserWrapper>
-
----
 
 @@@
 
@@ -519,6 +375,7 @@ import { OrbitControls } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 export default function App() {
   return (
+    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.
     <Canvas>
       <OrbitControls />
       <mesh>
@@ -690,55 +547,6 @@ This is how you create any animation in R3F - update values in useFrame.
 -->
 
 ---
-title: "Import models"
-hide: true
----
-
-# Import models
-
-```tsx
-/*
-Auto-generated by: https://github.com/pmndrs/gltfjsx
-*/
-
-import { useGLTF } from "@react-three/drei";
-import React from "react";
-
-export function Model(props) {
-  const { nodes, materials } = useGLTF("/suzanne.gltf");
-  return (
-    <group {...props} dispose={null}>
-      <mesh
-        castShadow
-        receiveShadow
-        geometry={nodes.Suzanne.geometry}
-        material={nodes.Suzanne.material}
-        position={[0, 0.189, -0.043]}
-      />
-    </group>
-  );
-}
-
-useGLTF.preload("/suzanne.gltf");
-```
-
----
-hide: true
-title: Suzanne
-layout: image
-image: /suzanne.png
-backgroundSize: contain
-class: p-10 mix-blend-screen invert
----
-
----
-title: Suzanne Iframe
-layout: iframe
-url: https://gltf.pmnd.rs/
-hide: true
----
-
----
 layout: section
 ---
 
@@ -746,7 +554,7 @@ layout: section
 
 ---
 
-# GLTF
+# Custom Models: GLTF
 
 <BrowserWrapper title="sketchfab.com">
   <!-- <DemoIframe url="https://sketchfab.com"></DemoIframe> -->
@@ -765,6 +573,8 @@ We can download models from the internet from websites like sketchfab for free (
 ---
 
 # So how do I use GLTF in React?
+
+gltfJSX parses the model and generates code with all the meshes, materials, and hierarchies.
 
 <BrowserWrapper title="gltfJSX - 🎮 Turns GLTFs into JSX components">
   <DemoIframe url="https://gltf.pmnd.rs/"></DemoIframe>
@@ -977,10 +787,29 @@ You can also look at the official react-three-fiber docs - they have a lot of im
 -->
 
 ---
+class: flex gap-2
+---
+
+<BrowserWrapper title="Winston Snores">
+  <DemoIframe url="https://winston-snores.nirtamir.com/"></DemoIframe>
+</BrowserWrapper>
+
+<BrowserWrapper title="Sky Roads">
+  <DemoIframe url="https://sky-roads.nirtamir.com/"></DemoIframe>
+</BrowserWrapper>
+
+<BrowserWrapper title="Leaf Story">
+  <DemoIframe url="https://leaf-story.nirtamir.com/"></DemoIframe>
+</BrowserWrapper>
+
+---
 layout: section
 ---
 
 # Go build stuff
+
+<div v-click class="text-2xl">Create that wow effect</div>
+<div v-click class="text-xl pt-4 opacity-75">Or at least something fun</div>
 
 ---
 layout: intro
