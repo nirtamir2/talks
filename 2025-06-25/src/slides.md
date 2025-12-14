@@ -31,7 +31,8 @@ layout: section
 
 # The WOW effect
 
-<div v-click class="text-2xl">Worth it every time</div>
+<div v-click class="text-2xl">We feel that someone cares about us</div>
+<div v-click class="text-xl pt-4 opacity-75">Worth it every time</div>
 
 <!--
 The wow effect.
@@ -49,7 +50,9 @@ It comes from small things:
 
 Those small details create magic.
 
-We feel that someone care about our user experience.
+Worth it every time
+
+We feel that someone cares about our user experience.
 So we trust the project.
 -->
 
@@ -60,6 +63,8 @@ layout: section
 # 3D
 
 <div class="text-2xl">3D is one of the fastest ways to create that wow effect</div>
+<div v-click class="text-xl pt-4 opacity-75">It’s visual, it’s interactive, and it immediately grabs attention
+</div>
 
 <!--
 3D is one of the fastest ways to create that wow effect.
@@ -350,6 +355,12 @@ Notice how verbose this is - we'll see how R3F simplifies this in a moment.
 -->
 
 ---
+layout: section
+---
+
+# All that for a simple cube?
+
+---
 title: React-three-fiber
 layout: section
 ---
@@ -552,9 +563,11 @@ layout: section
 
 # What if I want something cooler than a box?
 
+<div v-click class="text-2xl">Custom Models</div>
+
 ---
 
-# Custom Models: GLTF
+# GLTF
 
 <BrowserWrapper title="sketchfab.com">
   <!-- <DemoIframe url="https://sketchfab.com"></DemoIframe> -->
@@ -593,7 +606,18 @@ layout: section
 
 # Physics
 
-<div class="text-2xl pb-56">Split into Physics World and View World</div>
+<div v-click class="text-2xl">
+Three.js draws things — a physics library makes them act like the real world.
+</div>
+
+---
+title: "Physics"
+---
+
+# Split into Physics World and View World
+
+- **Physics World:** The Engine calculating collisions and forces
+- **View World:** The Display rendering the visual output.
 
 <img v-drag="[76,240,453,283]" src="/physics-world.png" alt="physics world" />
 
