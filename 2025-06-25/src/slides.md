@@ -79,19 +79,19 @@ Even a simple 3D touch can make your product stand out
 # Wow effect examples
 
 <div class="block -z-10">
-<div class="flex items-center size-full justify-center ">
+<div class="flex items-center justify-center ">
 <v-switch>
 <template #1>
-<SlidevVideo loop autoplay>
-  <source src="/vercel-ship-lanyard-drop-video.mp4" type="video/mp4" />
+<SlidevVideo loop autoplay class="size-96">
+  <source src="/Next.js Lanyard.mp4" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
-    <a href="/vercel-ship-lanyard-drop-video.mp4">here</a>.
+    <a href="/Next.js Lanyard.mp4">here</a>.
   </p>
 </SlidevVideo>
 </template>
 <template #2>
-<SlidevVideo loop autoplay>
+<SlidevVideo loop autoplay class="size-96">
   <source src="/iphone.mp4" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
@@ -102,6 +102,15 @@ Even a simple 3D touch can make your product stand out
 </template>
 <template #3>
 <SlidevVideo loop autoplay>
+  <source src="/conf 2024 website.mp4" type="video/mp4" />
+  <p>
+    Your browser does not support videos. You may download it
+    <a href="/conf 2024 website.mp4">here</a>.
+  </p>
+</SlidevVideo>
+</template>
+<template #4>
+<SlidevVideo loop autoplay class="size-96">
   <source src="/resend.mp4" type="video/mp4" />
   <p>
     Your browser does not support videos. You may download it
