@@ -119,15 +119,16 @@ Even a simple 3D touch can make your product stand out
 </div>
 </div>
 
-<!-- 
+<!--
 We have a lot of examples:
 [click]
 From Next.js conf website
 [click]
+[click]
 To Apple iPhone website
 [click]
 And even Resend in their marketing website
- -->
+-->
 
 ---
 layout: section
@@ -141,10 +142,15 @@ layout: section
 <div v-click class="text-3xl">Let’s make something that wows</div>
 
 <!--
-A lot of think that 3D specialist in order to create 3D experiences in the web. 
+A lot of people think that you need a 3D specialist in order to create 3D experiences on the web. 
+
+[click]
+
 But 3D isn’t just for experts — it’s a creative tool anyone can use.
 
-In this talk, we’ll build 3D web together experiences step by step, even if you’ve never touched 3D before.
+[click]
+
+In this talk, we’ll build a 3D web experience together step by step, even if you’ve never touched 3D before.
 -->
 
 ---
@@ -238,7 +244,7 @@ First we need have a Renderer that handles rendering your 3D scene in the browse
 
 [click]
 
-Then inside the render we have a **Scene** - which is like the stage to play -  it’s the space where all your 3D objects, lights, and cameras live.
+Then inside the renderer we have a **Scene** - which is like the stage to play -  it’s the space where all your 3D objects, lights, and cameras live.
 
 [click]
 
@@ -282,7 +288,7 @@ Material
 <v-drag-arrow pos="560,100,78,91"/>
 
 <!--
-Mesh is made of 2 parts: Geometry and Mesh
+Mesh is made of 2 parts: Geometry and Material
 -->
 
 ---
@@ -381,12 +387,11 @@ We create a BoxGeometry with height, width and depth of 1, and MeshBasicMaterial
 [click]
 Then we need to add the mesh to the scene
 [click]
-and render it with our camera. We need to run this in a loop using requestAnimationFrame
+and render it with our camera
 [click]
-Notice how verbose this is
+Notice how verbose this code is.
 [click]
-And the result is just a blue cube
-
+Only to render a blue cube
 -->
 
 ---
@@ -416,161 +421,27 @@ It handles all the setup boilerplate and gives you React's component model for f
 
 ---
 
-@@@
-
-```tsx sandpack index=0
-import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-export default function App() {
-  return (
-    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.
-    <Canvas>
-      <OrbitControls />
-      <mesh>
-        <boxGeometry />
-        <meshMatcapMaterial color="#0066CC" />
-      </mesh>
-    </Canvas>
-  );
-}
-```
-
-```tsx sandpack index=1
-import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-export default function App() {
-  return (
-    <Canvas>
-      <OrbitControls />
-      <ambientLight />
-      <directionalLight position={[3, 5, 2]} />
-      <mesh>
-        <boxGeometry />
-        <meshMatcapMaterial color="#0066CC" />
-      </mesh>
-    </Canvas>
-  );
-}
-
-// boxGeometry, sphereGeometry, planeGeometry,
-// torusGeometry, torusKnotGeometry
-
-// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial
-// meshLambertMaterial, meshStandardMaterial
-// metalness={0.3}
-```
-
-```tsx sandpack index=2
-import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-export default function App() {
-  return (
-    <Canvas>
-      <OrbitControls />
-      <axesHelper />
-      <mesh
-        position={[0, 0, 0]}
-        scale={[1, 1, 1]}
-        rotation={[0, 0, 0]} // Math.PI / 4
-      >
-        <boxGeometry args={[1, 1, 1]} />
-        <meshMatcapMaterial color="#0066CC" />
-      </mesh>
-    </Canvas>
-  );
-}
-```
-
-```tsx sandpack index=3 file="App.tsx"
-import { OrbitControls } from "@react-three/drei";
-import { Box } from "./Box";
-import { Canvas } from "@react-three/fiber";
-export default function App() {
-  return (
-    <Canvas>
-      <OrbitControls />
-      <Box position={[-1.2, 0, 0]} />
-      <Box position={[1.2, 0, 0]} />
-    </Canvas>
-  );
-}
-```
-
-```tsx sandpack index=3 file="Box.tsx"
-import type { ThreeElements } from "@react-three/fiber";
-import { useState } from "react";
-
-export function Box(props: ThreeElements["mesh"]) {
-  const [isBlue, setIsBlue] = useState(false);
-  const [isLarge, setIsLarge] = useState(false);
-
-  const color = isBlue ? "#0066CC" : "#FF5733";
-
-  return (
-    <mesh
-      {...props}
-      scale={isLarge ? 2 : 1}
-      onClick={() => setIsLarge((isLarge) => !isLarge)}
-      onPointerOver={() => setIsBlue(true)}
-      onPointerOut={() => setIsBlue(false)}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshMatcapMaterial color={color} />
-    </mesh>
-  );
-}
-```
-
-```tsx sandpack index=4 file="App.tsx"
-import { OrbitControls } from "@react-three/drei";
-import { Box } from "./Box";
-import { Canvas } from "@react-three/fiber";
-export default function App() {
-  return (
-    <Canvas>
-      <OrbitControls />
-      <Box position={[-1.2, 0, 0]} />
-      <Box position={[1.2, 0, 0]} />
-    </Canvas>
-  );
-}
-```
-
-```tsx sandpack index=4 active file="Box.tsx"
-import type { ThreeElements } from "@react-three/fiber";
-import { useFrame } from "@react-three/fiber";
-import { useRef, useState } from "react";
-
-export function Box(props: ThreeElements["mesh"]) {
-  const meshRef = useRef<ThreeElements["mesh"]>(null!);
-
-  useFrame((state, delta) => {
-    meshRef.current.rotation.x += delta;
-  });
-
-  return (
-    <mesh {...props} ref={meshRef}>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshMatcapMaterial color="#FF5733" />
-    </mesh>
-  );
-}
-```
-
-@@@
+<React is="FilesPlayground" :files="[{&quot;App.tsx&quot;:{&quot;code&quot;:&quot;import { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.\n    <Canvas>\n      <OrbitControls />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;0&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.\n    <Canvas>\n      <OrbitControls />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <ambientLight />\n      <directionalLight position={[3, 5, 2]} />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n\n// boxGeometry, sphereGeometry, planeGeometry,\n// torusGeometry, torusKnotGeometry\n\n// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial\n// meshLambertMaterial, meshStandardMaterial\n// metalness={0.3}\n```\n\n```tsx sandpack index=2\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <axesHelper />\n      <mesh\n        position={[0, 0, 0]}\n        scale={[1, 1, 1]}\n        rotation={[0, 0, 0]} // Math.PI / 4\n      >\n        <boxGeometry args={[1, 1, 1]} />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const [isBlue, setIsBlue] = useState(false);\n  const [isLarge, setIsLarge] = useState(false);\n\n  const color = isBlue ? \&quot;#0066CC\&quot; : \&quot;#FF5733\&quot;;\n\n  return (\n    <mesh\n      {...props}\n      scale={isLarge ? 2 : 1}\n      onClick={() => setIsLarge((isLarge) => !isLarge)}\n      onPointerOver={() => setIsBlue(true)}\n      onPointerOut={() => setIsBlue(false)}\n    >\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color={color} />\n    </mesh>\n  );\n}\n```\n\n```tsx sandpack index=4 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=4 active file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useFrame } from \&quot;@react-three/fiber\&quot;;\nimport { useRef, useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const meshRef = useRef<ThreeElements[\&quot;mesh\&quot;]>(null!);\n\n  useFrame((state, delta) => {\n    meshRef.current.rotation.x += delta;\n  });\n\n  return (\n    <mesh {...props} ref={meshRef}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n    </mesh>\n  );\n}\n```\n\n&quot;}},{&quot;App.tsx&quot;:{&quot;code&quot;:&quot;import { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <ambientLight />\n      <directionalLight position={[3, 5, 2]} />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n\n// boxGeometry, sphereGeometry, planeGeometry,\n// torusGeometry, torusKnotGeometry\n\n// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial\n// meshLambertMaterial, meshStandardMaterial\n// metalness={0.3}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;1&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.\n    <Canvas>\n      <OrbitControls />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <ambientLight />\n      <directionalLight position={[3, 5, 2]} />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n\n// boxGeometry, sphereGeometry, planeGeometry,\n// torusGeometry, torusKnotGeometry\n\n// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial\n// meshLambertMaterial, meshStandardMaterial\n// metalness={0.3}\n```\n\n```tsx sandpack index=2\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <axesHelper />\n      <mesh\n        position={[0, 0, 0]}\n        scale={[1, 1, 1]}\n        rotation={[0, 0, 0]} // Math.PI / 4\n      >\n        <boxGeometry args={[1, 1, 1]} />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const [isBlue, setIsBlue] = useState(false);\n  const [isLarge, setIsLarge] = useState(false);\n\n  const color = isBlue ? \&quot;#0066CC\&quot; : \&quot;#FF5733\&quot;;\n\n  return (\n    <mesh\n      {...props}\n      scale={isLarge ? 2 : 1}\n      onClick={() => setIsLarge((isLarge) => !isLarge)}\n      onPointerOver={() => setIsBlue(true)}\n      onPointerOut={() => setIsBlue(false)}\n    >\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color={color} />\n    </mesh>\n  );\n}\n```\n\n```tsx sandpack index=4 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=4 active file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useFrame } from \&quot;@react-three/fiber\&quot;;\nimport { useRef, useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const meshRef = useRef<ThreeElements[\&quot;mesh\&quot;]>(null!);\n\n  useFrame((state, delta) => {\n    meshRef.current.rotation.x += delta;\n  });\n\n  return (\n    <mesh {...props} ref={meshRef}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n    </mesh>\n  );\n}\n```\n\n&quot;}},{&quot;App.tsx&quot;:{&quot;code&quot;:&quot;import { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <axesHelper />\n      <mesh\n        position={[0, 0, 0]}\n        scale={[1, 1, 1]}\n        rotation={[0, 0, 0]} // Math.PI / 4\n      >\n        <boxGeometry args={[1, 1, 1]} />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;2&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.\n    <Canvas>\n      <OrbitControls />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <ambientLight />\n      <directionalLight position={[3, 5, 2]} />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n\n// boxGeometry, sphereGeometry, planeGeometry,\n// torusGeometry, torusKnotGeometry\n\n// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial\n// meshLambertMaterial, meshStandardMaterial\n// metalness={0.3}\n```\n\n```tsx sandpack index=2\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <axesHelper />\n      <mesh\n        position={[0, 0, 0]}\n        scale={[1, 1, 1]}\n        rotation={[0, 0, 0]} // Math.PI / 4\n      >\n        <boxGeometry args={[1, 1, 1]} />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const [isBlue, setIsBlue] = useState(false);\n  const [isLarge, setIsLarge] = useState(false);\n\n  const color = isBlue ? \&quot;#0066CC\&quot; : \&quot;#FF5733\&quot;;\n\n  return (\n    <mesh\n      {...props}\n      scale={isLarge ? 2 : 1}\n      onClick={() => setIsLarge((isLarge) => !isLarge)}\n      onPointerOver={() => setIsBlue(true)}\n      onPointerOut={() => setIsBlue(false)}\n    >\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color={color} />\n    </mesh>\n  );\n}\n```\n\n```tsx sandpack index=4 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=4 active file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useFrame } from \&quot;@react-three/fiber\&quot;;\nimport { useRef, useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const meshRef = useRef<ThreeElements[\&quot;mesh\&quot;]>(null!);\n\n  useFrame((state, delta) => {\n    meshRef.current.rotation.x += delta;\n  });\n\n  return (\n    <mesh {...props} ref={meshRef}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n    </mesh>\n  );\n}\n```\n\n&quot;}},{&quot;App.tsx&quot;:{&quot;code&quot;:&quot;import { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;3&quot;,&quot;file&quot;:&quot;App.tsx&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.\n    <Canvas>\n      <OrbitControls />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <ambientLight />\n      <directionalLight position={[3, 5, 2]} />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n\n// boxGeometry, sphereGeometry, planeGeometry,\n// torusGeometry, torusKnotGeometry\n\n// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial\n// meshLambertMaterial, meshStandardMaterial\n// metalness={0.3}\n```\n\n```tsx sandpack index=2\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <axesHelper />\n      <mesh\n        position={[0, 0, 0]}\n        scale={[1, 1, 1]}\n        rotation={[0, 0, 0]} // Math.PI / 4\n      >\n        <boxGeometry args={[1, 1, 1]} />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const [isBlue, setIsBlue] = useState(false);\n  const [isLarge, setIsLarge] = useState(false);\n\n  const color = isBlue ? \&quot;#0066CC\&quot; : \&quot;#FF5733\&quot;;\n\n  return (\n    <mesh\n      {...props}\n      scale={isLarge ? 2 : 1}\n      onClick={() => setIsLarge((isLarge) => !isLarge)}\n      onPointerOver={() => setIsBlue(true)}\n      onPointerOut={() => setIsBlue(false)}\n    >\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color={color} />\n    </mesh>\n  );\n}\n```\n\n```tsx sandpack index=4 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=4 active file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useFrame } from \&quot;@react-three/fiber\&quot;;\nimport { useRef, useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const meshRef = useRef<ThreeElements[\&quot;mesh\&quot;]>(null!);\n\n  useFrame((state, delta) => {\n    meshRef.current.rotation.x += delta;\n  });\n\n  return (\n    <mesh {...props} ref={meshRef}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n    </mesh>\n  );\n}\n```\n\n&quot;},&quot;Box.tsx&quot;:{&quot;code&quot;:&quot;import type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const [isBlue, setIsBlue] = useState(false);\n  const [isLarge, setIsLarge] = useState(false);\n\n  const color = isBlue ? \&quot;#0066CC\&quot; : \&quot;#FF5733\&quot;;\n\n  return (\n    <mesh\n      {...props}\n      scale={isLarge ? 2 : 1}\n      onClick={() => setIsLarge((isLarge) => !isLarge)}\n      onPointerOver={() => setIsBlue(true)}\n      onPointerOut={() => setIsBlue(false)}\n    >\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color={color} />\n    </mesh>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;3&quot;,&quot;file&quot;:&quot;Box.tsx&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.\n    <Canvas>\n      <OrbitControls />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <ambientLight />\n      <directionalLight position={[3, 5, 2]} />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n\n// boxGeometry, sphereGeometry, planeGeometry,\n// torusGeometry, torusKnotGeometry\n\n// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial\n// meshLambertMaterial, meshStandardMaterial\n// metalness={0.3}\n```\n\n```tsx sandpack index=2\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <axesHelper />\n      <mesh\n        position={[0, 0, 0]}\n        scale={[1, 1, 1]}\n        rotation={[0, 0, 0]} // Math.PI / 4\n      >\n        <boxGeometry args={[1, 1, 1]} />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const [isBlue, setIsBlue] = useState(false);\n  const [isLarge, setIsLarge] = useState(false);\n\n  const color = isBlue ? \&quot;#0066CC\&quot; : \&quot;#FF5733\&quot;;\n\n  return (\n    <mesh\n      {...props}\n      scale={isLarge ? 2 : 1}\n      onClick={() => setIsLarge((isLarge) => !isLarge)}\n      onPointerOver={() => setIsBlue(true)}\n      onPointerOut={() => setIsBlue(false)}\n    >\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color={color} />\n    </mesh>\n  );\n}\n```\n\n```tsx sandpack index=4 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=4 active file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useFrame } from \&quot;@react-three/fiber\&quot;;\nimport { useRef, useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const meshRef = useRef<ThreeElements[\&quot;mesh\&quot;]>(null!);\n\n  useFrame((state, delta) => {\n    meshRef.current.rotation.x += delta;\n  });\n\n  return (\n    <mesh {...props} ref={meshRef}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n    </mesh>\n  );\n}\n```\n\n&quot;}},{&quot;App.tsx&quot;:{&quot;code&quot;:&quot;import { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;4&quot;,&quot;file&quot;:&quot;App.tsx&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.\n    <Canvas>\n      <OrbitControls />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <ambientLight />\n      <directionalLight position={[3, 5, 2]} />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n\n// boxGeometry, sphereGeometry, planeGeometry,\n// torusGeometry, torusKnotGeometry\n\n// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial\n// meshLambertMaterial, meshStandardMaterial\n// metalness={0.3}\n```\n\n```tsx sandpack index=2\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <axesHelper />\n      <mesh\n        position={[0, 0, 0]}\n        scale={[1, 1, 1]}\n        rotation={[0, 0, 0]} // Math.PI / 4\n      >\n        <boxGeometry args={[1, 1, 1]} />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const [isBlue, setIsBlue] = useState(false);\n  const [isLarge, setIsLarge] = useState(false);\n\n  const color = isBlue ? \&quot;#0066CC\&quot; : \&quot;#FF5733\&quot;;\n\n  return (\n    <mesh\n      {...props}\n      scale={isLarge ? 2 : 1}\n      onClick={() => setIsLarge((isLarge) => !isLarge)}\n      onPointerOver={() => setIsBlue(true)}\n      onPointerOut={() => setIsBlue(false)}\n    >\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color={color} />\n    </mesh>\n  );\n}\n```\n\n```tsx sandpack index=4 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=4 active file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useFrame } from \&quot;@react-three/fiber\&quot;;\nimport { useRef, useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const meshRef = useRef<ThreeElements[\&quot;mesh\&quot;]>(null!);\n\n  useFrame((state, delta) => {\n    meshRef.current.rotation.x += delta;\n  });\n\n  return (\n    <mesh {...props} ref={meshRef}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n    </mesh>\n  );\n}\n```\n\n&quot;},&quot;Box.tsx&quot;:{&quot;code&quot;:&quot;import type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useFrame } from \&quot;@react-three/fiber\&quot;;\nimport { useRef, useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const meshRef = useRef<ThreeElements[\&quot;mesh\&quot;]>(null!);\n\n  useFrame((state, delta) => {\n    meshRef.current.rotation.x += delta;\n  });\n\n  return (\n    <mesh {...props} ref={meshRef}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n    </mesh>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:true,&quot;attrs&quot;:{&quot;index&quot;:&quot;4&quot;,&quot;active&quot;:true,&quot;file&quot;:&quot;Box.tsx&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    // <Canvas> replaces all the setup code — the renderer, the scene, the render loop.\n    <Canvas>\n      <OrbitControls />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <ambientLight />\n      <directionalLight position={[3, 5, 2]} />\n      <mesh>\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n\n// boxGeometry, sphereGeometry, planeGeometry,\n// torusGeometry, torusKnotGeometry\n\n// meshMatcapMaterial, meshToonMaterial, meshNormalMaterial\n// meshLambertMaterial, meshStandardMaterial\n// metalness={0.3}\n```\n\n```tsx sandpack index=2\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <axesHelper />\n      <mesh\n        position={[0, 0, 0]}\n        scale={[1, 1, 1]}\n        rotation={[0, 0, 0]} // Math.PI / 4\n      >\n        <boxGeometry args={[1, 1, 1]} />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=3 file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const [isBlue, setIsBlue] = useState(false);\n  const [isLarge, setIsLarge] = useState(false);\n\n  const color = isBlue ? \&quot;#0066CC\&quot; : \&quot;#FF5733\&quot;;\n\n  return (\n    <mesh\n      {...props}\n      scale={isLarge ? 2 : 1}\n      onClick={() => setIsLarge((isLarge) => !isLarge)}\n      onPointerOver={() => setIsBlue(true)}\n      onPointerOut={() => setIsBlue(false)}\n    >\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color={color} />\n    </mesh>\n  );\n}\n```\n\n```tsx sandpack index=4 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Box } from \&quot;./Box\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Box position={[-1.2, 0, 0]} />\n      <Box position={[1.2, 0, 0]} />\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=4 active file=\&quot;Box.tsx\&quot;\nimport type { ThreeElements } from \&quot;@react-three/fiber\&quot;;\nimport { useFrame } from \&quot;@react-three/fiber\&quot;;\nimport { useRef, useState } from \&quot;react\&quot;;\n\nexport function Box(props: ThreeElements[\&quot;mesh\&quot;]) {\n  const meshRef = useRef<ThreeElements[\&quot;mesh\&quot;]>(null!);\n\n  useFrame((state, delta) => {\n    meshRef.current.rotation.x += delta;\n  });\n\n  return (\n    <mesh {...props} ref={meshRef}>\n      <boxGeometry args={[1, 1, 1]} />\n      <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n    </mesh>\n  );\n}\n```\n\n&quot;}}]"></React>
 
 <!--
-Here’s the same example, but written with React Three Fiber.
-
+First we import Canvas from `@react-three/fiber`.
 <Canvas> replaces all the setup code — the renderer, the scene, the render loop — it’s all handled for us.
 
-Inside it, we add `<OrbitControls />` so the user can rotate and zoom with the mouse.
+Then we create a <mesh> with a box geometry and a Matcap material with a blue color, just like in Three.js, but here we write it as JSX.
 
-Then we create a <mesh> with a box geometry and a Matcap material, just like in Three.js, but here we write it as JSX.
+We add `<OrbitControls />` from drei which is a utility library with a lot of high lever react-three-fiber components. OrbitControls allows the user to rotate and zoom the camera with the mouse.
 
 [move]
 
 I've added an axesHelper - the red line is X, green is Y, blue is Z.
+Now lets change the geomtries to sphereGeometry, planeGeometry, torusGeometry, torusKnotGeometry.
+And also change the materials to meshMatcapMaterial, meshToonMaterial, meshNormalMaterial. Now meshLambertMaterial reacts to light so I added ambient light which spread equally across all the scene, and a directional light.
+Now if we remove them it will be dark. 
+Now we can use meshStandardMaterial which is very similar to meshLambertMaterial but it have other properties like metalness: 0.3 if we change it to 0.9 it will look like that, and 3 will look like that. 
+
+[click]
+
+
 Notice the mesh has position, scale, and rotation properties.
 Position moves it in 3D space - [x, y, z].
 Scale changes its size - [1, 1, 1] is normal size.
@@ -579,10 +450,9 @@ Play with these values to get a feel for 3D coordinates.
 
 [click]
 Now we're seeing React's real power.
-I've extracted the box into its own component.
-This lets us reuse it - see how we render two boxes at different positions?
-The Box component also has state - it tracks hover and active states.
-Click a box to scale it up. Hover to change its color.
+I've extracted the box into its own component and set its position via prop.
+The Box component also has state use for size and color.
+When I click on the box it change the size and I can hover to change its color.
 This is the magic of R3F - 3D objects behave like React components with props, state, and events.
 
 [click]
@@ -602,6 +472,11 @@ layout: section
 
 <div v-click class="text-3xl">Custom Models</div>
 
+<!--
+But what if I want something cooler than a box?
+Of course, you don't have to model everything from primitives. You can import models created in Blender, Maya, or other 3D software
+-->
+
 ---
 
 # GLTF
@@ -614,10 +489,8 @@ layout: section
 </BrowserWrapper>
 
 <!--
-Of course, you don't have to model everything from primitives.
-You can import models created in Blender, Maya, or other 3D software.
-The standard format is GLTF - think of it as the JPEG of 3D.
-We can download models from the internet from websites like sketchfab for free (notice that some require some attribution).
+The standard 3D model format is GLTF - think of it as the JPEG of 3D.
+We can download models from the internet from websites like sketchfab for free (but notice that some require some attribution).
 -->
 
 ---
@@ -634,6 +507,7 @@ gltfJSX parses the model and generates code with all the meshes, materials, and 
 After we download the models we can use the gltfjsx tool converts GLTF files into React components automatically.
 It parses the model and generates code with all the meshes, materials, and hierarchies.
 We can copy the code and create react components for out models.
+It assumes that we will serve the gltf file in our public directory in scene.gltf but we can see the meshes and even edit their attributes.
 -->
 
 ---
@@ -646,6 +520,10 @@ layout: section
 <div v-click class="text-3xl">
 Makes objects act like the real world
 </div>
+
+<!--
+Now let's add some physics - to make objects act like the real world.
+-->
 
 ---
 title: "Physics"
@@ -660,130 +538,34 @@ title: "Physics"
 
 <img v-drag="[591,268,215,225]" src="/visual-world.png" alt="visual world" />
 
+<!--
+The idea of working with the physics library is to split the work into the physics world and the view work. The physical world will is responsible for collisions and forces like in physics class. And the view world is what we already created, which is responsible for rendering the visual output.
+-->
+
 ---
 title: "Physics"
 ---
 
-@@@
-
-```tsx sandpack index=0
-import { OrbitControls, Sphere, Torus } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier";
-
-export default function App() {
-  return (
-    <Canvas>
-      <OrbitControls />
-      <Physics debug>
-        <RigidBody colliders="cuboid">
-          <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>
-            <boxGeometry />
-            <meshMatcapMaterial color="#0066CC" />
-          </mesh>
-        </RigidBody>
-        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />
-      </Physics>
-    </Canvas>
-  );
-}
-```
-
-```tsx sandpack index=1 file="MyBox.tsx"
-import {
-  RapierRigidBody,
-  RigidBody,
-  RigidBodyProps,
-} from "@react-three/rapier";
-import { useRef } from "react";
-
-export function MyBox(props: RigidBodyProps) {
-  const ref = useRef<RapierRigidBody>(null!);
-  return (
-    <RigidBody {...props} ref={ref} colliders="cuboid">
-      <mesh
-        onClick={() => {
-          ref.current.applyImpulse({ x: 0, y: 8, z: 0 }, true);
-        }}
-      >
-        <boxGeometry />
-        <meshMatcapMaterial color="#0066CC" />
-      </mesh>
-    </RigidBody>
-  );
-}
-```
-
-```tsx sandpack index=1 file="MySphere.tsx"
-import { RigidBody, RigidBodyProps } from "@react-three/rapier";
-
-export function MySphere(props: RigidBodyProps) {
-  return (
-    <RigidBody {...props} colliders="ball">
-      <mesh>
-        <sphereGeometry />
-        <meshMatcapMaterial color="#FF5733" />
-      </mesh>
-    </RigidBody>
-  );
-}
-```
-
-```tsx sandpack index=1 file="MyTorus.tsx"
-import { RigidBody, RigidBodyProps } from "@react-three/rapier";
-
-export function MyTorus(props: RigidBodyProps) {
-  return (
-    <RigidBody {...props} colliders="trimesh">
-      <mesh>
-        <torusGeometry />
-        <meshMatcapMaterial color="#50C878" />
-      </mesh>
-    </RigidBody>
-  );
-}
-```
-
-```tsx sandpack index=1 file="App.tsx"
-import { OrbitControls } from "@react-three/drei";
-import { Canvas } from "@react-three/fiber";
-import { CuboidCollider, Physics, RigidBody } from "@react-three/rapier";
-import { MyBox } from "./MyBox";
-import { MySphere } from "./MySphere";
-import { MyTorus } from "./MyTorus";
-
-export default function App() {
-  return (
-    <Canvas>
-      <OrbitControls />
-      <Physics debug>
-        <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />
-        <MySphere position={[0, 10, 0]} />
-        <MyTorus position={[2, 0, 0]} />
-        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />
-      </Physics>
-    </Canvas>
-  );
-}
-```
-
-@@@
+<React is="FilesPlayground" :files="[{&quot;App.tsx&quot;:{&quot;code&quot;:&quot;import { OrbitControls, Sphere, Torus } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <RigidBody colliders=\&quot;cuboid\&quot;>\n          <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>\n            <boxGeometry />\n            <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n          </mesh>\n        </RigidBody>\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;0&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls, Sphere, Torus } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <RigidBody colliders=\&quot;cuboid\&quot;>\n          <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>\n            <boxGeometry />\n            <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n          </mesh>\n        </RigidBody>\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyBox.tsx\&quot;\nimport {\n  RapierRigidBody,\n  RigidBody,\n  RigidBodyProps,\n} from \&quot;@react-three/rapier\&quot;;\nimport { useRef } from \&quot;react\&quot;;\n\nexport function MyBox(props: RigidBodyProps) {\n  const ref = useRef<RapierRigidBody>(null!);\n  return (\n    <RigidBody {...props} ref={ref} colliders=\&quot;cuboid\&quot;>\n      <mesh\n        onClick={() => {\n          ref.current.applyImpulse({ x: 0, y: 8, z: 0 }, true);\n        }}\n      >\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MySphere.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MySphere(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;ball\&quot;>\n      <mesh>\n        <sphereGeometry />\n        <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyTorus.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MyTorus(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;trimesh\&quot;>\n      <mesh>\n        <torusGeometry />\n        <meshMatcapMaterial color=\&quot;#50C878\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\nimport { MyBox } from \&quot;./MyBox\&quot;;\nimport { MySphere } from \&quot;./MySphere\&quot;;\nimport { MyTorus } from \&quot;./MyTorus\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />\n        <MySphere position={[0, 10, 0]} />\n        <MyTorus position={[2, 0, 0]} />\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n&quot;}},{&quot;MyBox.tsx&quot;:{&quot;code&quot;:&quot;import {\n  RapierRigidBody,\n  RigidBody,\n  RigidBodyProps,\n} from \&quot;@react-three/rapier\&quot;;\nimport { useRef } from \&quot;react\&quot;;\n\nexport function MyBox(props: RigidBodyProps) {\n  const ref = useRef<RapierRigidBody>(null!);\n  return (\n    <RigidBody {...props} ref={ref} colliders=\&quot;cuboid\&quot;>\n      <mesh\n        onClick={() => {\n          ref.current.applyImpulse({ x: 0, y: 8, z: 0 }, true);\n        }}\n      >\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;1&quot;,&quot;file&quot;:&quot;MyBox.tsx&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls, Sphere, Torus } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <RigidBody colliders=\&quot;cuboid\&quot;>\n          <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>\n            <boxGeometry />\n            <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n          </mesh>\n        </RigidBody>\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyBox.tsx\&quot;\nimport {\n  RapierRigidBody,\n  RigidBody,\n  RigidBodyProps,\n} from \&quot;@react-three/rapier\&quot;;\nimport { useRef } from \&quot;react\&quot;;\n\nexport function MyBox(props: RigidBodyProps) {\n  const ref = useRef<RapierRigidBody>(null!);\n  return (\n    <RigidBody {...props} ref={ref} colliders=\&quot;cuboid\&quot;>\n      <mesh\n        onClick={() => {\n          ref.current.applyImpulse({ x: 0, y: 8, z: 0 }, true);\n        }}\n      >\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MySphere.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MySphere(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;ball\&quot;>\n      <mesh>\n        <sphereGeometry />\n        <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyTorus.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MyTorus(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;trimesh\&quot;>\n      <mesh>\n        <torusGeometry />\n        <meshMatcapMaterial color=\&quot;#50C878\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\nimport { MyBox } from \&quot;./MyBox\&quot;;\nimport { MySphere } from \&quot;./MySphere\&quot;;\nimport { MyTorus } from \&quot;./MyTorus\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />\n        <MySphere position={[0, 10, 0]} />\n        <MyTorus position={[2, 0, 0]} />\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n&quot;},&quot;MySphere.tsx&quot;:{&quot;code&quot;:&quot;import { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MySphere(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;ball\&quot;>\n      <mesh>\n        <sphereGeometry />\n        <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;1&quot;,&quot;file&quot;:&quot;MySphere.tsx&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls, Sphere, Torus } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <RigidBody colliders=\&quot;cuboid\&quot;>\n          <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>\n            <boxGeometry />\n            <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n          </mesh>\n        </RigidBody>\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyBox.tsx\&quot;\nimport {\n  RapierRigidBody,\n  RigidBody,\n  RigidBodyProps,\n} from \&quot;@react-three/rapier\&quot;;\nimport { useRef } from \&quot;react\&quot;;\n\nexport function MyBox(props: RigidBodyProps) {\n  const ref = useRef<RapierRigidBody>(null!);\n  return (\n    <RigidBody {...props} ref={ref} colliders=\&quot;cuboid\&quot;>\n      <mesh\n        onClick={() => {\n          ref.current.applyImpulse({ x: 0, y: 8, z: 0 }, true);\n        }}\n      >\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MySphere.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MySphere(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;ball\&quot;>\n      <mesh>\n        <sphereGeometry />\n        <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyTorus.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MyTorus(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;trimesh\&quot;>\n      <mesh>\n        <torusGeometry />\n        <meshMatcapMaterial color=\&quot;#50C878\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\nimport { MyBox } from \&quot;./MyBox\&quot;;\nimport { MySphere } from \&quot;./MySphere\&quot;;\nimport { MyTorus } from \&quot;./MyTorus\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />\n        <MySphere position={[0, 10, 0]} />\n        <MyTorus position={[2, 0, 0]} />\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n&quot;},&quot;MyTorus.tsx&quot;:{&quot;code&quot;:&quot;import { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MyTorus(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;trimesh\&quot;>\n      <mesh>\n        <torusGeometry />\n        <meshMatcapMaterial color=\&quot;#50C878\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;1&quot;,&quot;file&quot;:&quot;MyTorus.tsx&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls, Sphere, Torus } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <RigidBody colliders=\&quot;cuboid\&quot;>\n          <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>\n            <boxGeometry />\n            <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n          </mesh>\n        </RigidBody>\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyBox.tsx\&quot;\nimport {\n  RapierRigidBody,\n  RigidBody,\n  RigidBodyProps,\n} from \&quot;@react-three/rapier\&quot;;\nimport { useRef } from \&quot;react\&quot;;\n\nexport function MyBox(props: RigidBodyProps) {\n  const ref = useRef<RapierRigidBody>(null!);\n  return (\n    <RigidBody {...props} ref={ref} colliders=\&quot;cuboid\&quot;>\n      <mesh\n        onClick={() => {\n          ref.current.applyImpulse({ x: 0, y: 8, z: 0 }, true);\n        }}\n      >\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MySphere.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MySphere(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;ball\&quot;>\n      <mesh>\n        <sphereGeometry />\n        <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyTorus.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MyTorus(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;trimesh\&quot;>\n      <mesh>\n        <torusGeometry />\n        <meshMatcapMaterial color=\&quot;#50C878\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\nimport { MyBox } from \&quot;./MyBox\&quot;;\nimport { MySphere } from \&quot;./MySphere\&quot;;\nimport { MyTorus } from \&quot;./MyTorus\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />\n        <MySphere position={[0, 10, 0]} />\n        <MyTorus position={[2, 0, 0]} />\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n&quot;},&quot;App.tsx&quot;:{&quot;code&quot;:&quot;import { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\nimport { MyBox } from \&quot;./MyBox\&quot;;\nimport { MySphere } from \&quot;./MySphere\&quot;;\nimport { MyTorus } from \&quot;./MyTorus\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />\n        <MySphere position={[0, 10, 0]} />\n        <MyTorus position={[2, 0, 0]} />\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}&quot;,&quot;hidden&quot;:false,&quot;active&quot;:false,&quot;attrs&quot;:{&quot;index&quot;:&quot;1&quot;,&quot;file&quot;:&quot;App.tsx&quot;},&quot;blocksContent&quot;:&quot;```tsx sandpack index=0\nimport { OrbitControls, Sphere, Torus } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <RigidBody colliders=\&quot;cuboid\&quot;>\n          <mesh rotation={[Math.PI / 4, Math.PI / 4, 0]}>\n            <boxGeometry />\n            <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n          </mesh>\n        </RigidBody>\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyBox.tsx\&quot;\nimport {\n  RapierRigidBody,\n  RigidBody,\n  RigidBodyProps,\n} from \&quot;@react-three/rapier\&quot;;\nimport { useRef } from \&quot;react\&quot;;\n\nexport function MyBox(props: RigidBodyProps) {\n  const ref = useRef<RapierRigidBody>(null!);\n  return (\n    <RigidBody {...props} ref={ref} colliders=\&quot;cuboid\&quot;>\n      <mesh\n        onClick={() => {\n          ref.current.applyImpulse({ x: 0, y: 8, z: 0 }, true);\n        }}\n      >\n        <boxGeometry />\n        <meshMatcapMaterial color=\&quot;#0066CC\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MySphere.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MySphere(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;ball\&quot;>\n      <mesh>\n        <sphereGeometry />\n        <meshMatcapMaterial color=\&quot;#FF5733\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;MyTorus.tsx\&quot;\nimport { RigidBody, RigidBodyProps } from \&quot;@react-three/rapier\&quot;;\n\nexport function MyTorus(props: RigidBodyProps) {\n  return (\n    <RigidBody {...props} colliders=\&quot;trimesh\&quot;>\n      <mesh>\n        <torusGeometry />\n        <meshMatcapMaterial color=\&quot;#50C878\&quot; />\n      </mesh>\n    </RigidBody>\n  );\n}\n```\n\n```tsx sandpack index=1 file=\&quot;App.tsx\&quot;\nimport { OrbitControls } from \&quot;@react-three/drei\&quot;;\nimport { Canvas } from \&quot;@react-three/fiber\&quot;;\nimport { CuboidCollider, Physics, RigidBody } from \&quot;@react-three/rapier\&quot;;\nimport { MyBox } from \&quot;./MyBox\&quot;;\nimport { MySphere } from \&quot;./MySphere\&quot;;\nimport { MyTorus } from \&quot;./MyTorus\&quot;;\n\nexport default function App() {\n  return (\n    <Canvas>\n      <OrbitControls />\n      <Physics debug>\n        <MyBox rotation={[Math.PI / 4, Math.PI / 4, 0]} />\n        <MySphere position={[0, 10, 0]} />\n        <MyTorus position={[2, 0, 0]} />\n        <CuboidCollider position={[0, -2, 0]} args={[20, 0.5, 20]} />\n      </Physics>\n    </Canvas>\n  );\n}\n```\n\n&quot;}}]"></React>
 
 <!--
-Now for something really cool - physics.
-React-three/rapier brings realistic physics to your 3D scenes.
-Wrap objects in RigidBody components and they become physical objects.
+We are going to use React-three/rapier to handle the physics world.
+We first import Physics from React-three/rapier. Wrap our world with Physics provider. I set the debug to true so we will be able to inspect how do the physics world see our meshes. 
+When we wrap objects in RigidBody components they become physical objects.
 They'll fall, collide, bounce - all automatically.
+So we will wrap our mesh with RigidBody with a collider of cuboid. 
+We also have a CuboidCollider floor to interact with it. 
+As you can see the ball falls to the ground because of the gravity. 
 
 [click]
 
-The colliders property tells Rapier the shape for collision detection.
-'cuboid' for boxes, 'ball' for spheres, 'trimesh' for complex meshes.
-The debug mode shows the collision shapes - turn it off for production.
+Now we can create more components. 
+I created a Sphere component with a collider of ball. 
+Now, if we change the Sphere collider to from ball to cuboid the physics engine will treat it like a cube.
+For more complex objects, we use a trimesh collider. 
+I also call applyImpulse with a y of 8 to make the box jump on click. 
+
 Watch what happens when these objects fall and hit the ground.
-
-[click]
-Now if we change the Sphere collider to from ball to cuboid the physics engine will treat it like a cube. (DEMO)
 -->
 
 ---
@@ -844,7 +626,7 @@ You just need to understand the building blocks we've covered today.
 </BrowserWrapper>
 
 <!--
-You can also look at the official react-three-fiber docs - they have a lot of impressive examples you can grab and look at their code implementation
+You can also look at the official react-three-fiber docs - they have a lot of impressive examples you can grab and look at their code implementation. Also drei provides a lot of examples and high level components you can use.
 -->
 
 ---
@@ -863,6 +645,10 @@ class: flex gap-2
   <DemoIframe url="https://leaf-story.nirtamir.com/"></DemoIframe>
 </BrowserWrapper>
 
+<!--
+I also created some silly examples from a meditation app with real dog snoring, to sky-roads app and an interactive leaf story. Don't afraid to make something silly for fun.
+-->
+
 ---
 layout: section
 ---
@@ -871,6 +657,14 @@ layout: section
 
 <div v-click class="text-3xl">Create that wow effect</div>
 <div v-click class="text-xl pt-4 opacity-75">Or at least something fun</div>
+
+<!--
+So go and build stuff
+[click]
+Create that wow effect
+[click]
+Or at least make something fun
+-->
 
 ---
 layout: intro
