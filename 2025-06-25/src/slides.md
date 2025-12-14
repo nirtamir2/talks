@@ -81,7 +81,7 @@ layout: section
 <!--
 But 3D isn’t just for experts — it’s a creative tool anyone can use.
 
-In this talk, we’ll build 3D web experiences step by step, even if you’ve never touched 3D before.
+In this talk, we’ll build 3D web together experiences step by step, even if you’ve never touched 3D before.
 -->
 
 ---
@@ -155,7 +155,7 @@ Renderer (WebGLRenderer)
 
 <span v-drag="[488,47,351,20]" class="text-sm opacity-75 pl-2" v-click>rendering your 3D scene in the browser using WebGL</span>
 
-<div class="border-2 border-white rounded relative" v-drag="[209,129,594,355]" >
+<div class="border-2 border-white rounded relative" v-drag="[209,129,594,355]"  v-click >
 <div class="absolute -top-8 left-0"> 
 <span class="text-2xl font-semibold">  
 Scene
@@ -365,6 +365,7 @@ A UV map is how a 2D image (like a texture) gets wrapped onto a 3D model — it�
 
 ---
 title: Three.js Textures
+hide: true
 layout: image
 image: /material-geometry.png
 backgroundSize: contain
@@ -388,9 +389,6 @@ backgroundSize: contain
 # class: mix-blend-screen hue-rotate-180 contrast-180
 ---
 
----
-monacoRunAdditionalDeps:
-  - three
 ---
 
 # Three.js code
