@@ -50,7 +50,7 @@ It comes from small things:
 Those small details create magic.
 
 We feel that someone cares about our user experience.
-And it build trust. 
+And it build trust.
 -->
 
 ---
@@ -61,7 +61,6 @@ layout: section
 
 <div class="text-3xl">3D is one of the fastest ways to create that wow effect</div>
 <!-- <div v-click class="text-xl pt-4 opacity-75">It’s visual, it’s interactive, and it immediately grabs attention </div> -->
-
 
 <!--
 3D is one of the fastest ways to create that wow effect.
@@ -137,6 +136,7 @@ layout: section
 <v-click>
 
 # 3D is for everyone
+
 </v-click>
 
 <div v-click class="text-3xl">Let’s make something that wows</div>
@@ -169,10 +169,11 @@ class: pl-25
 <!-- - <mdi-github /> [@nirtamir2](https://github.com/nirtamir2) -->
 - <mdi-twitter /> [@NirTamir](https://twitter.com/NirTamir)
 <!-- - <mdi-linkedin /> [@nirtamir2](https://linkedin.com/in/nirtamir2) -->
+
 <!--
 My name is Nir. Nir Tamir.
 I've been doing frontend for over a decade.
-You can find more about me at nirtamir.com or follow me on Twitter. 
+You can find more about me at nirtamir.com or follow me on Twitter.
 -->
 
 ---
@@ -223,7 +224,6 @@ Scene
 <path d="M9.295 8.756H20.822C21.467 8.756 21.994 8.228 21.994 7.584V6.905C21.994 6.26 21.467 5.733 20.822 5.733H17.099C18.21 5.32 19.382 4.338 19.382 3.199V2.742C18.491 1.74 17.661 0 16.081 0H13.943C12.698 0 11.814 1.344 10.736 2.742V3.199C10.736 4.338 11.855 5.32 12.938 5.733H9.295C8.651 5.733 8.12399 6.26 8.12399 6.905V7.584C8.12399 8.228 8.651 8.756 9.295 8.756Z" fill="#6B83A5"/>
 <path d="M8.468 8.756H21.649C22.294 8.756 22.821 9.283 22.821 9.928V10.607C22.821 11.251 22.294 11.779 21.649 11.779H8.468C7.823 11.779 7.29599 11.251 7.29599 10.607V9.928C7.29599 9.283 7.823 8.756 8.468 8.756ZM9.15199 3.881V4.561C9.15199 5.205 9.67899 5.732 10.324 5.732H19.793C20.438 5.732 20.965 5.205 20.965 4.561V3.881C20.965 3.237 20.438 2.709 19.793 2.709H10.324C9.67899 2.709 9.15199 3.237 9.15199 3.881Z" fill="#ABBDDB"/>
 </svg>
-
 
 <div  v-click v-drag="[418,267,146,53]" class="flex gap-10" >
  <svg title="mesh"   width="53" height="53" viewBox="0 0 53 53" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -307,7 +307,6 @@ backgroundSize: contain
 <img v-drag="[472,26,504,518]" src="/geometries-demo.png"/>
 
 <!--
-
 Geometry is the shape - it defines
 
 - Vertices (points in space)
@@ -327,11 +326,9 @@ Geometry is the shape - it defines
 <div class="text-3xl">How it reacts to light</div>
 </div>
 
-
 <img v-drag="[466,33,517,531]" src="/materials-demo.png"/>
 
 <!--
-
 Material is the “skin” that wraps the geometry.
 
 It controls:
@@ -400,7 +397,9 @@ layout: section
 
 # All that for a simple cube?
 
-<!-- We will see how R3F simplifies this in a moment. -->
+<!--
+We will see how R3F simplifies this in a moment.
+-->
 
 ---
 title: React-three-fiber
@@ -416,7 +415,7 @@ layout: section
 <!--
 R3F is a React renderer for Three.js - which means it uses React's reconciliation to manage your 3D scene.
 Instead of imperatively creating objects and adding them to the scene, you declare what you want using JSX.
-It handles all the setup boilerplate and gives you React's component model for free. So we get props, state, hooks and JSX just like react but inside Three.js world. Let's see it in action. 
+It handles all the setup boilerplate and gives you React's component model for free. So we get props, state, hooks and JSX just like react but inside Three.js world. Let's see it in action.
 -->
 
 ---

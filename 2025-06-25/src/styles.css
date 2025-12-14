@@ -134,6 +134,6 @@ h6 {
   background: #161616ee;
 }
 
-.grid-container .layout1{
+.grid-container .layout1 {
   grid-template-areas: "main  next" " main note" "bottom bottom bottom";
 }
