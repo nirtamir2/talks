@@ -25,6 +25,10 @@ layout: center
 
 # Effortless 3D with react-three-fiber
 
+<!--
+Effortless 3D with react-three-fiber
+-->
+
 ---
 layout: section
 ---
@@ -373,18 +377,18 @@ renderer.render(scene, camera);
 So let's see what vanilla Three.js code looks like.
 First we import all as THREE from three.js
 [click]
-First, we create a WebGLRenderer - this creates a canvas element and handles all the low-level WebGL rendering.
+Then, we create a WebGLRenderer - this creates a canvas element and handles all the low-level WebGL rendering.
 We set its size and append it to the DOM.
 [click]
 Then we create a Scene.
 [click]
-We add a PerspectiveCamera to define our viewpoint and set its position. 
+We add a PerspectiveCamera and set its position. 
 [click]
-We create a BoxGeometry with height, width and depth of 1, and MeshBasicMaterial with a blue color and we combine them to a mesh for our cube.
+We create a BoxGeometry with height, width and depth of 1, and a MeshBasicMaterial with a blue color, and we create a Cube mesh
 [click]
 Then we need to add the mesh to the scene
 [click]
-and render it with our camera
+and render it using our camera
 [click]
 Notice how verbose this code is.
 [click]
@@ -424,7 +428,7 @@ It handles all the setup boilerplate and gives you React's component model for f
 
 <!--
 First we import Canvas from `@react-three/fiber`.
-<Canvas> replaces all the setup code — the renderer, the scene, the render loop — it’s all handled for us.
+`<Canvas>` replaces all the setup code — the renderer, the scene, the render loop — it’s all handled for us.
 
 Then we create a <mesh> with a box geometry and a Matcap material with a blue color, just like in Three.js, but here we write it as JSX.
 
@@ -503,10 +507,11 @@ gltfJSX parses the model and generates code with all the meshes, materials, and 
 </BrowserWrapper>
 
 <!--
-After we download the models we can use the gltfjsx tool converts GLTF files into React components automatically.
+After we download the models we can use the gltfjsx tool that converts GLTF files into React components automatically
 It parses the model and generates code with all the meshes, materials, and hierarchies.
-We can copy the code and create react components for out models.
-It assumes that we will serve the gltf file in our public directory in scene.gltf but we can see the meshes and even edit their attributes.
+We can copy the code and create React components for our models.
+We can see the meshes and even edit their attributes.
+It assumes that we will serve the GLTF file in our public directory in scene.gltf.
 -->
 
 ---
@@ -530,15 +535,12 @@ title: "Physics"
 
 # Split into Physics World and View World
 
-- ## **Physics World:** The Engine calculating collisions and forces
-- ## **View World:** The Display rendering the visual output.
+<img v-drag="[-82,132,628,392]" src="/physics-world.png" alt="physics world" />
 
-<img v-drag="[76,240,453,283]" src="/physics-world.png" alt="physics world" />
-
-<img v-drag="[591,268,215,225]" src="/visual-world.png" alt="visual world" />
+<img v-drag="[598,177,308,322]" src="/visual-world.png" alt="visual world" />
 
 <!--
-The idea of working with the physics library is to split the work into the physics world and the view work. The physical world will is responsible for collisions and forces like in physics class. And the view world is what we already created, which is responsible for rendering the visual output.
+The idea of working with the physics library is to separate the work into physics-related tasks and view-related tasks. The physical world is responsible for collisions and forces, like in physics class, while the view is responsible for rendering the visual output.
 -->
 
 ---
@@ -584,6 +586,22 @@ layout: section
 
 </v-clicks>
 
+<!--
+We covered a lot today:
+[click]
+We looked at the core Three.js concepts
+[click]
+And how R3F makes it declarative with React components
+[click]
+We continued to add interactivity with events and state,
+[click]
+Animated with `useFrame`
+[click]
+imported 3D models
+[click]
+And added physics with Rapier
+-->
+
 ---
 layout: section
 ---
@@ -591,9 +609,7 @@ layout: section
 # The best way to <br> learn is by doing
 
 <!--
-Start small - make a rotating cube. [TODO: slide of just a box]
-Add some interaction. [TODO: slide of just a box rotating]
-Import a model and before you know it, you'll be creating those wow moments. [TODO: slide of just a rubik cube rotating]
+The best way to learn is through hands-on experience. Create some fun experiments
 -->
 
 ---
@@ -607,13 +623,9 @@ title: "Demo wow"
 </BrowserWrapper>
 
 <!--
-This is a model of myself that I built, using the same principles
-
-Here's a more complete example of what you can build.
-This uses everything we've covered - models, materials, physics, interactivity.
-The key insight is that each of these effects is just a few lines of code.
-You don't need to be a graphics programmer or a 3D artist.
-You just need to understand the building blocks we've covered today.
+I created a 3D model of myself and built a small website—a free world I can walk around in.
+This was just me experimenting and playing with ideas.
+I did even worse with a meditation app using a dog's real snoring...
 -->
 
 ---
@@ -629,6 +641,7 @@ You can also look at the official react-three-fiber docs - they have a lot of im
 -->
 
 ---
+hide: true
 class: flex gap-2
 ---
 
@@ -655,7 +668,7 @@ layout: section
 # Go build stuff
 
 <div v-click class="text-3xl">Create that wow effect</div>
-<div v-click class="text-xl pt-4 opacity-75">Or at least something fun</div>
+<div v-click class="text-xl pt-4 opacity-75">Make something fun</div>
 
 <!--
 So go and build stuff
