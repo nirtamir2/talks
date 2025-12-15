@@ -90,7 +90,7 @@ function divide(a: number, b: number) {
 const result = divide(1, 2); // number
 ```
 
- <img src="/result-number.png" v-drag="[99,130,93,85]" />
+ <img src="/result-number.png" v-drag="[99,130,120,110]" />
 
 <!--
 And when we fix it, TypeScript infers the return type automatically.
@@ -107,7 +107,7 @@ transition: view-transition
 const result = divide(4, 0); // Infinity
 ```
 
-<img src="/result-number.png" v-drag="[103,130,91,83]" />
+<img src="/result-number.png" v-drag="[103,130,121,111]" />
 
 <!--
 In real apps, we hit edge cases the type system can't catch.
@@ -131,7 +131,7 @@ try {
 }
 ```
 
- <img src="/error-unknown.png" v-drag="[125,180,102,94]" />
+ <img src="/error-unknown.png" v-drag="[131,186,115,106]" />
 
 <!--
 We can throw an error and catch it.
@@ -166,7 +166,7 @@ const coffee = makeCoffee(); // 💥 throws Error("MachineOutOfWaterError ☕️
 ```
 ````
 
- <img src="/make-coffee-type.png" v-click="[1,3]" v-drag="[186,178,160,99]" />
+ <img src="/make-coffee-type.png" v-click="[1,3]" v-drag="[186,178,201,124]" />
 
 <!--
 Here's an even bigger problem.
@@ -424,9 +424,9 @@ function doSomething(): DoSomethingResult {
 }
 ```
 
-<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 130, height:80 }"  />
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 136, height:90 }"  />
 
-<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 253, height:80 }"  />
+<div :initial="{ x: -80 }" :enter="{ x: 0, y: 0 }" v-click="[1]" v-motion class="absolute pointer-events-none left-14 w-217 border-2 border-teal rounded-xl bg-teal/10 z-20 top-5" :click-1="{ y: 274, height:90 }"  />
 
 <!--
 [click]

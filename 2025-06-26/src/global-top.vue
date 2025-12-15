@@ -10,11 +10,11 @@
 }
 
 code {
-  --prism-font-size: 16px;
+  --prism-font-size: 18px;
 }
 
 .slidev-code {
-  --slidev-code-font-size: 16px;
+  --slidev-code-font-size: 18px;
   --slidev-code-line-height: 22px;
 }
 </style>
