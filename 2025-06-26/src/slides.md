@@ -185,9 +185,9 @@ In production.
 layout: section
 ---
 
-# How do you handle an error you can't see?
+# How do you handle an <br> error you can't see?
 
-<div class="text-2xl">
+<div class="text-3xl">
 We're back to the JavaScript days
 </div>
 
@@ -447,7 +447,7 @@ layout: section
 
 # TypeScript is great
 
-<div class="text-2xl">
+<div class="text-3xl">
 For the happy path
 </div>
 
@@ -484,8 +484,9 @@ layout: section
 
 # [Effect](https://effect.website/docs/getting-started/introduction/)
 
-<div class="text-2xl">
-is a powerful TypeScript library designed to help developers easily create complex, synchronous, and asynchronous programs.</div>
+<div class="text-3xl text-balance">
+is a powerful TypeScript library designed to help developers easily create complex, synchronous, and asynchronous programs.
+</div>
 
 <!--
 Effect is a powerful TypeScript library that brings errors into the type system.
@@ -748,7 +749,7 @@ For ValidationError, we transform it into a different error type.
 
 [click]
 
-This is powerful - we can recover from some errors and transform others.
+We can recover from some errors and transform others.
 The type system tracks everything.
 
 [click]
@@ -848,8 +849,6 @@ layout: center
 # We can use the type system to track **errors**, not only **success** values
 
 <!--
-This is the core insight.
-
 TypeScript already tracks success values beautifully.
 Effect extends that same power to errors.
 
@@ -878,7 +877,7 @@ layout: section
 
 # From error tracking to recovery
 
-<div v-click class="text-2xl">
+<div v-click class="text-3xl">
 We can recover, retry, and compose effects in many ways
 </div>
 
@@ -918,12 +917,7 @@ const result = Effect.timeout(pizza, "1 second");
 </SlidevVideo>
 
 <!--
-You can add timeouts to any Effect.
-If it takes too long, it fails with a TimeoutError.
-
-We have orderDelivery() and we don’t want to wait forever.
-Using Effect.timeout(pizza, "1 second"), the effect fails if it takes too long — the pizza gets cold.
-
+We can add a time limit to an effect, failing with timeout if exceeded
 
 [click]
 After one second, it fails automatically with a timeout.
@@ -949,8 +943,7 @@ const result = Effect.eventually(swipeCard);
 </SlidevVideo>
 
 <!--
-swipeCard() might fail temporarily.
-With Effect.eventually(swipeCard), it keeps retrying until it succeeds, ignoring errors.
+We can run an effect repeatedly until it succeeds, ignoring errors
 
 [click]
 Each attempt runs automatically until the card is accepted.
