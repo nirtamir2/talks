@@ -10,11 +10,11 @@ PLAYWRIGHT_BROWSERS_PATH = "0"
 
 [[redirects]]
 from = "/2025/react-next/src"
-to = "https://github.com/nirtamir2/talks/tree/main/2025-06-25"
+to = "https://github.com/nirtamir2/talks/tree/main/2025-12-15"
 status = 302
 
 [[redirects]]
-from = "2025-06-25"
+from = "2025-12-15"
 to = "https://talks.nirtamir.com/2025/react-next/"
 status = 301
 
@@ -24,12 +24,22 @@ to = "/2025/react-next/index.html"
 status = 200
 
 [[redirects]]
-from = "/2025/node-tlv/src"
-to = "https://github.com/nirtamir2/talks/tree/main/2025-06-26"
+from = "/2025/node-tlv/pdf"
+to = "https://github.com/nirtamir/talks/blob/main/2025-12-16/2025-06-26-09-effect-ts.pdf?raw=true"
 status = 302
 
 [[redirects]]
-from = "2025-06-26"
+from = "/2025-12-16/pdf"
+to = "https://github.com/nirtamir/talks/blob/main/2025-12-16/2025-06-26-09-effect-ts.pdf?raw=true"
+status = 302
+
+[[redirects]]
+from = "/2025/node-tlv/src"
+to = "https://github.com/nirtamir2/talks/tree/main/2025-12-16"
+status = 302
+
+[[redirects]]
+from = "2025-12-16"
 to = "https://talks.nirtamir.com/2025/node-tlv/"
 status = 301
 
