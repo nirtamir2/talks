@@ -1,16 +1,16 @@
 {
   "name": "slidev-addon-sandpack",
+  "type": "module",
   "version": "0.1.0",
   "description": "Build stepped, multi-file Sandpack live-code demos in Slidev from readable Markdown.",
-  "type": "module",
-  "license": "MIT",
   "author": "Nir Tamir",
+  "license": "MIT",
+  "homepage": "https://github.com/nirtamir2/talks/tree/main/packages/slidev-addon-sandpack#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/nirtamir2/talks.git",
     "directory": "packages/slidev-addon-sandpack"
   },
-  "homepage": "https://github.com/nirtamir2/talks/tree/main/packages/slidev-addon-sandpack#readme",
   "bugs": {
     "url": "https://github.com/nirtamir2/talks/issues"
   },
@@ -22,13 +22,13 @@
     "live-code",
     "presentation"
   ],
-  "engines": {
-    "node": ">=20.19.0",
-    "slidev": ">=52.1.0"
-  },
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": [
+    "./components/*.vue",
+    "./styles/*.css"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -37,18 +37,18 @@
   },
   "types": "./dist/index.d.ts",
   "files": [
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md",
     "components",
     "dist",
     "setup",
-    "styles",
-    "CHANGELOG.md",
-    "LICENSE",
-    "README.md"
+    "styles"
   ],
-  "sideEffects": [
-    "./components/*.vue",
-    "./styles/*.css"
-  ],
+  "engines": {
+    "node": ">=20.19.0",
+    "slidev": ">=52.1.0"
+  },
   "scripts": {
     "build": "pnpm run clean && tsc -p tsconfig.build.json",
     "build:example": "slidev build example/slides.md --out example-dist",
@@ -60,17 +60,17 @@
     "test:run": "vitest run",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
+  "peerDependencies": {
+    "react": ">=18 <20",
+    "react-dom": ">=18 <20",
+    "vue": ">=3.4.0"
+  },
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",
     "@slidev/types": "^52.1.0",
     "jiti": "^2.6.1",
     "markdown-it": "^14.1.0",
     "markdown-it-container": "^4.0.0"
-  },
-  "peerDependencies": {
-    "react": ">=18 <20",
-    "react-dom": ">=18 <20",
-    "vue": ">=3.4.0"
   },
   "devDependencies": {
     "@slidev/cli": "52.1.0",
