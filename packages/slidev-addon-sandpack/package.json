@@ -42,6 +42,7 @@
     "README.md",
     "components",
     "dist",
+    "docs",
     "setup",
     "styles"
   ],
@@ -54,7 +55,7 @@
     "build:example": "pnpm run build && slidev build example/slides.md --out example-dist",
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "format:check": "prettier --check . --ignore-unknown",
-    "lint": "eslint src test/*.test.ts test/*.test.tsx components setup example/**/*.ts example/**/*.tsx package.json tsconfig*.json vitest.config.ts --no-error-on-unmatched-pattern",
+    "lint": "eslint src test/*.test.ts test/*.test.tsx components setup scripts example/**/*.ts example/**/*.tsx package.json tsconfig*.json vitest.config.ts --no-error-on-unmatched-pattern",
     "test": "pnpm run build && vitest",
     "test:pack": "node scripts/test-pack.mjs",
     "test:run": "pnpm run build && vitest run",

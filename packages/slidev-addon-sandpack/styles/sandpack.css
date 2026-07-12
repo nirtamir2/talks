@@ -63,16 +63,19 @@
 .slidev-sandpack__workspace {
   min-height: 0;
   flex: 1;
+  flex-wrap: nowrap;
   border: 0 !important;
   border-radius: 0 !important;
 }
 
 .slidev-sandpack__workspace > .sp-editor {
+  width: 0;
   min-width: 0;
   flex-basis: calc(var(--slidev-sandpack-editor-size) * 1%) !important;
 }
 
 .slidev-sandpack__workspace > .sp-preview {
+  width: 0;
   min-width: 0;
   flex-basis: calc(var(--slidev-sandpack-preview-size) * 1%) !important;
 }
@@ -103,6 +106,7 @@
 
   .slidev-sandpack__workspace > .sp-editor,
   .slidev-sandpack__workspace > .sp-preview {
+    width: 100%;
     min-height: 18rem;
     flex-basis: auto !important;
   }

@@ -4,10 +4,8 @@
     "rootDir": "src",
     "types": ["node", "react", "react-dom"],
     "declaration": true,
-    "declarationMap": true,
     "noEmit": false,
-    "outDir": "dist",
-    "sourceMap": true
+    "outDir": "dist"
   },
   "include": ["src"]
 }
