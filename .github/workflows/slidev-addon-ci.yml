@@ -10,6 +10,7 @@ on:
       - "pnpm-lock.yaml"
       - "pnpm-workspace.yaml"
   push:
+    branches: [main]
     paths:
       - ".github/workflows/slidev-addon-*.yml"
       - "2025-12-15/src/**"
