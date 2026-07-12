@@ -1,7 +1,7 @@
 # Slidev Sandpack Addon Design
 
 - Date: 2026-07-11
-- Status: Conversation design approved; written review pending
+- Status: Approved
 
 ## Summary
 
