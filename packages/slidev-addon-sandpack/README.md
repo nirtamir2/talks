@@ -131,6 +131,8 @@ export default function App() {
 
 See [docs/presets.md](./docs/presets.md) for inheritance, merge rules, source-backed files, layouts, and shareable preset packages.
 
+Maintainers can follow [docs/releasing.md](./docs/releasing.md) for the npm trusted-publishing setup, release tags, provenance, and Slidev gallery discovery.
+
 ## Runtime controls
 
 Every demo provides:

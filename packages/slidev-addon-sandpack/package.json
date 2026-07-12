@@ -68,14 +68,14 @@
   },
   "dependencies": {
     "@codesandbox/sandpack-react": "^2.20.0",
-    "@slidev/types": "^52.1.0",
     "jiti": "^2.6.1",
-    "markdown-it": "^14.1.0",
+    "markdown-it": "^14.3.0",
     "markdown-it-container": "^4.0.0"
   },
   "devDependencies": {
     "@slidev/cli": "52.1.0",
     "@slidev/theme-default": "^0.25.0",
+    "@slidev/types": "^52.1.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.2.0",
     "@testing-library/user-event": "^14.6.1",

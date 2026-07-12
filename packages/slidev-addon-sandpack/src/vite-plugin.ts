@@ -1,4 +1,4 @@
-import { defineVitePluginsSetup } from "@slidev/types";
+import type { VitePluginsSetup } from "@slidev/types";
 import type { Plugin, ViteDevServer } from "vite";
 import { isWatchedFile, subscribeToWatchedFiles } from "./watch.js";
 
@@ -55,4 +55,6 @@ export function createSandpackVitePlugin(): Plugin {
   };
 }
 
-export default defineVitePluginsSetup(() => [createSandpackVitePlugin()]);
+const setup: VitePluginsSetup = () => [createSandpackVitePlugin()];
+
+export default setup;
