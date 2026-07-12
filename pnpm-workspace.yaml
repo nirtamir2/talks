@@ -1,6 +1,7 @@
 packages:
   - "*/src"
   - "*/demo"
+  - "packages/*"
   - "!2023-08-20/src/**"
   - "!2024-06-27/src/**"
 
