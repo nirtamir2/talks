@@ -1,0 +1,91 @@
+{
+  "name": "slidev-addon-sandpack",
+  "version": "0.1.0",
+  "description": "Build stepped, multi-file Sandpack live-code demos in Slidev from readable Markdown.",
+  "type": "module",
+  "license": "MIT",
+  "author": "Nir Tamir",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nirtamir2/talks.git",
+    "directory": "packages/slidev-addon-sandpack"
+  },
+  "homepage": "https://github.com/nirtamir2/talks/tree/main/packages/slidev-addon-sandpack#readme",
+  "bugs": {
+    "url": "https://github.com/nirtamir2/talks/issues"
+  },
+  "keywords": [
+    "slidev",
+    "slidev-addon",
+    "sandpack",
+    "codesandbox",
+    "live-code",
+    "presentation"
+  ],
+  "engines": {
+    "node": ">=20.19.0",
+    "slidev": ">=52.1.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "files": [
+    "components",
+    "dist",
+    "setup",
+    "styles",
+    "CHANGELOG.md",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": [
+    "./components/*.vue",
+    "./styles/*.css"
+  ],
+  "scripts": {
+    "build": "pnpm run clean && tsc -p tsconfig.build.json",
+    "build:example": "slidev build example/slides.md --out example-dist",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "format:check": "prettier --check . --ignore-unknown",
+    "lint": "eslint .",
+    "test": "vitest",
+    "test:pack": "node scripts/test-pack.mjs",
+    "test:run": "vitest run",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@codesandbox/sandpack-react": "^2.20.0",
+    "@slidev/types": "^52.1.0",
+    "jiti": "^2.6.1",
+    "markdown-it": "^14.1.0",
+    "markdown-it-container": "^4.0.0"
+  },
+  "peerDependencies": {
+    "react": ">=18 <20",
+    "react-dom": ">=18 <20",
+    "vue": ">=3.4.0"
+  },
+  "devDependencies": {
+    "@slidev/cli": "52.1.0",
+    "@slidev/theme-default": "^0.25.0",
+    "@types/markdown-it": "^14.1.2",
+    "@types/markdown-it-container": "^2.0.10",
+    "@types/node": "^24.8.0",
+    "@types/react": "^19.2.2",
+    "@types/react-dom": "^19.2.2",
+    "prettier": "^3.6.2",
+    "prettier-plugin-slidev": "^1.0.5",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "typescript": "^5.9.3",
+    "vitest": "^3.1.4",
+    "vue": "^3.5.22"
+  }
+}
