@@ -54,7 +54,7 @@
     "build:example": "slidev build example/slides.md --out example-dist",
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "format:check": "prettier --check . --ignore-unknown",
-    "lint": "eslint . --ignore-pattern test/fixtures/**",
+    "lint": "eslint src test/*.test.ts test/*.test.tsx components setup package.json tsconfig*.json vitest.config.ts --no-error-on-unmatched-pattern",
     "test": "vitest",
     "test:pack": "node scripts/test-pack.mjs",
     "test:run": "vitest run",
