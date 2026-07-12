@@ -55,10 +55,10 @@
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
     "format:check": "prettier --check . --ignore-unknown",
     "lint": "eslint src test/*.test.ts test/*.test.tsx components setup package.json tsconfig*.json vitest.config.ts --no-error-on-unmatched-pattern",
-    "test": "vitest",
+    "test": "pnpm run build && vitest",
     "test:pack": "node scripts/test-pack.mjs",
-    "test:run": "vitest run",
-    "typecheck": "tsc -p tsconfig.json --noEmit"
+    "test:run": "pnpm run build && vitest run",
+    "typecheck": "pnpm run build && tsc -p tsconfig.json --noEmit && vue-tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
     "react": ">=18 <20",
@@ -82,6 +82,8 @@
     "@types/node": "^24.8.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/test-utils": "^2.4.6",
     "jsdom": "^26.1.0",
     "prettier": "^3.6.2",
     "prettier-plugin-slidev": "^1.0.5",
@@ -90,6 +92,7 @@
     "typescript": "^5.9.3",
     "vite": "^7.1.10",
     "vitest": "^3.1.4",
-    "vue": "^3.5.22"
+    "vue": "^3.5.22",
+    "vue-tsc": "^3.1.1"
   }
 }

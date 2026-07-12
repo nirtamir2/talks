@@ -13,6 +13,6 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true
   },
-  "include": ["src", "setup", "test", "vitest.config.ts"],
+  "include": ["src", "setup", "test"],
   "exclude": ["test/fixtures"]
 }
