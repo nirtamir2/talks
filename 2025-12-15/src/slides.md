@@ -425,7 +425,7 @@ It handles all the setup boilerplate and gives you React's component model for f
 
 ---
 
-@@@ r3f
+````sandpack r3f
 
 ```tsx [App.tsx]
 import { OrbitControls } from "@react-three/drei";
@@ -574,7 +574,7 @@ export default function App() {
 }
 ```
 
-@@@
+````
 
 <!--
 First we import Canvas from `@react-three/fiber`.
@@ -697,7 +697,7 @@ The idea of working with the physics library is to separate the work into physic
 title: "Physics"
 ---
 
-@@@ r3f-physics
+````sandpack r3f-physics
 
 ```tsx [App.tsx]
 import { OrbitControls, Sphere, Torus } from "@react-three/drei";
@@ -802,7 +802,7 @@ export default function App() {
 }
 ```
 
-@@@
+````
 
 <!--
 We are going to use React-three/rapier to handle the physics world.

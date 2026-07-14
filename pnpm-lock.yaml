@@ -372,8 +372,8 @@ importers:
   2025-12-15/src:
     dependencies:
       slidev-addon-sandpack:
-        specifier: ^0.1.1
-        version: 0.1.1(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(vue@3.5.22(typescript@5.9.3))
+        specifier: ^0.2.0
+        version: 0.2.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(vue@3.5.22(typescript@5.9.3))
 
   2025-12-16/src: {}
 
@@ -6462,9 +6462,6 @@ packages:
   markdown-it-async@2.2.0:
     resolution: {integrity: sha512-sITME+kf799vMeO/ww/CjH6q+c05f6TLpn6VOmmWCGNqPJzSh+uFgZoMB9s0plNtW6afy63qglNAC3MhrhP/gg==}
 
-  markdown-it-container@4.0.0:
-    resolution: {integrity: sha512-HaNccxUH0l7BNGYbFbjmGpf5aLHAMTinqRZQAEQbMr2cdD3z91Q6kIo1oUn1CQndkT03jat6ckrdRYuwwqLlQw==}
-
   markdown-it-footnote@4.0.0:
     resolution: {integrity: sha512-WYJ7urf+khJYl3DqofQpYfEYkZKbmXmwxQV8c8mO/hGIhgZ1wOe7R4HLFNwqx7TjILbnC98fuyeSsin19JdFcQ==}
 
@@ -7944,8 +7941,8 @@ packages:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
 
-  slidev-addon-sandpack@0.1.1:
-    resolution: {integrity: sha512-2FI2bcqkXcksbMSn9uZqKRFRmIK9Vz82KIWEFn2xgPFy16cgx32KI6pQeRRy5j06T3wkZR8fR6g2gnzHmFX6TA==}
+  slidev-addon-sandpack@0.2.0:
+    resolution: {integrity: sha512-Cx3JYvK1Q7g6utM8dJnhAhWbmKr1qo3mhujLD9lsE4MeXFJ4EZgry6jAl00GytuSQV22SMl4H26gX+wwTLXxYw==}
     engines: {node: '>=20.19.0', slidev: '>=52.1.0'}
     peerDependencies:
       react: '>=18 <20'
@@ -16675,8 +16672,6 @@ snapshots:
       '@types/markdown-it': 14.1.2
       markdown-it: 14.3.0
 
-  markdown-it-container@4.0.0: {}
-
   markdown-it-footnote@4.0.0: {}
 
   markdown-it-magic-link@0.1.4:
@@ -18432,12 +18427,11 @@ snapshots:
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
 
-  slidev-addon-sandpack@0.1.1(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(vue@3.5.22(typescript@5.9.3)):
+  slidev-addon-sandpack@0.2.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(vue@3.5.22(typescript@5.9.3)):
     dependencies:
       '@codesandbox/sandpack-react': 2.20.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       jiti: 2.6.1
       markdown-it: 14.3.0
-      markdown-it-container: 4.0.0
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
       vue: 3.5.22(typescript@5.9.3)
