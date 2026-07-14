@@ -10,6 +10,6 @@
     "export": "slidev export --per-slide --output ../2025-06-25-react-three-fiber.pdf"
   },
   "dependencies": {
-    "slidev-addon-sandpack": "workspace:*"
+    "slidev-addon-sandpack": "^0.1.1"
   }
 }
