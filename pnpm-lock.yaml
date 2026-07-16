@@ -372,8 +372,8 @@ importers:
   2025-12-15/src:
     dependencies:
       slidev-addon-sandpack:
-        specifier: ^0.2.1
-        version: 0.2.1(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(vue@3.5.22(typescript@5.9.3))
+        specifier: ^0.4.0
+        version: 0.4.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(vue@3.5.22(typescript@5.9.3))
 
   2025-12-16/src: {}
 
@@ -7941,9 +7941,9 @@ packages:
       react: '>=18.0.0'
       react-dom: '>=18.0.0'
 
-  slidev-addon-sandpack@0.2.1:
-    resolution: {integrity: sha512-X8glVaQAEWXW1eYDNfKZEIymKWln0LekO4GaEbQQrwLOq8/0kZr5ZlQKQgRVdbX8V3utymyVg9DpLmzKw9gEPw==}
-    engines: {node: '>=20.19.0', slidev: '>=52.1.0'}
+  slidev-addon-sandpack@0.4.0:
+    resolution: {integrity: sha512-lCDXHyj3phfK+UzudM1ziyj6ge0r7OYturZmHp5+0hJGiJYYcLriyR+rLMFv8eRLxVUKwDqRMwZZ5YF0Aqs10A==}
+    engines: {node: '>=24.0.0', slidev: '>=52.1.0'}
     peerDependencies:
       react: '>=18 <20'
       react-dom: '>=18 <20'
@@ -18427,7 +18427,7 @@ snapshots:
       react: 19.2.1
       react-dom: 19.2.1(react@19.2.1)
 
-  slidev-addon-sandpack@0.2.1(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(vue@3.5.22(typescript@5.9.3)):
+  slidev-addon-sandpack@0.4.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)(vue@3.5.22(typescript@5.9.3)):
     dependencies:
       '@codesandbox/sandpack-react': 2.20.0(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
       jiti: 2.6.1
